@@ -1,0 +1,62 @@
+@import '../abstracts/variables';
+
+.root {
+  width: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  border-radius: 10px;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: $custom-theme;
+  box-shadow: $neum-out-shadow;
+}
+
+.login {
+  display: block;
+  border: none;
+  border-bottom: solid 1px $font-color;
+  margin: 5px 0 5px 0;
+  &:focus {
+    border-bottom: solid 1px $font-color;
+    outline: 0;
+  }
+}
+
+.login-button {
+  cursor: pointer;
+  background-color: $custom-theme;
+  width: auto;
+  min-width: 100px;
+  border-radius: 24px;
+  text-align: center;
+  padding: 15px 40px;
+  margin-top: 20px;
+  color: $font-color;
+  font-size: 14px;
+  margin-left: auto;
+  font-weight: 500;
+  box-shadow: $neum-out-shadow;
+  border: none;
+  transition: all .3s ease;
+  outline: 0;
+}
+
+.signin-title {
+  color: $font-color;
+  font-size: xx-large;
+  margin-top: 0;
+  font-family: Tangerine cursive;
+}
+
+.input {
+  color: $font-color;
+}
