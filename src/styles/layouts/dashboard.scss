@@ -1,0 +1,66 @@
+@import '../abstracts/_variables.scss';
+
+.dashboard-root {
+  height: 100% !important;
+  overflow: hidden;
+  flex-grow: 1;
+  background-color : rgba(255, 255, 255, 0);
+}
+
+.grid-container {
+  width : 100% !important;
+  background-color : $custom-theme;
+}
+
+.item {
+  height : 100%;
+  position: relative;
+  padding: 3%;
+  margin: 1% !important;
+  border-radius: 10px !important;
+  background-color: $custom-theme !important;
+  box-shadow: $neum-out-shadow !important;
+}
+
+.parentItem {
+  text-align : center;
+  border-radius : 15px;
+  padding : 0 0 20px 0;
+  box-shadow: $neum-out-shadow;
+  background-color : rgba(255, 255, 255, 0.1);
+}
+
+.controlCardButtons {
+  height : 100%;
+  position: relative;
+  border-radius: 0.5rem;
+  padding: 3% 10%;
+  box-shadow: $neum-out-shadow;
+  background-color : rgba(255, 255, 255, 0.1);
+}
+
+.optionBox {
+  text-align:center;
+  margin:auto;
+  display:inline;
+  align-items:center;
+  width:calc(100%/4);
+}
+.disable {
+  visibility : hidden;
+}
+
+.textColor {
+  padding : 5px 0 5px 0;
+  color : white !important;
+  font-weight : bold;
+}
+
+.figureCardDiv {
+  display:grid;
+  grid-template-columns: 33.3% 33.3% 33.3%;
+}
+
+.containerHistory {
+  padding :15px 0 15px 0;
+}

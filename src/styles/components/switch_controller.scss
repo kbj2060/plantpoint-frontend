@@ -1,0 +1,91 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.switch-controllers {
+  height : auto;
+  background-color: $custom-theme !important;
+  box-shadow: none !important;
+}
+
+.control-form {
+  margin : auto;
+}
+
+.display-power-on {
+  padding-left : 10px;
+  width : 40px;
+  color : $button-on
+}
+
+.display-power-off {
+  padding-left : 10px;
+  width : 40px;
+  color : $button-off
+}
+
+// TODO : 섹션 별로 기계 수 체크하여 변수로 넣기
+.switch-wrapper {
+  height: calc(100%/5);
+}
+
+.icons {
+  color : white;
+  text-align:left;
+  margin:auto;
+  display:inline;
+  width:calc(100%/4);
+}
+
+.power-button {
+  display:inline-flex;
+  justify-content:flex-end;
+  width:calc(100%/4);
+  margin:auto;
+  text-align:center;
+}
+
+.default-icon {
+  color: $default-icon
+}
+
+.auto-icon {
+  height : 1.1em;
+  width : 1.3em;
+  margin : auto;
+  vertical-align: middle;
+  text-align:center;
+  color: $font-color;
+  padding: 1px;
+}
+
+.cooler-icon {
+  @include icon-color($cooler-icon)
+}
+
+.heater-icon {
+  @include icon-color($heater-icon)
+}
+
+.waterpump-icon {
+  @include icon-color($waterpump-icon)
+}
+
+.led-icon {
+  @include icon-color($led-icon)
+}
+
+
+/*
+.controlCardDiv {
+  padding: 3% 0 3% 0;
+  height:100%
+}
+
+
+
+
+
+
+.checker  {
+  margin: auto;
+}*/

@@ -1,0 +1,7 @@
+{
+  "host" : "localhost",
+  "user" : "root",
+  "password" : "01055646565",
+  "port" : "3306",
+  "database" : "iot"
+}

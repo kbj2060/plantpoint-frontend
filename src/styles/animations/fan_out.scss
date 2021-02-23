@@ -1,0 +1,17 @@
+@import '../abstracts/variables.scss';
+
+.spin {
+    animation: spin 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    color : $default-icon;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,29 @@
+@import '../abstracts/_variables.scss';
+$width: 250px;
+$image-height: 120px;
+
+.list {
+  width: $width;
+}
+
+.fullList {
+  width: auto;
+}
+
+.logo {
+  width : $width;
+  height : $image-height;
+}
+
+.link {
+  text-decoration: none !important;
+}
+
+.link-text {
+  text-decoration: none !important;
+  color: $font-color;
+}
+
+.menu-icon {
+  color: $font-color
+}
