@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.1.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -10,9 +11,13 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/axios": "^0.14.0",
+    "@types/immutability-helper": "^2.6.3",
+    "@types/lodash": "^4.14.168",
     "@types/react-addons-update": "^0.14.20",
     "@types/react-router-dom": "^5.1.7",
     "add": "^2.0.6",
+    "d3": "^6.5.0",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-addons-update": "^15.6.3",
     "react-dom": "^17.0.1",
@@ -24,9 +29,9 @@
     "yarn": "^1.22.10"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -52,9 +57,12 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@types/react-redux": "^7.1.16",
+    "craco-alias": "^2.1.1",
     "css-loader": "^1.0.0",
     "css-modules-typescript-loader": "^2.0.1",
+    "immutability-helper": "^3.1.1",
     "node-sass": "^5.0.0",
+    "prop-types": "^15.7.2",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^0.23.1",

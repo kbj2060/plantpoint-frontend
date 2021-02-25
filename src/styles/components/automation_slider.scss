@@ -1,0 +1,24 @@
+@import '../abstracts/variables';
+
+.slider-root {
+  width: auto;
+  .slider{
+    font-size : 0.9em;
+  }
+  .explanation {
+    padding: 3% 0;
+    .chip {
+      color : $font-color;
+      border-color: $font-color;
+      margin: 0 10%;
+    }
+  }
+}
+
+
+
+.title {
+  font-weight : 1000;
+  margin-bottom : 10%;
+  color:white
+}

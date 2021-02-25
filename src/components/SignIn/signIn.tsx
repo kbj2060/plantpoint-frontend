@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect} from "react";
-import {Auth, LoginState, SigninDto, SignInResult} from "../../interfaces/Ilogin";
-import {defaultAuth, defaultLoginState} from "../../values/defaults";
+import {Auth, LoginState, SigninDto, SignInResult} from "@interfaces/Login";
+import {defaultAuth} from "@values/defaults";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {loginFailure, loginSuccess} from "../../redux/modules/Authentication";
+import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
 import {saveState} from "../LocalStorage";
-import {AppName, AuthResults, HttpUrls, LocalStorageKeys, Messages, PagePaths, Reports, Texts} from "../../constants";
+import {AppName, AuthResults, HttpUrls, StorageKeys, Messages, PagePaths, Reports, Texts} from "../../constants";
 import CustomDialog from "../utils/customDialog";
 import SignInInput from "./siginInput";
-import '../../styles/components/signin.scss'
+import '@styles/components/signin.scss'
 
 function getSuccessAuth (username: string, token: string): Auth {
   return {
@@ -24,25 +24,31 @@ function getSuccessAuth (username: string, token: string): Auth {
   }
 }
 
+interface Signin {
+  username: string;
+  password: string;
+}
+
 export default function SignInComponent() {
-  const [login, setLogin] = React.useState<LoginState>(defaultLoginState);
   const [auth, setAuth] = React.useState<Auth>(defaultAuth);
   const [open, setOpen] = React.useState<boolean>(false);
+  const signin: Signin = { username: '', password: '' } as Signin;
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const handleClickDialogOpen = useCallback(() => {
+  const handleClickDialogOpen = () => {
     setOpen(true);
-  }, []);
+  }
 
   const handleDialogClose = useCallback(() => {
     setOpen(false);
   }, []);
 
-  const handleLoginChange = useCallback((type: keyof LoginState) => (e: { target: { value: any; }; }): void => {
-    setLogin({ ...login, [type]: e.target.value })
-  }, [login]);
+  const handleLoginChange =(type: keyof LoginState) => (e: { target: { value: any; }; }): void => {
+    signin[type] = e.target.value
+    /*setLogin({ ...login, [type]: e.target.value })*/
+  }
 
   const dispatchLoginSuccess = (username: string, accessToken: string): void  => {
     dispatch(loginSuccess(username, accessToken))
@@ -69,7 +75,7 @@ export default function SignInComponent() {
         const updatedAuth = getSuccessAuth(username, accessToken);
 
         dispatchLoginSuccess(username, accessToken);
-        saveState(LocalStorageKeys.AUTHENTICATION, updatedAuth);
+        saveState(StorageKeys.AUTHENTICATION, updatedAuth);
         setAuth(updatedAuth);
       })
       .catch(() => {
@@ -79,7 +85,7 @@ export default function SignInComponent() {
 
   const handleSubmit = (event: { preventDefault: () => void; }): void => {
     event.preventDefault();
-    loginRequest(login.username, login.password).then(() => Reports.SIGNIN_FINISH);
+    loginRequest(signin.username, signin.password).then(() => Reports.SIGNIN_FINISH);
   };
 
   useEffect(() => {
@@ -95,7 +101,7 @@ export default function SignInComponent() {
         break;
     }
     return () => { resetAuth() }
-  }, [auth, history, handleClickDialogOpen])
+  }, [auth, history])
 
   return (
     <div className="login-form" >

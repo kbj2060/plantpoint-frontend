@@ -48,7 +48,7 @@
   color: $default-icon
 }
 
-.auto-icon {
+.auto-checker-icon {
   height : 1.1em;
   width : 1.3em;
   margin : auto;
@@ -74,18 +74,21 @@
   @include icon-color($led-icon)
 }
 
+.current-icon {
+  height : 1.5em;
+  width : 1.5em;
+  margin : auto;
+  vertical-align: middle;
+  text-align:center;
+  padding: 1px;
+}
+.checkers  {
+  margin: auto;
+}
 
 /*
 .controlCardDiv {
-  padding: 3% 0 3% 0;
-  height:100%
+padding: 3% 0 3% 0;
+height:100%
 }
-
-
-
-
-
-
-.checker  {
-  margin: auto;
-}*/
+*/

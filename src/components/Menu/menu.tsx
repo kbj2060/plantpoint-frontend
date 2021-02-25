@@ -1,10 +1,10 @@
+import React, {BaseSyntheticEvent} from 'react';
 import {Link} from 'react-router-dom';
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import {logout} from "../../redux/modules/Authentication";
+import {logout} from "@redux/modules/Authentication";
 import {useDispatch} from "react-redux";
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist';
-import React, {BaseSyntheticEvent} from 'react';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -15,10 +15,10 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import logo from '../../logo.jpeg';
-import "../../styles/components/menu.scss";
+import "@styles/components/menu.scss";
 import {DrawerDirection, PageNames, PagePaths} from "../../constants";
 
-type LinkButtonProps = {
+interface LinkButtonProps {
 	to: string;
 	value: string;
 	icon: React.ReactNode;

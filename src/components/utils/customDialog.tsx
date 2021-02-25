@@ -7,7 +7,7 @@ import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import {Texts} from "../../constants";
 
-type dialogProps = {
+interface DialogProps {
   open: boolean,
   handleClose: () => void,
   title: string,
@@ -15,7 +15,7 @@ type dialogProps = {
 }
 
 function CustomDialog(
-  {open, handleClose, title, description}: dialogProps
+  {open, handleClose, title, description}: DialogProps
 ) {
     return (
       <Dialog

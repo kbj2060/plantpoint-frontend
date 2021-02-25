@@ -1,7 +1,7 @@
-import {Auth, LoginState} from "../interfaces/Ilogin";
-import {ReducerSwitchState} from "../redux/modules/ControlSwitch";
-import {AvailableAutomationType, AvailableMachines, AvailableMachineSection} from "../interfaces/main";
+import {Auth, LoginState} from "@interfaces/Login";
+import {ReducerSwitchState} from "@redux/modules/ControlSwitch";
 
+// TODO: 기본 값 데이터베이스에 두고 가져올 것.
 export const defaultAuth: Auth = {
   login: {
     status: 'INIT'
@@ -13,25 +13,36 @@ export const defaultAuth: Auth = {
   accessToken: '',
 }
 
+export const UpdateTimeOut = {
+  current: '10000',
+  history: '60000',
+  status: '50000'
+}
+
+export const Criteria = {
+  current: 1,
+  switchHistory: 20,
+}
+
 export const defaultLoginState: LoginState = {
   username: "",
   password: "",
 }
 
 export const defaultSwitchesState: ReducerSwitchState = {
-  s1 : {
     waterpump: false,
     led: false,
     cooler: false,
     heater: false,
     fan: false
-  }
 }
 
-export const defaultAutomation = {
+export const defaultMachines = ['waterpump', 'led', 'cooler', 'heater', 'fan']
+
+export const defaultAutomations = {
   waterpump : {
-    start: [''],
-    end: [''],
+    start: [],
+    end: [],
     term: 1,
     enable: false,
     machine: 'waterpump',
@@ -39,17 +50,17 @@ export const defaultAutomation = {
     machineSection: 's1',
   },
   fan : {
-    start: [''],
-    end: [''],
+    start: [],
+    end: [],
     term: 1,
     enable: false,
     machine: 'fan',
-    automationType: 'range',
+    automationType: 'cycle',
     machineSection: 's1',
   },
   cooler : {
-    start: [''],
-    end: [''],
+    start: [10],
+    end: [40],
     term: 1,
     enable: false,
     machine: 'cooler',
@@ -57,8 +68,8 @@ export const defaultAutomation = {
     machineSection: 's1',
   },
   heater : {
-    start: [''],
-    end: [''],
+    start: [10],
+    end: [40],
     term: 1,
     enable: false,
     machine: 'heater',
@@ -66,12 +77,13 @@ export const defaultAutomation = {
     machineSection: 's1',
   },
   led : {
-    start: [''],
-    end: [''],
+    start: [0],
+    end: [23],
     term: 1,
     enable: false,
     machine: 'led',
-    automationType: 'cycle',
+    automationType: 'range',
     machineSection: 's1',
   },
 }
+

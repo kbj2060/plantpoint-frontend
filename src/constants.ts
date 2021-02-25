@@ -1,20 +1,29 @@
 export const AppName = 'Plant Point';
 export const DrawerDirection = 'right';
 
-export enum LocalStorageKeys {
+export enum StorageKeys {
   AUTHENTICATION = 'authentication',
   SWITCHES='switches',
-  AUTO='auto',
+  AUTO='automation',
+  MACHINE='machine',
 }
 
 export enum HttpUrls {
   SIGNIN = `http://localhost:9000/authentication/signin`,
-  SWITCHES_CREATE = 'http://localhost:9000/switches/create'
+  AUTOMATION_READ = 'http://localhost:9000/automations/read',
+  AUTOMATION_CREATE = 'http://localhost:9000/automations/create',
+  SWITCHES_CREATE = 'http://localhost:9000/switches/create',
+  SWITCHES_READ_LAST = 'http://localhost:9000/switches/read/last',
+  MACHINES_READ = 'http://localhost:9000/machines/read',
+  CURRENT_READ = 'http://localhost:9000/currents/read'
 }
 
 export enum Reports {
   SIGNIN_FINISH = 'Login Finished..',
   SWITCH_CHANGED = 'Switch Changed..',
+  SWITCH_LOADED = 'Switch Loaded..',
+  AUTOMATION_LOADED = 'Automation Loaded..',
+  CURRENT_LOADED = 'Current Loaded..',
 }
 
 export enum Texts {
@@ -22,6 +31,7 @@ export enum Texts {
   OK = '확인',
 }
 export enum Messages {
+  NO_AUTOMATION_DATA= '해당하는 기계의 자동화 정보가 존재하지 않습니다. 기본값으로 지정합니다.',
   SIGNIN_FAILURE_TITLE = '로그인 실패',
   SIGNIN_FAILURE_DESC = '아이디 혹은 비밀번호를 확인해주세요.',
 }
@@ -41,7 +51,7 @@ export enum PagePaths {
 }
 
 export enum PageNames {
-  MAIN = 's1',
+  MAIN = '무들로29',
   SCHEDULER = '일정',
   SETTING ='설정',
   LOGOUT='로그아웃',
