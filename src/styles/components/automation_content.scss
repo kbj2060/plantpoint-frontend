@@ -1,0 +1,72 @@
+@import '../abstracts/variables';
+
+.chip {
+  color : $font-color;
+  border-color: $font-color;
+}
+
+.icon {
+  padding: 1%;
+}
+
+.center-icon {
+  margin: auto;
+}
+
+.table {
+  display: flex;
+  flex-direction : column;
+}
+
+.title  {
+  color : $font-color;
+}
+
+.detailExplanation {
+  display:flex;
+  flex-direction: row;
+}
+
+.explanation {
+  color : $font-color;
+  margin: 0;
+}
+
+.cell  {
+  display: flex;
+  padding: 1%;
+}
+
+.default-icon  {
+  color: $default-icon
+}
+
+.auto-switch-text {
+  color: $font-color;
+  padding: 0.1rem;
+}
+
+.auto-switch {
+  display: flex;
+  align-items: center;
+  .MuiSwitch-root {
+    overflow: visible !important;
+      .MuiIconButton-label {
+        padding: 1px !important;
+    }
+  }
+}
+
+.term-icon-button {
+  color: $font-color;
+}
+
+.term-button-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.term{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}

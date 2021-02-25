@@ -1,30 +1,27 @@
-import React, {useEffect} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
-import {useDispatch} from "react-redux";
-import {controlSwitch} from "../../redux/modules/ControlSwitch";
-//import socket from '../../socket';
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from '@material-ui/lab/Alert';
-//import {CheckLogin} from "../utils/CheckLogin";
 import {CustomIOSSwitch} from "../utils/customIOSSwitch";
 import {ColorCircularProgress} from "../utils/colorCircularProgress";
-import {store} from "../../redux/store";
-//import getCurrentUser from "../utils/getCurrentUser";
-import '../../styles/components/switch_controller.scss';
+import {ReducerControlSwitchDto} from "@redux/modules/ControlSwitch"
+import {store} from "@redux/store";
+import '@styles/components/switch_controller.scss';
 import getCurrentUser from "../../utils/getCurrentUser";
-import {CreateSwitchDto, DispatchControlSwitchDto, MachineProps} from "../../interfaces/ISwitch";
-import {HttpUrls, LocalStorageKeys, Reports} from "../../constants";
-import {AvailableMachines, AvailableMachineSection} from "../../interfaces/main";
+import {CreateSwitchDto, MachineProps} from "@interfaces/Switch";
+import {HttpUrls, StorageKeys, Reports} from "../../constants";
+import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
+import {getReduxData} from "@funcUtils/getReduxData";
+//import socket from '../../socket';
+//import {CheckLogin} from "../utils/CheckLogin";
+//import getCurrentUser from "../utils/getCurrentUser";
+import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 
 interface switchesProps extends MachineProps {}
 function Switches({machine}: switchesProps) {
   const [state, setState] = React.useState(true);
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  const dispatch = useDispatch();
-  const {Translations} = require('../..//values/translations');
+  const changeSwitchStatus = useChangeSwitchStatus();
   const current_page = decodeURI(window.location.pathname.replace('/',''))
 
   /*const emitSocket = (status) => {
@@ -58,8 +55,8 @@ function Switches({machine}: switchesProps) {
   const handleChange = (e: { persist: () => void; target: { checked: any; }; }) => {
     e.persist();
     const status: boolean = e.target.checked;
-    const currentSwitches = store.getState()[LocalStorageKeys.SWITCHES][current_page];
-    const dispatchControlSwitch: DispatchControlSwitchDto = {
+    const currentSwitches = store.getState()[StorageKeys.SWITCHES];
+    const dispatchControlSwitch: ReducerControlSwitchDto = {
       machineSection: current_page as AvailableMachineSection,
       machine: machine as AvailableMachines,
       status: status,
@@ -70,19 +67,10 @@ function Switches({machine}: switchesProps) {
       return;
     }
 
-    dispatch( controlSwitch( dispatchControlSwitch ) );
-    openSnackBar();
+    changeSwitchStatus( dispatchControlSwitch );
     setState( status );
     //emitSocket(status);
     postSwitchMachine( status ).then(() => Reports.SWITCH_CHANGED)
-  }
-
-  const openSnackBar = () => {
-    setSnackbarOpen(true);
-  }
-
-  const closeSnackBar = () => {
-    setSnackbarOpen(false);
   }
 
   const cleanup = () => {
@@ -90,25 +78,15 @@ function Switches({machine}: switchesProps) {
     setIsLoading(true);
   }
 
-  function getMemorizedMachineState (): boolean {
-    return store.getState()[LocalStorageKeys.SWITCHES][current_page][machine]
-  }
+  const getMemorizedMachineState = useCallback(() => {
+    return getReduxData(StorageKeys.SWITCHES)[machine];
+  }, [machine])
 
   const PowerDisplay = () => {
     return (
       state
         ? <p className='display-power-on'>ON</p>
         : <p className='display-power-off'>OFF</p>
-    )
-  }
-
-  const Alarm = () => {
-    return (
-      <Snackbar open={snackbarOpen} onClose={closeSnackBar} autoHideDuration={2000}>
-        <MuiAlert elevation={6} variant="filled" onClose={closeSnackBar} severity="info">
-          {`${Translations[machine.toLowerCase()]} 전원 수동 전환 완료!`}
-        </MuiAlert>
-      </Snackbar>
     )
   }
 
@@ -119,7 +97,7 @@ function Switches({machine}: switchesProps) {
     return () => {
       cleanup();
     }
-  }, [machine]);
+  }, [machine, getMemorizedMachineState]);
 
   if(isLoading){
     return <ColorCircularProgress />
@@ -140,9 +118,8 @@ function Switches({machine}: switchesProps) {
           className='control-form' />
       </FormGroup>
       <PowerDisplay />
-      <Alarm />
     </>
   )
 }
 
-export default Switches;
+export default memo(Switches);

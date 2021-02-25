@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
     //mode: "production",
     mode: "development", devtool: "inline-source-map",
@@ -8,7 +10,7 @@ module.exports = {
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
-        extensions: [".ts", ".tsx", ".js", ".css", ".scss"]
+        extensions: [".ts", ".tsx", ".js", ".css", ".scss"],
     },
     module: {
         rules: [

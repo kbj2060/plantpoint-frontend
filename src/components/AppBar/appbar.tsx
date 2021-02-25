@@ -3,9 +3,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Menu from '../Menu/menu';
-import '../../styles/components/appbar.scss'
+import '@styles/components/appbar.scss'
 
-type AppBarProps = {
+interface AppBarProps {
   page: string;
 }
 

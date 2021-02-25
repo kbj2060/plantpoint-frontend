@@ -1,17 +1,16 @@
 import React from 'react';
 import Box from "@material-ui/core/Box";
-import Switch from "./Switches";
 import Card from "@material-ui/core/Card";
+import Switch from "./Switches";
 import IconWrapper from "./IconWrapper";
-import AutoChecker from "./AutomationChecker"
-import {store} from "../../redux/store";
-import {LocalStorageKeys} from "../../constants";
-import {MachineProps} from "../../interfaces/ISwitch";
-import '../../styles/components/switch_controller.scss';
-import {AvailableMachines} from "../../interfaces/main";
 import AutomationChecker from "./AutomationChecker";
-//import CurrentChecker from './CurrentChecker';
-//import SettingModal from "../SettingModal";
+import SettingModal from "../SettingModal";
+import {getReduxData} from "@funcUtils/getReduxData";
+import {StorageKeys} from "../../constants";
+import {MachineProps} from "@interfaces/Switch";
+import {AvailableMachines} from "@interfaces/main";
+import CurrentChecker from "@components/SwitchController/CurrentChecker";
+import '@styles/components/switch_controller.scss';
 
 interface IconsProps extends MachineProps {}
 const Icons = ({machine}: IconsProps) => {
@@ -25,8 +24,8 @@ const Icons = ({machine}: IconsProps) => {
 interface CheckersProps extends MachineProps {}
 const Checkers = ({machine}: CheckersProps) => {
   return (
-    <Box className='checker' flexGrow={1} p={1} >
-      {/*<CurrentChecker machine={machine}/>*/}
+    <Box className='checkers' flexGrow={1} p={1} >
+      <CurrentChecker machine={machine}/>
       <AutomationChecker machine={machine} />
     </Box>
   )
@@ -42,8 +41,7 @@ const PowerSwitch = ({machine}: PowerSwitchProps) => {
 }
 
 export default function SwitchController() {
-  const current_page: string = decodeURI(window.location.pathname.replace('/',''))
-  const machines = Object.keys(store.getState()[LocalStorageKeys.SWITCHES][current_page]);
+  const machines = Object.keys(getReduxData(StorageKeys.SWITCHES));
 
   const SwitchesWrapper = () => {
     return (
@@ -58,18 +56,18 @@ export default function SwitchController() {
     )
   }
 
-/*  const SettingModalWrapper = () => {
+  const SettingModalWrapper = () => {
     return (
-      <Box style={{textAlign:'center'}}>
-       {/!*<SettingModal />*!/}
+      <Box className='modal-button-box'>
+       <SettingModal />
       </Box>
     )
-  }*/
+  }
 
   return (
     <Card className='switch-controllers' >
         <SwitchesWrapper />
-        {/*<SettingModalWrapper />*/}
+        <SettingModalWrapper />
     </Card>
   );
 }

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {LoginState} from "../../interfaces/Ilogin";
-import styles from "../../styles/components/signin.scss";
+import {LoginState} from "@interfaces/Login";
+import "@styles/components/signin.scss";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from "@material-ui/core/TextField";
-import '../../styles/components/signin.scss'
+import '@styles/components/signin.scss'
 
 const {Colors} = require('../../values/colors');
 const CssTextField = withStyles({
@@ -14,14 +14,14 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-type SignInProps = {
+interface SignInProps {
   type: keyof LoginState;
   handleOnChange(e: { target: { value: any;}; }): void ;
 }
 
 function SignInInput ({type, handleOnChange}: SignInProps) {
   return (
-    <CssTextField id={type} InputProps={{className: styles.input}}
+    <CssTextField id={type} InputProps={{className: 'input'}}
                   className="login" placeholder={type} type={type} onChange={handleOnChange}/>
   )
 }

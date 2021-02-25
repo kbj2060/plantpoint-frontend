@@ -1,0 +1,89 @@
+@import '../abstracts/variables';
+
+.stepper-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  .wrapper {
+    text-align: center;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.16), 0 3px 5px rgba(0, 0, 0, 0.23);
+    background-color : $custom-theme;
+    border-radius : 15px;
+    padding : 20px;
+
+    .stepper {
+      background-color : rgba(255,255,255,0) !important;
+      padding-bottom: 1% !important;
+
+      .alternativeLabel {
+        color: $font-color;
+        font-size : 0.9rem;
+      }
+      .active {
+        color: #dec11e !important
+      }
+      .completed {
+        color: gray !important
+      }
+      .iconActive {
+        color: #dec11e !important
+      }
+      .iconCompleted {
+        color: gray !important
+      }
+
+    }
+  }
+
+}
+
+.auto-switch-wrapper {
+  display: inline-flex;
+
+  .button-label {
+    font-size: 0.8rem;
+    color: $font-color;
+  }
+}
+
+.close-icon-wrapper {
+  display: flex;
+
+  .close-icon {
+    margin-left:auto;
+    color: $font-color;
+    cursor: pointer;
+  }
+}
+
+.back-button {
+  float:left;
+  color: $font-color;
+  margin-right: 1%;
+}
+
+.content {
+  padding-left: 24px;
+  padding-top: 10px;
+  padding-bottom: 1%;
+  color: $font-color;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.content-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.next-button {
+  float:right;
+  color: $font-color;
+}
+

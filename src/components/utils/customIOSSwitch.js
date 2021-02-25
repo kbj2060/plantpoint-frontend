@@ -1,7 +1,7 @@
 import {withStyles} from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import React from "react";
-import * as styles from '../../styles/abstracts/_variables.scss';
+import * as styles from '@styles/abstracts/_variables.scss';
 
 const {Colors} = require('../../values/colors')
 export const CustomIOSSwitch = withStyles((theme) => ({

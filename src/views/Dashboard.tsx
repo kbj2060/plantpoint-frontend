@@ -1,85 +1,68 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import AppBar from '../components/AppBar/appbar';
 import {CheckLogin} from "../utils/CheckLogin";
 import {Redirect} from "react-router-dom";
 import {Grid} from "@material-ui/core";
 import SwitchController from "../components/SwitchController";
+import {useDispatch} from "react-redux";
+import getCurrentPage from "../utils/getCurrentPage";
+import axios from "axios";
+import {HttpUrls, Reports} from "../constants";
+import {saveAutomation} from "@redux/modules/ControlAutomation";
+import { ResponseAutomationRead} from "@interfaces/Automation";
+import {ResponseSwitchesReadLast} from "@interfaces/Switch";
+import {ReducerSaveSwitchesDto, saveSwitch} from "@redux/modules/ControlSwitch";
+import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
+import {saveMachines} from "@redux/modules/ControlMachine";
+import {groupBy} from "../utils/groupBy";
 import '../styles/layouts/dashboard.scss';
 
-/*
-const timezone = () => {
-  return moment().format('YYYY-MM-DD HH:mm:ss');
-}
-*/
-
-type DashboardProps = {
+interface DashboardProps {
   page: string;
 }
 
 export default function Dashboard({page}: DashboardProps) {
-/*
-  const {environments, sections, machines} = require('root/values/preferences.json')
-  const {auto:defaultSetting, switches:defaultMachineStatus} = require('root/values/defaults.json');
-  const {autoItem} = require('root/values/preferences.json');
   const dispatch = useDispatch();
-  const [isLoadingSwitch, setIsLoadingSwitch] = React.useState(true);
-  const [isLoadingAuto, setIsLoadingAuto] = React.useState(true);
+  const current_section: string = getCurrentPage();
 
-  const current_section = getCurrentPage();
-
-  const getControlAuto = async () => {
-    await axios.get('/api/get/auto', {
-      params: {
-        selects : ['machine', 'enable', 'duration', 'type'],
-        where : autoItem[current_section],
-        section : current_section
-      }
-    }).then(({data}) => {
-      if(Object.keys(data).length === Object.keys(defaultSetting).length){
-        dispatch(saveSetting(data))
-        saveState("auto", data)
-      } else {
-        dispatch(saveSetting(defaultSetting));
-        saveState("auto", defaultSetting)
-      }
-      setIsLoadingAuto(false);
-    })
+  async function getAutomation () {
+    await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_section}`)
+      .then(({data}) => {
+        const {lastAutomations}: ResponseAutomationRead = data;
+        const groupedAutomations = groupBy(lastAutomations, 'machine');
+        dispatch(saveAutomation(groupedAutomations));
+      })
   }
 
-  const getControlSwitches = async () => {
-      await axios.get('/api/get/switch/now',{
-        params: {
-          section : current_section
-        }
-      }).then(({data}) => {
-          if(checkEmpty(data)){
-            dispatch(saveSwitch(defaultMachineStatus[current_section]))
-            saveState("switches", defaultMachineStatus[current_section])
-          } else {
-            let status = {}
-            machines[current_section].forEach((machine) => {
-              status[machine] = data[current_section].includes(machine)
-            })
-            dispatch(saveSwitch(status))
-            saveState("switches", status)
-          }
-        setIsLoadingSwitch(false);
+  async function getSwitches () {
+      await axios.get(`${HttpUrls.SWITCHES_READ_LAST}/${current_section}`)
+        .then(({data}) => {
+          const response: ResponseSwitchesReadLast[] = data;
+          const grouped: ReducerSaveSwitchesDto = groupBy(response, 'machine');
+          dispatch(saveSwitch(grouped));
+      })
+  }
+
+  interface ResponseMachineRead {
+    machine: AvailableMachines;
+    machineSection: AvailableMachineSection;
+  }
+
+  async function getAvailableMachines (machineSection: string) {
+    return await axios.get(`${HttpUrls.MACHINES_READ}/${machineSection}`)
+      .then(({data}) => {
+        const response: ResponseMachineRead[] = data;
+        dispatch( saveMachines(response) );
       })
   }
 
   useEffect(() => {
-      getControlSwitches();
-      getControlAuto();
-      return () => {
-        setIsLoadingSwitch(true);
-        setIsLoadingAuto(true);
-      }
-  }, []);
-
-  if(isLoadingAuto || isLoadingSwitch) {
-    return null
-  }
-*/
+    getAvailableMachines(current_section)
+      .then(() => {
+        getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
+        getAutomation().then(() => console.log(Reports.AUTOMATION_LOADED));
+      })
+  });
 
   return (
     CheckLogin() ?

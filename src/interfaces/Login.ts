@@ -1,26 +1,26 @@
-export type LoginState = {
+export interface LoginState {
   username: string,
   password: string,
-};
+}
 
-export type SignInResult = {
+export interface SignInResult {
   access_token: string,
 }
 
-export type SigninDto = {
+export interface SigninDto {
   username: string,
   password: string,
 }
 
 export type AuthStatus = 'INIT'| 'FAILURE' | 'SUCCESS';
 
-export type AuthDetail = {
+export interface AuthDetail {
   isLoggedIn: boolean,
   currentUser: string,
-};
+}
 
-export type Auth = {
+export interface Auth {
   login : Record<'status', AuthStatus>,
   status : AuthDetail,
   accessToken: string,
-};
+}

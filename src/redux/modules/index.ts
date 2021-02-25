@@ -3,12 +3,14 @@ import ControlSwitch from "./ControlSwitch";
 import ControlAutomation from "./ControlAutomation";
 import Authentication from "./Authentication";
 import ControlScheduleDate from "./ControlScheduleDate";
+import ControlMachine from "./ControlMachine";
 
 const allReducers = combineReducers({
 	switches: ControlSwitch,
-	auto: ControlAutomation,
+	automation: ControlAutomation,
 	authentication: Authentication,
-	date : ControlScheduleDate
+	date : ControlScheduleDate,
+	machine: ControlMachine,
 });
 
 export type RootState = ReturnType<typeof allReducers>

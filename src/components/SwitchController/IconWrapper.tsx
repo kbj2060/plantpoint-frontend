@@ -4,14 +4,12 @@ import WhatshotIcon from "@material-ui/icons/Whatshot";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import ToysIcon from "@material-ui/icons/Toys";
 import OpacityIcon from "@material-ui/icons/Opacity";
-import {shallowEqual, useSelector} from "react-redux";
-import {LocalStorageKeys} from "../../constants";
-import {RootState} from "../../redux/modules";
-import {AvailableMachines, AvailableMachineSection} from "../../interfaces/main";
-import '../../styles/components/switch_controller.scss';
-import '../../styles/animations/fan_out.scss';
+import {AvailableMachines} from "@interfaces/main";
+import '@styles/components/switch_controller.scss';
+import '@styles/animations/fan_out.scss';
+import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
 
-type activeIconProps = {
+interface activeIconProps {
   active: boolean;
 }
 
@@ -45,14 +43,12 @@ const CustomToysIcon = ({active}: activeIconProps) => {
     : <ToysIcon className='default-icon' />
 };
 
-type IconWrapperProps = {
+interface IconWrapperProps {
   machine: AvailableMachines;
 }
 
 export default function IconWrapper({machine}: IconWrapperProps) {
-  const current_page = decodeURI(window.location.pathname.replace('/',''))
-  const animation: boolean = useSelector((state: RootState) =>
-    state[LocalStorageKeys.SWITCHES][current_page as AvailableMachineSection][machine], shallowEqual );
+  const isAnimated: boolean = useSubscribeSwitchStatus(machine);
 
   function getIcon (machine: AvailableMachines, active: boolean): JSX.Element {
     const icons = {
@@ -65,7 +61,7 @@ export default function IconWrapper({machine}: IconWrapperProps) {
     return icons[machine]
   }
 
-  return animation === undefined
+  return isAnimated === undefined
           ? getIcon(machine as AvailableMachines, false)
-          : getIcon(machine as AvailableMachines, animation)
+          : getIcon(machine as AvailableMachines, isAnimated)
 }

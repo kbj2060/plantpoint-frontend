@@ -1,19 +1,16 @@
 import {AvailableMachines, AvailableMachineSection} from "./main";
+import {ReducerControlSwitchDto} from "../redux/modules/ControlSwitch";
 
-export type MachineProps = {
+export interface MachineProps {
   machine: AvailableMachines;
 }
 
-export type CreateSwitchDto = {
+export interface CreateSwitchDto {
   machine : AvailableMachines;
   machineSection : AvailableMachineSection;
   status : number;
   controlledBy : string;
 }
 
-export type DispatchControlSwitchDto = {
-  machineSection: AvailableMachineSection;
-  machine: AvailableMachines;
-  status: boolean;
-}
+export interface ResponseSwitchesReadLast extends ReducerControlSwitchDto {}
 

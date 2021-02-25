@@ -1,6 +1,6 @@
 import update from 'react-addons-update';
 import {loadState, saveState} from "../../components/LocalStorage/index.ts";
-import {checkEmpty} from "../../utils/CheckEmpty";
+import {checkEmpty} from "../../utils/checkEmpty";
 
 
 export const AUTH_INIT = "AUTH_INIT";

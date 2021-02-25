@@ -6,6 +6,11 @@
 @import "components/signin";
 @import "components/switch_controller";
 
+@import "components/automation_content";
+@import 'components/automation_stepper';
+@import 'components/automation_modal';
+@import 'components/automation_slider';
+
 @import "animations/fan_out";
 
 @import "layouts/dashboard";
