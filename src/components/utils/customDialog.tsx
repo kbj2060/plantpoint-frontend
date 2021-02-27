@@ -13,7 +13,6 @@ interface DialogProps {
   title: string,
   description: string,
 }
-
 function CustomDialog(
   {open, handleClose, title, description}: DialogProps
 ) {

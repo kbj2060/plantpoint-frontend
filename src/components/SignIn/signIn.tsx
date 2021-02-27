@@ -6,9 +6,9 @@ import {useDispatch} from "react-redux";
 import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
 import {saveState} from "../LocalStorage";
-import {AppName, AuthResults, HttpUrls, StorageKeys, Messages, PagePaths, Reports, Texts} from "../../constants";
-import CustomDialog from "../utils/customDialog";
-import SignInInput from "./siginInput";
+import {AppName, AuthResults, HttpUrls, StorageKeys, Errors, PagePaths, Reports, Texts} from "../../constants";
+import CustomDialog from "@compUtils/CustomDialog";
+import SignInInput from "./SiginInput";
 import '@styles/components/signin.scss'
 
 function getSuccessAuth (username: string, token: string): Auth {
@@ -24,7 +24,7 @@ function getSuccessAuth (username: string, token: string): Auth {
   }
 }
 
-interface Signin {
+interface SignIn {
   username: string;
   password: string;
 }
@@ -32,7 +32,7 @@ interface Signin {
 export default function SignInComponent() {
   const [auth, setAuth] = React.useState<Auth>(defaultAuth);
   const [open, setOpen] = React.useState<boolean>(false);
-  const signin: Signin = { username: '', password: '' } as Signin;
+  const signin: SignIn = { username: '', password: '' } as SignIn;
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -118,8 +118,8 @@ export default function SignInComponent() {
       <CustomDialog
         open={open}
         handleClose={handleDialogClose}
-        title={Messages.SIGNIN_FAILURE_TITLE}
-        description={Messages.SIGNIN_FAILURE_DESC} />
+        title={Errors.SIGNIN_FAILURE_TITLE}
+        description={Errors.SIGNIN_FAILURE_DESC} />
     </div>
   )
 }

@@ -1,3 +1,22 @@
-@mixin icon-color ($color) {
+@import "variables";
+
+@mixin iconColor ($color) {
   color: $color
+}
+
+@mixin handleChipColor ($color) {
+  color : $font-color !important;
+  border-color: $font-color !important;
+  margin: 10px !important;
+  .MuiChip-labelSmall {
+    color: $color;
+  }
+}
+
+@mixin dashboardComponent () {
+  margin: 1% !important;
+  height : auto;
+  border-radius: $component-radius !important;
+  background-color: $custom-theme !important;
+  box-shadow: $neum-out-shadow !important;
 }

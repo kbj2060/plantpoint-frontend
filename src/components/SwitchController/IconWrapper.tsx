@@ -48,7 +48,7 @@ interface IconWrapperProps {
 }
 
 export default function IconWrapper({machine}: IconWrapperProps) {
-  const isAnimated: boolean = useSubscribeSwitchStatus(machine);
+  const isAnimated: boolean = useSubscribeSwitchStatus(machine) as boolean;
 
   function getIcon (machine: AvailableMachines, active: boolean): JSX.Element {
     const icons = {

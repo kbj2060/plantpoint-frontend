@@ -2,25 +2,20 @@ import React, {memo, useCallback, useEffect} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
-import {CustomIOSSwitch} from "../utils/customIOSSwitch";
-import {ColorCircularProgress} from "../utils/colorCircularProgress";
+import {CustomIOSSwitch} from "@compUtils/CustomIOSSwitch";
 import {ReducerControlSwitchDto} from "@redux/modules/ControlSwitch"
-import {store} from "@redux/store";
 import '@styles/components/switch_controller.scss';
 import getCurrentUser from "../../utils/getCurrentUser";
 import {CreateSwitchDto, MachineProps} from "@interfaces/Switch";
-import {HttpUrls, StorageKeys, Reports} from "../../constants";
+import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 //import socket from '../../socket';
-//import {CheckLogin} from "../utils/CheckLogin";
-//import getCurrentUser from "../utils/getCurrentUser";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 
-interface switchesProps extends MachineProps {}
-function Switches({machine}: switchesProps) {
-  const [state, setState] = React.useState(true);
-  const [isLoading, setIsLoading] = React.useState(true);
+interface SwitchesProps extends MachineProps {}
+function Switches({machine}: SwitchesProps) {
+  const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
   const current_page = decodeURI(window.location.pathname.replace('/',''))
 
@@ -55,27 +50,27 @@ function Switches({machine}: switchesProps) {
   const handleChange = (e: { persist: () => void; target: { checked: any; }; }) => {
     e.persist();
     const status: boolean = e.target.checked;
-    const currentSwitches = store.getState()[StorageKeys.SWITCHES];
-    const dispatchControlSwitch: ReducerControlSwitchDto = {
+    const controlSwitchDto: ReducerControlSwitchDto = {
       machineSection: current_page as AvailableMachineSection,
       machine: machine as AvailableMachines,
       status: status,
     }
 
-    if ((machine === "cooler" && status && currentSwitches['heater'])
-      || (machine === "heater" && status && currentSwitches['cooler'])) {
+    if ((machine === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
+      || (machine === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])) {
       return;
     }
 
-    changeSwitchStatus( dispatchControlSwitch );
+    changeSwitchStatus( controlSwitchDto );
     setState( status );
     //emitSocket(status);
-    postSwitchMachine( status ).then(() => Reports.SWITCH_CHANGED)
+    postSwitchMachine( status )
+      .then(()=> { console.log(Reports.SWITCH_CHANGED); })
+      .catch(() => { console.log(Errors.POST_SWITCH_FAILURE); })
   }
 
   const cleanup = () => {
     //socket.disconnect();
-    setIsLoading(true);
   }
 
   const getMemorizedMachineState = useCallback(() => {
@@ -91,17 +86,11 @@ function Switches({machine}: switchesProps) {
   }
 
   useEffect(() => {
-    setState( getMemorizedMachineState() )
-    setIsLoading(false)
     //receiveSocket();
     return () => {
       cleanup();
     }
-  }, [machine, getMemorizedMachineState]);
-
-  if(isLoading){
-    return <ColorCircularProgress />
-  }
+  }, [machine]);
 
   return (
     <>

@@ -7,7 +7,7 @@ import ToysIcon from '@material-ui/icons/Toys';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
 import LoopIcon from '@material-ui/icons/Loop';
-import {ColorCircularProgress} from "../utils/colorCircularProgress";
+import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import getCurrentPage from "@funcUtils/getCurrentPage";
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -17,10 +17,10 @@ import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAuto
 import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
 
-interface SettingExplanationProp {
+interface SettingExplanationProps {
   position: string,
 }
-export default function SettingExplanation({position}: SettingExplanationProp) {
+export default function SettingExplanation({position}: SettingExplanationProps) {
   const current_page = getCurrentPage();
   const [automations, setAutomations] = React.useState<ReducerAutomationState>(getReduxData(StorageKeys.AUTO));
   const [isLoading, setIsLoading] = React.useState(true);

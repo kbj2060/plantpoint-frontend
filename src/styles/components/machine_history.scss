@@ -1,0 +1,38 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.machine-history-root {
+  flex-shrink: 0;
+  iconButton {
+    color: $font-color;
+  }
+}
+
+.container {
+  @include dashboardComponent();
+  width: 100% !important;
+  height: auto;
+}
+
+.text  {
+  color : $font-color;
+  font-weight : bold;
+}
+
+.status-on  {
+  color : $button-on;
+}
+
+.status-off  {
+  color : $button-off
+}
+
+.table  {
+  height: 100%
+}
+
+.footer {
+  padding: 0;
+  width : 100%;
+  color : $font-color;
+}

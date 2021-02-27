@@ -5,6 +5,6 @@ export interface ReadCurrentDto {
   machine: string;
 }
 
-export interface ResponseCurrentDto extends ReadCurrentDto {
+export interface ResponseCurrentRead extends ReadCurrentDto {
   current: number;
 }

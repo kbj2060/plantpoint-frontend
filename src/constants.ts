@@ -14,6 +14,7 @@ export enum HttpUrls {
   AUTOMATION_CREATE = 'http://localhost:9000/automations/create',
   SWITCHES_CREATE = 'http://localhost:9000/switches/create',
   SWITCHES_READ_LAST = 'http://localhost:9000/switches/read/last',
+  SWITCHES_READ = 'http://localhost:9000/switches/read/history',
   MACHINES_READ = 'http://localhost:9000/machines/read',
   CURRENT_READ = 'http://localhost:9000/currents/read'
 }
@@ -24,16 +25,20 @@ export enum Reports {
   SWITCH_LOADED = 'Switch Loaded..',
   AUTOMATION_LOADED = 'Automation Loaded..',
   CURRENT_LOADED = 'Current Loaded..',
+  SWITCH_HISTORY_LOADED = 'Switch History Loaded..',
 }
 
 export enum Texts {
   LOGIN = '로그인',
   OK = '확인',
 }
-export enum Messages {
+
+export enum Errors {
   NO_AUTOMATION_DATA= '해당하는 기계의 자동화 정보가 존재하지 않습니다. 기본값으로 지정합니다.',
   SIGNIN_FAILURE_TITLE = '로그인 실패',
   SIGNIN_FAILURE_DESC = '아이디 혹은 비밀번호를 확인해주세요.',
+  POST_SWITCH_FAILURE = '스위치 작동 실패했습니다. 서버와의 통신을 확인해주세요.',
+  GET_MACHINE_HISTORY_FAILURE = '스위치 기록 불러오기 실패했습니다. 서버와의 통신을 확인해주세요.'
 }
 
 export enum AuthResults {

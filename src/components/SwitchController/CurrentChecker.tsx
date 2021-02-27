@@ -4,7 +4,7 @@ import {checkEmpty} from "@funcUtils/checkEmpty";
 import {MachineProps} from "@interfaces/Switch";
 import getCurrentPage from "@funcUtils/getCurrentPage";
 import {HttpUrls, Reports} from "../../constants";
-import {ResponseCurrentDto} from "@interfaces/Current";
+import { ResponseCurrentRead } from "@interfaces/Current";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -31,7 +31,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 			const machineSection = getCurrentPage();
 			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)
 				.then(({ data }) => {
-					const response: ResponseCurrentDto = data;
+					const response: ResponseCurrentRead = data;
 					if(checkEmpty(response) || response.current < Criteria.current){
 						setFlowing(false);
 					}

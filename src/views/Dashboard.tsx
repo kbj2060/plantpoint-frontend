@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import AppBar from '../components/AppBar/appbar';
+import AppBar from '@components/AppBar/Appbar';
 import {CheckLogin} from "../utils/CheckLogin";
 import {Redirect} from "react-router-dom";
 import {Grid} from "@material-ui/core";
@@ -16,6 +16,8 @@ import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {saveMachines} from "@redux/modules/ControlMachine";
 import {groupBy} from "../utils/groupBy";
 import '../styles/layouts/dashboard.scss';
+import CCTV from "@components/CCTV";
+import MachineHistory from "@components/MachinesHistory";
 
 interface DashboardProps {
   page: string;
@@ -69,16 +71,16 @@ export default function Dashboard({page}: DashboardProps) {
         <div className='dashboard-root' >
           <AppBar page={page}/>
           <Grid container className='grid-container'>
-            <Grid item xs={12} sm={12} md={4} className='item'>
+            <Grid item xs={12} sm={12} md={4} className='item' >
               <SwitchController />
             </Grid>
-            {/*<Grid item xs={12} sm={12} md={4} className={classes.item}>
+            <Grid item xs={12} sm={12} md={4} className='cctv-item' >
               <CCTV />
             </Grid>
-            <Grid item xs={12} sm={12} md={4} className={classes.item}>
-              <MachinesHistoryCard />
+            <Grid item xs={12} sm={12} md={4} className='item' >
+              <MachineHistory />
             </Grid>
-            {sections.map(section => { return(
+            {/*sections.map(section => { return(
                 <Grid key={section.toString()} item xs={12} sm={12} md={4} className={classes.item} >
                   <StatusDisplay plant={section} />
                 </Grid>)

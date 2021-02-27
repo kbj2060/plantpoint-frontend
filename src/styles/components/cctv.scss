@@ -1,0 +1,8 @@
+@import '../abstracts/variables';
+
+.cctv {
+  height: 98%;
+  width: 98%;
+  border-radius: $component-radius;
+  margin: 1%;
+}

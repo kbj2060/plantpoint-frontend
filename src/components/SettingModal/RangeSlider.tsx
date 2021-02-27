@@ -2,7 +2,7 @@ import React, {useImperativeHandle} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {useDispatch} from "react-redux";
 import {controlAutomation, ReducerAutomationDto} from "@redux/modules/ControlAutomation";
-import {CustomIosSlider} from "../utils/CustomIosSlider";
+import {CustomIosSlider} from "@compUtils/CustomIosSlider";
 import update from 'react-addons-update';
 import Chip from "@material-ui/core/Chip";
 import {StorageKeys} from "../../constants";
@@ -11,10 +11,11 @@ import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {MachineProps} from "@interfaces/Switch";
 import {TaskNextButtonRef} from "./CustomStepper";
+import '@styles/components/automation_slider.scss';
 
-interface RangeSliderProp extends MachineProps {}
+interface RangeSliderProps extends MachineProps {}
 export const RangeSlider = React.forwardRef(
-  ({ machine }: RangeSliderProp,
+  ({ machine }: RangeSliderProps,
             ref?: React.Ref<TaskNextButtonRef>) => {
     const {Units} = require('../../values/units');
     const {defaultAutomations} = require('../../values/defaults')
@@ -75,8 +76,8 @@ export const RangeSlider = React.forwardRef(
             />
           </Grid>
           <Grid className='explanation'>
-            <Chip className='chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
-            <Chip className='chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
+            <Chip className='on-chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
+            <Chip className='off-chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
           </Grid>
         </div>
       );

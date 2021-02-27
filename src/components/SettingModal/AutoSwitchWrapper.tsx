@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from "@material-ui/core/Grid";
-import {CustomAntSwitch} from "../utils/customAntSwitch";
+import {CustomAntSwitch} from "@compUtils/CustomAntSwitch";
 import { ReducerAutomationDto } from "@redux/modules/ControlAutomation";
 import {StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -8,10 +8,10 @@ import '@styles/components/automation_content.scss';
 import {AvailableMachines} from "@interfaces/main";
 import useChangeAutomationEnable from "@hooks/useChangeAutomationEnable";
 
-interface AutoSwitchWrapperProp {
+interface AutoSwitchWrapperProps {
   machine: AvailableMachines;
 }
-export default function AutoSwitchWrapper({machine}: AutoSwitchWrapperProp) {
+export default function AutoSwitchWrapper({machine}: AutoSwitchWrapperProps) {
   const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine];
   const [status, setStatus] = React.useState(singleAutomation.enable);
   const changeAutomationEnable = useChangeAutomationEnable();
