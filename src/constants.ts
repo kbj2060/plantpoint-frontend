@@ -6,6 +6,7 @@ export enum StorageKeys {
   SWITCHES='switches',
   AUTO='automation',
   MACHINE='machine',
+  ENVIRONMENTS='environments',
 }
 
 export enum HttpUrls {
@@ -16,7 +17,8 @@ export enum HttpUrls {
   SWITCHES_READ_LAST = 'http://localhost:9000/switches/read/last',
   SWITCHES_READ = 'http://localhost:9000/switches/read/history',
   MACHINES_READ = 'http://localhost:9000/machines/read',
-  CURRENT_READ = 'http://localhost:9000/currents/read'
+  CURRENT_READ = 'http://localhost:9000/currents/read',
+  ENVIRONMENTS_READ_LAST = 'http://localhost:9000/environments/read/last'
 }
 
 export enum Reports {
@@ -26,6 +28,7 @@ export enum Reports {
   AUTOMATION_LOADED = 'Automation Loaded..',
   CURRENT_LOADED = 'Current Loaded..',
   SWITCH_HISTORY_LOADED = 'Switch History Loaded..',
+  ENVIRONMENTS_LOADED = 'Environments Loaded..'
 }
 
 export enum Texts {

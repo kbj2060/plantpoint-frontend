@@ -2,7 +2,7 @@ import React, {useImperativeHandle, useState} from 'react';
 import CircularTimespanpicker from "./TimeSpanPicker";
 import {useDispatch} from "react-redux";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
-import useWindowDimensions from "../../utils/useWindowDimensions";
+import useWindowDimensions from "@hooks/useWindowDimensions";
 import TermControlButton from "./TermControlButton";
 import {StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";

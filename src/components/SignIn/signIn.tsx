@@ -45,7 +45,7 @@ export default function SignInComponent() {
     setOpen(false);
   }, []);
 
-  const handleLoginChange =(type: keyof LoginState) => (e: { target: { value: any; }; }): void => {
+  const handleLoginChange = (type: keyof LoginState) => (e: { target: { value: any; }; }): void => {
     signin[type] = e.target.value
     /*setLogin({ ...login, [type]: e.target.value })*/
   }

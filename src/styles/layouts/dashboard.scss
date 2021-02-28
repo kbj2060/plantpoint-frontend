@@ -12,11 +12,16 @@
   width : 100% !important;
   background-color : $custom-theme;
   .item {
+    height: auto;
     display: flex;
   }
   .cctv-item {
     position: relative;
     border-radius: 10px !important;
+  }
+  .status-display-item {
+    display: flex;
+    height: 100%;
   }
 }
 

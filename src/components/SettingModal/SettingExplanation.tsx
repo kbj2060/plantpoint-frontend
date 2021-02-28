@@ -9,19 +9,19 @@ import Chip from '@material-ui/core/Chip';
 import LoopIcon from '@material-ui/icons/Loop';
 import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
-import getCurrentPage from "@funcUtils/getCurrentPage";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {groupBy} from "@funcUtils/groupBy";
 import {HttpUrls, StorageKeys} from "../../constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
+import {currentPage} from "@funcUtils/currentPage";
 
 interface SettingExplanationProps {
   position: string,
 }
 export default function SettingExplanation({position}: SettingExplanationProps) {
-  const current_page = getCurrentPage();
+  const machineSection = currentPage();
   const [automations, setAutomations] = React.useState<ReducerAutomationState>(getReduxData(StorageKeys.AUTO));
   const [isLoading, setIsLoading] = React.useState(true);
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
   // HEAD(이전 설정) 데이터 불러오기 함수
   // TODO : 리덕스에서 그냥 꺼내쓰는 것과 디비에서 꺼내 쓰는 것 비교해보기.
   const getDatabaseAutomation = useCallback(async () => {
-    await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_page}`)
+    await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
       .then(({data}) => {
         const {lastAutomations} = data;
         const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');
@@ -39,7 +39,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
         setAutomations(getReduxData(StorageKeys.AUTO));
         setIsLoading(false);
       })
-  }, [dispatch, current_page]);
+  }, [dispatch, machineSection]);
 
   // TAIL(현재 설정) 데이터 보여주기 함수
   const getReduxAutomation = () => {

@@ -3,21 +3,22 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
 import {CustomIOSSwitch} from "@compUtils/CustomIOSSwitch";
-import {ReducerControlSwitchDto} from "@redux/modules/ControlSwitch"
+import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
-import getCurrentUser from "../../utils/getCurrentUser";
 import {CreateSwitchDto, MachineProps} from "@interfaces/Switch";
 import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 //import socket from '../../socket';
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
+import {currentPage} from "@funcUtils/currentPage";
+import {currentUser} from "@funcUtils/currentUser";
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
+  const machineSection = currentPage();
   const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
-  const current_page = decodeURI(window.location.pathname.replace('/',''))
 
   /*const emitSocket = (status) => {
     socket.emit('sendSwitchControl', {
@@ -38,11 +39,12 @@ function Switches({machine}: SwitchesProps) {
 
   const postSwitchMachine = async (status: boolean) => {
     const convertedStatus: number = status? 1 : 0;
+    const username = currentUser() as string;
     const switchCreateDto: CreateSwitchDto = {
       machine : machine,
-      machineSection : current_page as AvailableMachineSection,
+      machineSection : machineSection as AvailableMachineSection,
       status : convertedStatus,
-      controlledBy : getCurrentUser(),
+      controlledBy : username,
     }
     await axios.post(HttpUrls.SWITCHES_CREATE, switchCreateDto)
   }
@@ -50,8 +52,8 @@ function Switches({machine}: SwitchesProps) {
   const handleChange = (e: { persist: () => void; target: { checked: any; }; }) => {
     e.persist();
     const status: boolean = e.target.checked;
-    const controlSwitchDto: ReducerControlSwitchDto = {
-      machineSection: current_page as AvailableMachineSection,
+    const controlSwitchDto: ReducerControlSwitchesDto = {
+      machineSection: machineSection as AvailableMachineSection,
       machine: machine as AvailableMachines,
       status: status,
     }

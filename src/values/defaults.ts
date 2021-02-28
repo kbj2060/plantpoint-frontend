@@ -38,6 +38,11 @@ export const defaultSwitchesState: ReducerSwitchState = {
 }
 
 export const defaultMachines = ['waterpump', 'led', 'cooler', 'heater', 'fan']
+export const defaultEnvironment = {
+    "humidity": '0',
+    "co2": '0',
+    "temperature": '0'
+  }
 
 export const defaultAutomations = {
   waterpump : {

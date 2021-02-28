@@ -1,0 +1,52 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
+$md-width : 960px;
+
+.title {
+  padding : 5px 0 5px 0;
+  color : $font-color;
+  font-weight : bold
+}
+.environment {
+  padding : 5px 0 5px 0;
+  color : $font-color;
+  text-align : center;
+  font-size : 1rem;
+  font-weight : bold;
+}
+
+.figure-title {
+  color: $s1-1;
+  padding: 5px 0 5px 0;
+}
+
+.figure-card {
+  @include dashboardComponent();
+  width: 100%;
+  height: 100%;
+  border-radius: 20px !important;
+  box-shadow: $neum-out-shadow;
+  text-align : center;
+  background-color : $custom-theme !important;
+}
+
+.figures-wrapper {
+  display: grid;
+  grid-template-columns: 33.3% 33.3% 33.3% 33.3%;
+}
+
+.figure {
+  border-radius: 50% !important;
+  background-color: $custom-theme !important;
+  box-shadow: $neum-in-shadow !important;
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  height: 10vw;
+  width : auto;
+  @media only screen and (max-width : $md-width ) {
+    height: 20vw;
+  }
+}

@@ -11,6 +11,8 @@ import {MachineProps} from "@interfaces/Switch";
 import {AvailableMachines} from "@interfaces/main";
 import CurrentChecker from "@components/SwitchController/CurrentChecker";
 import '@styles/components/switch_controller.scss';
+import {checkLogin} from "@funcUtils/checkLogin";
+import {Redirect} from "react-router-dom";
 
 interface IconsProps extends MachineProps {}
 const Icons = ({machine}: IconsProps) => {
@@ -65,9 +67,11 @@ export default function SwitchController() {
   }
 
   return (
-    <Card className='switch-controllers' >
-        <SwitchesWrapper />
-        <SettingModalWrapper />
-    </Card>
+    checkLogin()
+      ? <Card className='switch-controllers' >
+          <SwitchesWrapper />
+          <SettingModalWrapper />
+        </Card>
+      : <Redirect to='/'/>
   );
 }

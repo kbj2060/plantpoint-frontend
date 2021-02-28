@@ -8,7 +8,6 @@ import axios from "axios";
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {saveState} from "../LocalStorage";
-import getCurrentUser from "../../utils/getCurrentUser";
 import {HttpUrls, StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationState} from "@redux/modules/ControlAutomation";
@@ -17,6 +16,7 @@ import {RangeSlider} from "./RangeSlider";
 import AutoSwitchWrapper from "./AutoSwitchWrapper";
 import {AvailableMachines} from "@interfaces/main";
 import '@styles/components/automation_stepper.scss';
+import {currentUser} from "@funcUtils/currentUser";
 
 const autoSwitchDisable = (index: number, len: number) => {
     return index === 0 || index === len -1;
@@ -118,7 +118,7 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
     }
 
     const handleApply = async () => {
-      const controlledBy: string = getCurrentUser();
+      const controlledBy: string = currentUser() as string;
       const automationsDto: ReducerAutomationState = getReduxData(StorageKeys.AUTO);
       saveState(StorageKeys.AUTO, automationsDto);
       await axios.post(`${HttpUrls.AUTOMATION_CREATE}/${controlledBy}`, automationsDto)
