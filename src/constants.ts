@@ -11,15 +11,24 @@ export enum StorageKeys {
 
 export enum HttpUrls {
   SIGNIN = `http://localhost:9000/authentication/signin`,
+
   AUTOMATION_READ = 'http://localhost:9000/automations/read',
   AUTOMATION_CREATE = 'http://localhost:9000/automations/create',
+
   SWITCHES_CREATE = 'http://localhost:9000/switches/create',
   SWITCHES_READ_LAST = 'http://localhost:9000/switches/read/last',
   SWITCHES_READ = 'http://localhost:9000/switches/read/history',
+
   MACHINES_READ = 'http://localhost:9000/machines/read',
   CURRENT_READ = 'http://localhost:9000/currents/read',
+
   ENVIRONMENTS_READ_LAST = 'http://localhost:9000/environments/read/last',
   ENVIRONMENT_READ_HISTORY = 'http://localhost:9000/environments/read/history',
+
+  SCHEDULES_CREATE = 'http://localhost:9000/schedules/create',
+  SCHEDULES_READ = 'http://localhost:9000/schedules/read',
+  SCHEDULES_UPDATE = 'http://localhost:9000/schedules/update',
+  SCHEDULES_DELETE = 'http://localhost:9000/schedules/delete',
 }
 
 export enum Reports {
@@ -31,6 +40,8 @@ export enum Reports {
   SWITCH_HISTORY_LOADED = 'Switch History Loaded..',
   ENVIRONMENTS_LOADED = 'Environments Loaded..',
   ENVIRONMENTS_HISTORY_LOADED = 'Environments History Loaded..',
+  SCHEDULES_REMOVED = 'Schedules Removed..',
+  SCHEDULES_CREATED = 'Schedules Created..',
 }
 
 export enum Texts {

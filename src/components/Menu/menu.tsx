@@ -40,12 +40,12 @@ export default function Menu() {
 	const [state, setState] = React.useState<boolean>(false);
 	const dispatch = useDispatch();
 
-  const openDrawer = (event: BaseSyntheticEvent) => {
+  function openDrawer<T extends BaseSyntheticEvent> (event: T) {
 		if (event && event.type === 'keydown') { return; }
 		setState( true );
 	}
 
-	const closeDrawer = (event: BaseSyntheticEvent) => {
+	function closeDrawer<T extends BaseSyntheticEvent> (event: T) {
 		if (event && event.type === 'keydown') { return; }
 		setState( false );
 	}

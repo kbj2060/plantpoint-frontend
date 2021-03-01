@@ -4,6 +4,7 @@ import "@styles/components/signin.scss";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from "@material-ui/core/TextField";
 import '@styles/components/signin.scss'
+import {BaseSyntheticEvent} from "react";
 
 const {Colors} = require('../../values/colors');
 const CssTextField = withStyles({
@@ -16,7 +17,7 @@ const CssTextField = withStyles({
 
 interface SignInProps {
   type: keyof LoginState;
-  handleOnChange(e: { target: { value: any;}; }): void ;
+  handleOnChange(e: BaseSyntheticEvent): void ;
 }
 
 function SignInInput ({type, handleOnChange}: SignInProps) {

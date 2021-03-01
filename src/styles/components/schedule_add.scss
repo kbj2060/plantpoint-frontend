@@ -1,0 +1,84 @@
+@import '../abstracts/variables';
+
+.root {
+  &.MuiPaper-root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  & .MuiOutlinedInput-root {
+    &.Mui-focused fieldset {
+      border-color: $graphGrid-color;
+    }
+  }
+  &.MuiFormControl-root {
+    width: 90%;
+  }
+  &.MuiOutlinedInput-multiline {
+    width: 90%;
+    &.Mui-focused fieldset {
+      border-color: $graphGrid-color;
+    }
+  }
+}
+
+.container {
+  height: 100%;
+}
+
+.header {
+  padding : 3% 0;
+  text-align : center;
+}
+
+.grid-container {
+  width: 100%;
+  box-shadow : $neum-out-shadow;
+  background-color : $custom-theme;
+  border-radius: 1em;
+  height:100%;
+  justify-content: center;
+}
+
+.grid-item {
+  padding : 1% 0;
+  width: 100%;
+}
+
+.date-header {
+  padding : 1.5% 0;
+  width: 100%;
+}
+
+.title {
+  width : 100%;
+}
+
+.button-grid {
+  width : 100%;
+  text-align: center;
+  padding : 1%;
+}
+
+.button  {
+  margin : 0 2%;
+}
+
+.text-field{
+  width : 90%;
+  border-color : $graphGrid-color;
+}
+
+.notched-outline  {
+  border-color : $graphGrid-color;
+}
+
+.input {
+  text-align: center;
+  padding: 1rem 1.5rem;
+  border: 1px solid $graphGrid-color;
+  border-radius: 100px;
+  color: $font-color;
+  outline: none;
+  background-color: transparent;
+}

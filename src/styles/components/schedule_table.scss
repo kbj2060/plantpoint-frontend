@@ -1,0 +1,41 @@
+@import '../abstracts/variables';
+
+.table-wrapper {
+  height: 100%;
+  width: 100%;
+  box-shadow : $neum-out-shadow;
+  background-color : $custom-theme;
+  border-radius: 1em;
+
+  .table-paper {
+    height: 100%;
+    border-radius: 1em;
+    width: 100%;
+    background : transparent;
+
+    .table {
+      width: 100%;
+
+      .text-container {
+        max-width : 100px;
+        display: block;
+        white-space: nowrap;
+        margin : auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+root  {
+  &.MuiTableRow-root {
+    &.Mui-selected {
+      background-color: rgba(140,138,122,0.5);
+    }
+  }
+  &.MuiSvgIcon-root {
+    color: #8C8A7A;
+  }
+}
+
