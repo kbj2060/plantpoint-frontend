@@ -17,29 +17,29 @@ interface TermControlButtonProp {
 
 function TermControlButton({machine}: TermControlButtonProp) {
   const dispatch = useDispatch();
-  const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine]
-  const [term, setTerm] = React.useState(singleAutomation.term);
+  const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
+  const [term, setTerm] = React.useState<number>( singleAutomation.term );
 
   const handleTermUp = () => {
-    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine]
+    const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
     setTerm(prev => {
       const updated = update(singleAutomation, {
         term : { $set: ++prev },
       })
-      dispatch(controlAutomation(updated));
+      dispatch(controlAutomation( updated ));
       return prev
     })
   }
 
   const handleTermDown = () => {
-    const reduxSetting = store.getState()[StorageKeys.AUTO][machine]
+    const reduxSetting = store.getState()[ StorageKeys.AUTO ][ machine ];
     setTerm(prev => {
       if(prev <= 1) { return 1; }
       const updated = update(reduxSetting, {
-        term : {$set: --prev},
+        term : { $set: --prev },
       })
-      dispatch(controlAutomation(updated));
-      return prev
+      dispatch(controlAutomation( updated ));
+      return prev;
     })
   }
 

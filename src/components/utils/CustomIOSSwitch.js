@@ -1,9 +1,9 @@
 import {withStyles} from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import React from "react";
-import * as styles from '@styles/abstracts/_variables.scss';
 
-const {Colors} = require('../../values/colors')
+const customTheme = '#D9D8D2';
+const neumInShadow = 'inset 6px 6px 12px #a5a4a0,inset -6px -6px 12px #ffffff';
 export const CustomIOSSwitch = withStyles((theme) => ({
   root: {
     width: 48,
@@ -13,9 +13,7 @@ export const CustomIOSSwitch = withStyles((theme) => ({
   switchBase: {
     border: 'none',
     borderRadius: '50%',
-    background: styles['custom-theme'],
     overflow: 'hidden',
-    boxShadow: Colors.neumInShadow,
     padding: 1,
     display:'flex',
     alignItems:'center',
@@ -24,8 +22,8 @@ export const CustomIOSSwitch = withStyles((theme) => ({
       overflow: 'hidden',
       transform: 'translateX(22px)',
       '& + $track': {
-        backgroundColor : Colors.customTheme,
-        boxShadow: Colors.neumInShadow,
+        backgroundColor : customTheme,
+        boxShadow: neumInShadow,
         opacity: 1,
         overflow: 'hidden',
       },
@@ -39,14 +37,14 @@ export const CustomIOSSwitch = withStyles((theme) => ({
     width: 24,
     height: 24,
     borderRadius: '50%',
-    background: Colors.customTheme,
+    background: customTheme,
     border : 'none',
   },
   track: {
     border: 'none',
     borderRadius: 26 / 2,
-    backgroundColor: Colors.customTheme,
-    boxShadow : Colors.neumInShadow,
+    backgroundColor: customTheme,
+    boxShadow : neumInShadow,
     opacity: 1,
     transition: theme.transitions.create(['background-color', 'border']),
   },
@@ -65,7 +63,36 @@ export const CustomIOSSwitch = withStyles((theme) => ({
         checked: classes.checked,
       }}
       {...props}
-    >
-    </Switch>
+    />
   );
 });
+
+/*
+import Switch from "@material-ui/core/Switch";
+import React from "react";
+import '@styles/components/custom_ios_switch.scss';
+
+import '@styles/abstracts/_variables.scss';
+
+interface CustomIOSSwitchProps {
+  checked: boolean;
+  key: string;
+  onChange : (e: { persist: () => void; target: { checked: any; };}) => void;
+  value: string
+}
+export const CustomIOSSwitch = ({  ...props }: CustomIOSSwitchProps) => {
+  return (
+    <Switch
+      focusVisibleClassName='focusVisible'
+      disableRipple
+      classes={{
+        root: 'root',
+        switchBase: 'switchBase',
+        thumb: 'thumb',
+        track: 'track',
+        checked: 'checked',
+      }}
+      {...props}
+    />
+  );
+}*/

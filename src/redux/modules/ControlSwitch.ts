@@ -6,15 +6,15 @@ import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 const CONTROL_SWITCH = "CONTROL_SWITCH";
 const SAVE_SWITCH = "SAVE_SWITCH";
 
-export type ReducerControlSwitchDto = {
+export type ReducerControlSwitchesDto = {
   machineSection: AvailableMachineSection;
   machine: AvailableMachines;
   status: number | boolean;
 }
-export type ReducerSaveSwitchesDto = Record<AvailableMachines, ReducerControlSwitchDto>;
+export type ReducerSaveSwitchesDto = Record<AvailableMachines, ReducerControlSwitchesDto>;
 export type ReducerSwitchState = Record<AvailableMachines, boolean>
 
-export function controlSwitch(_switch: ReducerControlSwitchDto) {
+export function controlSwitch(_switch: ReducerControlSwitchesDto) {
   return { type: CONTROL_SWITCH, _switch }
 }
 
@@ -24,7 +24,7 @@ export function saveSwitch(_switch: ReducerSaveSwitchesDto) {
 
 export interface actionTypes {
   type: "CONTROL_SWITCH" | "SAVE_SWITCH";
-  _switch: ReducerSaveSwitchesDto | ReducerControlSwitchDto;
+  _switch: ReducerSaveSwitchesDto | ReducerControlSwitchesDto;
 }
 
 const {defaultSwitchesState} = require('../../values/defaults');
@@ -36,7 +36,7 @@ function ControlSwitch(
 ): ReducerSwitchState {
   switch(action.type){
     case CONTROL_SWITCH:
-      const {machine, status} = action._switch as ReducerControlSwitchDto;
+      const {machine, status} = action._switch as ReducerControlSwitchesDto;
       const updatedState: ReducerSwitchState = update(state, {
           [machine] : { $set: status >= 1 }
       });
@@ -47,9 +47,9 @@ function ControlSwitch(
       const switches = action._switch as ReducerSaveSwitchesDto;
       const reducerSwitchState: ReducerSwitchState = {} as ReducerSwitchState;
       Object.keys(switches).forEach((key: string) => {
-        reducerSwitchState[key as AvailableMachines] =
-          switches[key as AvailableMachines]['status'] >= 1;
+        reducerSwitchState[key as AvailableMachines] = switches[key as AvailableMachines]['status'] >= 1;
       })
+      saveState(StorageKeys.SWITCHES, reducerSwitchState);
       return reducerSwitchState;
 
     default:

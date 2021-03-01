@@ -1,4 +1,4 @@
-import {loadState, saveState} from "../../components/LocalStorage";
+import {loadState} from "@components/LocalStorage";
 import {StorageKeys} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 
@@ -12,25 +12,27 @@ export interface ReducerMachineDto {
 export function saveMachines(machines: ReducerMachineDto[]) {
   return { type: SAVE_MACHINES, machines }
 }
-/*
-export type actionTypes = {
+
+export type ActionTypes = {
   type: "SAVE_MACHINES";
-  _switch: ReducerSwitchState;
-}*/
+  machines: ReducerMachineDto[];
+}
 
 const {defaultMachines} = require('../../values/defaults');
 const initialState = loadState(StorageKeys.MACHINE) || defaultMachines
 
 function ControlMachine(
-  state =initialState, action: any
+  state =initialState, action: ActionTypes
 ): AvailableMachines[] {
   switch(action.type){
     case SAVE_MACHINES:
-      const _machines =  action.machines.map((m: ReducerMachineDto) => {
+      return  action.machines.map((m: ReducerMachineDto) => {
         return m.machine
       });
+/*
       saveState(StorageKeys.MACHINE, _machines);
-      return  _machines;
+
+      return  _machines;*/
 
     default:
       return initialState

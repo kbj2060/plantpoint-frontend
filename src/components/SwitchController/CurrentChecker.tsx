@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import axios from "axios";
 import {checkEmpty} from "@funcUtils/checkEmpty";
-import {MachineProps} from "@interfaces/Switch";
-import getCurrentPage from "@funcUtils/getCurrentPage";
+import {MachineProps} from "@interfaces/main";
 import {HttpUrls, Reports} from "../../constants";
-import {ResponseCurrentDto} from "@interfaces/Current";
+import { ResponseCurrentRead } from "@interfaces/Current";
+import {currentPage} from "@funcUtils/currentPage";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -26,12 +26,12 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	//     'Authorization': token
 	//   }, 을 추가하여 보안
 	useEffect(() => {
-		const {Criteria, UpdateTimeOut} = require('../../values/defaults')
+		const {Criteria, UpdateTimeOut} = require('@values/defaults')
 		const fetchCurrent = async () => {
-			const machineSection = getCurrentPage();
+			const machineSection = currentPage();
 			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)
 				.then(({ data }) => {
-					const response: ResponseCurrentDto = data;
+					const response: ResponseCurrentRead = data;
 					if(checkEmpty(response) || response.current < Criteria.current){
 						setFlowing(false);
 					}
@@ -53,6 +53,6 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	if (!flowing) {
 		return <></>
 	}
-	return <CurrentFlowing fillColor={'#dec11e'}/>
+	return <CurrentFlowing fillColor={'#F6BD60'}/>
 
 }

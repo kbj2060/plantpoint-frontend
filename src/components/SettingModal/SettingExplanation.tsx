@@ -7,29 +7,29 @@ import ToysIcon from '@material-ui/icons/Toys';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
 import LoopIcon from '@material-ui/icons/Loop';
-import {ColorCircularProgress} from "../utils/colorCircularProgress";
+import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
-import getCurrentPage from "@funcUtils/getCurrentPage";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {groupBy} from "@funcUtils/groupBy";
 import {HttpUrls, StorageKeys} from "../../constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
+import {currentPage} from "@funcUtils/currentPage";
 
-interface SettingExplanationProp {
+interface SettingExplanationProps {
   position: string,
 }
-export default function SettingExplanation({position}: SettingExplanationProp) {
-  const current_page = getCurrentPage();
+
+export default function SettingExplanation({position}: SettingExplanationProps) {
+  const machineSection = currentPage();
   const [automations, setAutomations] = React.useState<ReducerAutomationState>(getReduxData(StorageKeys.AUTO));
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
-  // HEAD(이전 설정) 데이터 불러오기 함수
   // TODO : 리덕스에서 그냥 꺼내쓰는 것과 디비에서 꺼내 쓰는 것 비교해보기.
   const getDatabaseAutomation = useCallback(async () => {
-    await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_page}`)
+    await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
       .then(({data}) => {
         const {lastAutomations} = data;
         const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');
@@ -37,17 +37,17 @@ export default function SettingExplanation({position}: SettingExplanationProp) {
       })
       .then(() => {
         setAutomations(getReduxData(StorageKeys.AUTO));
-        setIsLoading(false);
+        setIsLoaded(true);
       })
-  }, [dispatch, current_page]);
+  }, [dispatch, machineSection]);
 
   // TAIL(현재 설정) 데이터 보여주기 함수
   const getReduxAutomation = () => {
     setAutomations(getReduxData(StorageKeys.AUTO));
-    setIsLoading(false);
+    setIsLoaded(true);
   }
 
-  const getAutoEnable = (subject: AvailableMachines) => {
+  function getAutoEnable<T extends AvailableMachines>(subject: T) {
     if(!checkEmpty(subject)){
       return automations[subject].enable;
     }
@@ -57,7 +57,7 @@ export default function SettingExplanation({position}: SettingExplanationProp) {
     return (<Chip key={'off'} className='chip' variant="outlined" size="small" label={"자동화 꺼짐"} /> )
   }
 
-  const getCycleChips = (subject: AvailableMachines) => {
+  function getCycleChips<T extends AvailableMachines> (subject: T) {
     if(!checkEmpty(automations[subject])){
       let {start, end, term} = automations[subject];
       let result = [];
@@ -105,12 +105,12 @@ export default function SettingExplanation({position}: SettingExplanationProp) {
       ? getDatabaseAutomation()
       : getReduxAutomation()
     return () => {
-      setIsLoading(true);
+      setIsLoaded(false);
     }
   }, [position, getDatabaseAutomation])
 
   return(
-  isLoading
+  !isLoaded
     ? <ColorCircularProgress />
     : <table className='table'>
       <tbody>

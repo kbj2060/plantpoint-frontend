@@ -2,9 +2,10 @@
 @import '../abstracts/mixins';
 
 .switch-controllers {
-  height : auto;
-  background-color: $custom-theme !important;
-  box-shadow: none !important;
+  @include dashboardComponent();
+  width: 100%;
+  display: grid;
+  padding : 5% 5% 1% 5%;
 }
 
 .control-form {
@@ -14,7 +15,6 @@
 .display-power-on {
   padding-left : 10px;
   width : 40px;
-  color : $button-on
 }
 
 .display-power-off {
@@ -25,7 +25,6 @@
 
 // TODO : 섹션 별로 기계 수 체크하여 변수로 넣기
 .switch-wrapper {
-  height: calc(100%/5);
 }
 
 .icons {
@@ -59,36 +58,31 @@
 }
 
 .cooler-icon {
-  @include icon-color($cooler-icon)
+  @include iconColor($cooler-icon)
 }
 
 .heater-icon {
-  @include icon-color($heater-icon)
+  @include iconColor($heater-icon)
 }
 
 .waterpump-icon {
-  @include icon-color($waterpump-icon)
+  @include iconColor($waterpump-icon)
 }
 
 .led-icon {
-  @include icon-color($led-icon)
+  @include iconColor($led-icon)
 }
 
 .current-icon {
-  height : 1.5em;
+  height : 1.3em;
   width : 1.5em;
   margin : auto;
   vertical-align: middle;
   text-align:center;
   padding: 1px;
 }
+
 .checkers  {
   margin: auto;
 }
 
-/*
-.controlCardDiv {
-padding: 3% 0 3% 0;
-height:100%
-}
-*/

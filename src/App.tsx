@@ -4,6 +4,7 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import {PagePaths} from "./constants";
+import Scheduler from "./views/Scheduler";
 /*
 const useStyles = makeStyles(() =>({
   video : {
@@ -42,11 +43,10 @@ function App() {
         <Route exact path={`/${PagePaths.MAIN}`} >
           <Dashboard page={PagePaths.MAIN}/>
         </Route>
-
-        {/*<Route exact path="/scheduler" >
-          <Scheduler page={"scheduler"}/>
+        <Route exact path="/scheduler" >
+          <Scheduler />
         </Route>
-        <Route exact path="/setting" >
+        {/*<Route exact path="/setting" >
           <Setting page={"setting"} />
         </Route>*/}
       </div>

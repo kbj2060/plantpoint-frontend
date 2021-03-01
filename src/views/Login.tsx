@@ -1,5 +1,5 @@
 import React from 'react';
-import SignInComponent from "../components/SignIn/signIn";
+import SignInComponent from "@components/SignIn/SignIn";
 
 export default function Login() {
     return(

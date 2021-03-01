@@ -6,7 +6,6 @@ const iOSBoxShadow =
 
 export const CustomIosSlider = withStyles(({
   root: {
-    color: props => props.linecolor,
     height: 2,
     padding: '15px 0',
   },

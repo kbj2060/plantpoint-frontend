@@ -1,17 +1,16 @@
-import React, {useCallback, useEffect} from "react";
+import React, {BaseSyntheticEvent, useCallback, useEffect} from "react";
 import {Auth, LoginState, SigninDto, SignInResult} from "@interfaces/Login";
 import {defaultAuth} from "@values/defaults";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
-import {saveState} from "../LocalStorage";
-import {AppName, AuthResults, HttpUrls, StorageKeys, Messages, PagePaths, Reports, Texts} from "../../constants";
-import CustomDialog from "../utils/customDialog";
-import SignInInput from "./siginInput";
+import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../constants";
+import CustomDialog from "@compUtils/CustomDialog";
+import SignInInput from "./SiginInput";
 import '@styles/components/signin.scss'
 
-function getSuccessAuth (username: string, token: string): Auth {
+function getSuccessAuth<T extends string>(username: T, token: T): Auth {
   return {
     login: {
       status: 'SUCCESS'
@@ -24,7 +23,7 @@ function getSuccessAuth (username: string, token: string): Auth {
   }
 }
 
-interface Signin {
+interface SignIn {
   username: string;
   password: string;
 }
@@ -32,7 +31,7 @@ interface Signin {
 export default function SignInComponent() {
   const [auth, setAuth] = React.useState<Auth>(defaultAuth);
   const [open, setOpen] = React.useState<boolean>(false);
-  const signin: Signin = { username: '', password: '' } as Signin;
+  const signin: SignIn = { username: '', password: '' } as SignIn;
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -45,12 +44,11 @@ export default function SignInComponent() {
     setOpen(false);
   }, []);
 
-  const handleLoginChange =(type: keyof LoginState) => (e: { target: { value: any; }; }): void => {
+  const handleLoginChange = <T extends keyof LoginState> (type: T) => <U extends BaseSyntheticEvent> (e: U): void => {
     signin[type] = e.target.value
-    /*setLogin({ ...login, [type]: e.target.value })*/
   }
 
-  const dispatchLoginSuccess = (username: string, accessToken: string): void  => {
+  function dispatchLoginSuccess<T extends string> (username: T, accessToken: T): void {
     dispatch(loginSuccess(username, accessToken))
   }
 
@@ -63,19 +61,17 @@ export default function SignInComponent() {
     setAuth(defaultAuth);
   }
 
-  const loginRequest = async (username: string, password: string) => {
-    const signinDto: SigninDto = {
+  async function loginRequest<T extends string>(username: T, password: T) {
+    const dto: SigninDto = {
       username: username,
       password: password,
     }
-    await axios.post(HttpUrls.SIGNIN, signinDto)
+    await axios.post(HttpUrls.SIGNIN, dto)
       .then(({data}) => {
         const result: SignInResult = data;
         const accessToken = result.access_token;
         const updatedAuth = getSuccessAuth(username, accessToken);
-
         dispatchLoginSuccess(username, accessToken);
-        saveState(StorageKeys.AUTHENTICATION, updatedAuth);
         setAuth(updatedAuth);
       })
       .catch(() => {
@@ -83,10 +79,10 @@ export default function SignInComponent() {
       });
   }
 
-  const handleSubmit = (event: { preventDefault: () => void; }): void => {
+  function handleSubmit<T extends BaseSyntheticEvent>(event: T): void {
     event.preventDefault();
     loginRequest(signin.username, signin.password).then(() => Reports.SIGNIN_FINISH);
-  };
+  }
 
   useEffect(() => {
     switch (auth.login.status) {
@@ -118,8 +114,8 @@ export default function SignInComponent() {
       <CustomDialog
         open={open}
         handleClose={handleDialogClose}
-        title={Messages.SIGNIN_FAILURE_TITLE}
-        description={Messages.SIGNIN_FAILURE_DESC} />
+        title={Errors.SIGNIN_FAILURE_TITLE}
+        description={Errors.SIGNIN_FAILURE_DESC} />
     </div>
   )
 }

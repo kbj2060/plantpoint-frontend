@@ -1,4 +1,5 @@
 @import '../abstracts/variables';
+@import '../abstracts/mixins';
 
 .slider-root {
   width: auto;
@@ -7,15 +8,15 @@
   }
   .explanation {
     padding: 3% 0;
-    .chip {
-      color : $font-color;
-      border-color: $font-color;
-      margin: 0 10%;
-    }
   }
 }
+.off-chip {
+  @include handleChipColor(#ff6a6a)
+}
 
-
+.on-chip {
+  @include handleChipColor(#409640)
+}
 
 .title {
   font-weight : 1000;

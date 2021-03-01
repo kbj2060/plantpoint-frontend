@@ -1,0 +1,65 @@
+@import '../abstracts/variables';
+
+$drawer-width: 300px;
+
+.drawer {
+  height: 100%;
+  min-width : $drawer-width;
+  overflow: hidden;
+}
+.container {
+  height: 100%;
+  min-width : $drawer-width - 10;
+}
+
+.header {
+  padding : 3% 0;
+  text-align : center;
+}
+
+.detail-grid-container {
+  padding: 3%;
+  width: 100%;
+  height: auto;
+  min-width : $drawer-width - 10;
+}
+
+.grid-item {
+  padding : 1% 0;
+}
+
+.title {
+  width : $drawer-width - 30;
+}
+
+.drawer-paper {
+  background-color: $custom-theme !important;
+  height: 100% !important;
+  min-width :  $drawer-width - 10;
+  overflow: hidden;
+}
+
+.button-grid {
+  width : 100%;
+  text-align: center;
+  padding : 2%;
+}
+
+.button  {
+  margin : 0 2%
+}
+
+.detail-text-field {
+  width : 100%;
+}
+
+.detail-input {
+  width: 100%;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  border: 1px solid $graphGrid-color;
+  border-radius: 100px;
+  color: $font-color;
+  outline: none;
+  background-color: transparent;
+}

@@ -14,16 +14,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {DrawerDirection, PageNames, PagePaths} from "../../constants";
 import logo from '../../logo.jpeg';
 import "@styles/components/menu.scss";
-import {DrawerDirection, PageNames, PagePaths} from "../../constants";
 
 interface LinkButtonProps {
 	to: string;
 	value: string;
 	icon: React.ReactNode;
 	onClick?: ((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void) | undefined;
-};
+}
 
 const LinkButton = (props: LinkButtonProps) => {
 	return (
@@ -40,12 +40,12 @@ export default function Menu() {
 	const [state, setState] = React.useState<boolean>(false);
 	const dispatch = useDispatch();
 
-  const openDrawer = (event: BaseSyntheticEvent) => {
+  function openDrawer<T extends BaseSyntheticEvent> (event: T) {
 		if (event && event.type === 'keydown') { return; }
 		setState( true );
 	}
 
-	const closeDrawer = (event: BaseSyntheticEvent) => {
+	function closeDrawer<T extends BaseSyntheticEvent> (event: T) {
 		if (event && event.type === 'keydown') { return; }
 		setState( false );
 	}
