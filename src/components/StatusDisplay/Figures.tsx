@@ -19,15 +19,15 @@ export default function Figures({ plant }: FiguresProps) {
   const changeEnvironmentStatus = useChangeEnvironmentStatus();
 
   useEffect(() => {
-    const {Time} = require('@values/time');
+    const { Time } = require('@values/time');
     const getCurrentStatus = async () => {
       await axios.get(`${HttpUrls.ENVIRONMENTS_READ_LAST}/${plant}`)
         .then(({data}) => {
-          const environmentDto: ReducerEnvironmentDto = {
+          const dto: ReducerEnvironmentDto = {
             ...data,
             environmentSection: plant
           }
-          changeEnvironmentStatus(environmentDto);
+          changeEnvironmentStatus(dto);
         });
     }
 

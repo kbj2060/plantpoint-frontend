@@ -20,7 +20,7 @@
     "co2", "humidity", "temperature"
   ],
   "sections": [
-    "s1-1", "s1-2", "s1-3"
+    "d1", "d2", "d3"
   ],
   "autoItem":{
     "s1" : ["led", "heater","cooler", "fan", "waterpump"]

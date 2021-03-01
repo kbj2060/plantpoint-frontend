@@ -11,9 +11,9 @@ export enum Translations {
     dashboard = "홈",
     setting = "설정",
     logout = "로그아웃",
-    s1_1 = "LEFT",
-    s1_2 = "CENTER",
-    s1_3 = "RIGHT",
+    d1 = "LEFT",
+    d2 = "CENTER",
+    d3 = "RIGHT",
     무들로29= "s1",
     s1= "무들로29",
 }

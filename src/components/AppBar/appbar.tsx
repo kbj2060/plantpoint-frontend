@@ -11,6 +11,7 @@ interface AppBarProps {
 
 export default function PermanentAppBar(props: AppBarProps) {
   const {page} = props;
+  const {Translations} = require('@values/translations');
 
   return (
     <div className='appbar-root' >
@@ -20,7 +21,7 @@ export default function PermanentAppBar(props: AppBarProps) {
               color='primary'>
         <Toolbar>
           <Typography className='title' variant="h6">
-            {page}
+            {Translations[page]}
           </Typography>
           <div className='grow' />
           <div className='menu' >

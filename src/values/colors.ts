@@ -1,8 +1,8 @@
 export enum Colors {
     customTheme = '#D9D8D2',
-    s1_1 = '#8C8A7A',
-    s1_2 = '#7A828C',
-    s1_3 = '#6F6C8C',
+    d1 = '#8C8A7A',
+    d2 = '#7A828C',
+    d3 = '#6F6C8C',
     buttonOn = '#61564E',
     buttonOff = '#474346',
     neumInShadow = 'inset 6px 6px 12px #a5a4a0,inset -6px -6px 12px #ffffff',

@@ -19,6 +19,7 @@ import CCTV from "@components/CCTV";
 import MachineHistory from "@components/MachinesHistory";
 import StatusDisplay from "@components/StatusDisplay";
 import {currentPage} from "@funcUtils/currentPage";
+import EnvironmentsHistoryComponent from "@components/EnvironmentsHistroy";
 
 interface DashboardProps {
   page: string;
@@ -92,11 +93,12 @@ export default function Dashboard({page}: DashboardProps) {
                   <StatusDisplay plant={section} />
                 </Grid>)
               })}
-            {/*{environments.map(env => { return (
-              <Grid key={env.toString()} item xs={12} sm={12} md={12} lg={4} xl={4}  className={classes.item}>
-                <EnvironmentsHistroy environment={env} />
-              </Grid>)
-              })}*/}
+            {['co2', 'temperature', 'humidity'].map((environment) => {
+              return (
+                <Grid key={environment.toString()} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
+                  <EnvironmentsHistoryComponent environment={environment} />
+                </Grid>)
+              })}
           </Grid>
         </div>
       : <Redirect to='/'/>

@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import Figures from "./Figures";
 
-
 interface StatusDisplayProps {
   plant: string;
 }
@@ -11,14 +10,10 @@ interface StatusDisplayProps {
 export default function StatusDisplay({plant}: StatusDisplayProps) {
   const {Translations} = require('@values/translations');
 
-  const getEnvironmentSectionName = (plant: string) => {
-    return plant.replace('-','_')
-  }
-
   const FigureTitle = () => {
     return (
       <Typography className='figure-title' >
-        {Translations[getEnvironmentSectionName(plant)]}
+        {Translations[plant]}
       </Typography>
     )
   }

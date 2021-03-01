@@ -1,11 +1,12 @@
-import React, {memo, useCallback, useEffect} from 'react';
+import React, {BaseSyntheticEvent, memo, useCallback, useEffect} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
 import {CustomIOSSwitch} from "@compUtils/CustomIOSSwitch";
 import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
-import {CreateSwitchDto, MachineProps} from "@interfaces/Switch";
+import {CreateSwitchDto} from "@interfaces/Switch";
+import {MachineProps} from "@interfaces/main";
 import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -37,22 +38,22 @@ function Switches({machine}: SwitchesProps) {
       }})
   }*/
 
-  const postSwitchMachine = async (status: boolean) => {
+  const postSwitchMachine = async <T extends boolean> (status: T) => {
     const convertedStatus: number = status? 1 : 0;
     const username = currentUser() as string;
-    const switchCreateDto: CreateSwitchDto = {
+    const dto: CreateSwitchDto = {
       machine : machine,
       machineSection : machineSection as AvailableMachineSection,
       status : convertedStatus,
       controlledBy : username,
-    }
-    await axios.post(HttpUrls.SWITCHES_CREATE, switchCreateDto)
+    };
+    await axios.post(HttpUrls.SWITCHES_CREATE, dto);
   }
 
-  const handleChange = (e: { persist: () => void; target: { checked: any; }; }) => {
+  function handleChange<T extends BaseSyntheticEvent>(e: T) {
     e.persist();
     const status: boolean = e.target.checked;
-    const controlSwitchDto: ReducerControlSwitchesDto = {
+    const dto: ReducerControlSwitchesDto = {
       machineSection: machineSection as AvailableMachineSection,
       machine: machine as AvailableMachines,
       status: status,
@@ -63,7 +64,7 @@ function Switches({machine}: SwitchesProps) {
       return;
     }
 
-    changeSwitchStatus( controlSwitchDto );
+    changeSwitchStatus( dto );
     setState( status );
     //emitSocket(status);
     postSwitchMachine( status )

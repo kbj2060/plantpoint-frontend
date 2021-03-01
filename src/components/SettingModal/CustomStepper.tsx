@@ -18,26 +18,28 @@ import {AvailableMachines} from "@interfaces/main";
 import '@styles/components/automation_stepper.scss';
 import {currentUser} from "@funcUtils/currentUser";
 
-const autoSwitchDisable = (index: number, len: number) => {
+function autoSwitchDisable<T extends number> (index: T, len: T) {
     return index === 0 || index === len -1;
 }
 
-const getLabels = (steps: string[], translationTable: Record<string,string>) => {
+function getLabels<T extends string> (steps: T[], translations: Record<T,T>) {
   return steps.map((step, index) => {
     if(index === 0){ return '현재 설정' }
     else if(index === steps.length - 1){ return '적용' }
-    else { return `${translationTable[step]}` }
+    else { return `${translations[step]}` }
   });
 }
 
 export interface TaskNextButtonRef {
   handleNextStep: () => void
 }
+
 export interface CustomStepperProp {
   modalClose: () => void;
 }
+
 export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Element {
-  const {Translations} = require('../../values/translations')
+  const {Translations} = require('@values/translations')
   const machines: string[] = getReduxData(StorageKeys.MACHINE);
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const steps: string[] = ['head',...machines, 'tail'];

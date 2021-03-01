@@ -1,4 +1,4 @@
-import React from "react";
+import React, {BaseSyntheticEvent} from "react";
 import {useTheme} from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import LastPageIcon from "@material-ui/icons/LastPage";
@@ -19,19 +19,19 @@ export function TablePaginationActions(
 ) {
   const theme = useTheme();
 
-  const handleFirstPageButtonClick = (event: any) => {
+  function handleFirstPageButtonClick<T extends BaseSyntheticEvent> (event: T) {
     onChangePage(event, 0);
   }
 
-  const handleBackButtonClick = (event: any) => {
+  function handleBackButtonClick<T extends BaseSyntheticEvent> (event: T) {
     onChangePage(event, page - 1);
   }
 
-  const handleNextButtonClick = (event: any) => {
+  function handleNextButtonClick<T extends BaseSyntheticEvent> (event: T) {
     onChangePage(event, page + 1);
   }
 
-  const handleLastPageButtonClick = (event: any) => {
+  function handleLastPageButtonClick<T extends BaseSyntheticEvent> (event: T) {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   }
 

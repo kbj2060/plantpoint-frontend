@@ -7,7 +7,7 @@ import AutomationChecker from "./AutomationChecker";
 import SettingModal from "../SettingModal";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {StorageKeys} from "../../constants";
-import {MachineProps} from "@interfaces/Switch";
+import {MachineProps} from "@interfaces/main";
 import {AvailableMachines} from "@interfaces/main";
 import CurrentChecker from "@components/SwitchController/CurrentChecker";
 import '@styles/components/switch_controller.scss';
@@ -67,11 +67,11 @@ export default function SwitchController() {
   }
 
   return (
-    checkLogin()
-      ? <Card className='switch-controllers' >
+    !checkLogin()
+      ? <Redirect to='/'/>
+      : <Card className='switch-controllers' >
           <SwitchesWrapper />
           <SettingModalWrapper />
         </Card>
-      : <Redirect to='/'/>
   );
 }

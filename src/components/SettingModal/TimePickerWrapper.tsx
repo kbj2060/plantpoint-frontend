@@ -17,10 +17,12 @@ interface Times {
   start: Moment[];
   end: Moment[];
 }
+
 interface TimeSpanPickerProp {
   machine: AvailableMachines;
   outerSize: number;
 }
+
 export const TimeSpanPickerWrapper = React.forwardRef(
   ({machine, outerSize}: TimeSpanPickerProp,
           ref?: React.Ref<TaskNextButtonRef>
@@ -28,16 +30,16 @@ export const TimeSpanPickerWrapper = React.forwardRef(
   const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
   const automationEnable: boolean = useSubscribeAutomationEnable(machine);
-  const singleAutomation = getReduxData(StorageKeys.AUTO)[machine]
   const customHeight = ( height / 2 ) + 5;
   const customWidth = ( width / 2 ) - 20;
   const TIME_FORMAT = 'HH:mm';
+  const singleAutomation = getReduxData(StorageKeys.AUTO)[machine]
   const [times, setTimes] = useState<Times>({
     start: singleAutomation.start,
     end: singleAutomation.end,
   });
 
-  const handleTimePicker = (arrTimes: Array<Moment[]>) => {
+  function handleTimePicker<T extends Moment[]> (arrTimes: T[]) {
     const formattedStartTimes: Moment[] = arrTimes.map((t: any) => t[0].format(TIME_FORMAT))
     const formattedEndTimes: Moment[] = arrTimes.map((t: any) => t[1].format(TIME_FORMAT))
     setTimes(update(times, {
@@ -56,24 +58,25 @@ export const TimeSpanPickerWrapper = React.forwardRef(
 
   return(
     <div className='timepicker-wrapper' >
-      {automationEnable ? (
-        <>
-          <div className='timepicker' >
-            <CircularTimespanpicker
-              subject={machine}
-              onClick={handleTimePicker}
-              outerRadius={outerSize}
-              boundaryHour={0} showResults={false} />
-          </div>
-          <div style={{
-            top: customHeight, left: customWidth,
-            position: 'absolute', display:'flex',
-            zIndex:'auto', fontSize:'1.1rem'
-          }}>
-            <TermControlButton machine={machine}/>
-          </div>
-        </>
-      ): null }
+      {automationEnable
+        ? <>
+            <div className='timepicker' >
+              <CircularTimespanpicker
+                subject={machine}
+                onClick={handleTimePicker}
+                outerRadius={outerSize}
+                boundaryHour={0} showResults={false} />
+            </div>
+            <div style={{
+              top: customHeight, left: customWidth,
+              position: 'absolute', display:'flex',
+              zIndex:'auto', fontSize:'1.1rem'
+            }}>
+              <TermControlButton machine={machine}/>
+            </div>
+          </>
+        : null
+      }
     </div>
   )
 }

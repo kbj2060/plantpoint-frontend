@@ -4,7 +4,7 @@ import WhatshotIcon from "@material-ui/icons/Whatshot";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import ToysIcon from "@material-ui/icons/Toys";
 import OpacityIcon from "@material-ui/icons/Opacity";
-import {AvailableMachines} from "@interfaces/main";
+import {AvailableMachines, MachineProps} from "@interfaces/main";
 import '@styles/components/switch_controller.scss';
 import '@styles/animations/fan_out.scss';
 import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
@@ -43,9 +43,7 @@ const CustomToysIcon = ({active}: activeIconProps) => {
     : <ToysIcon className='default-icon' />
 };
 
-interface IconWrapperProps {
-  machine: AvailableMachines;
-}
+interface IconWrapperProps extends MachineProps {}
 
 export default function IconWrapper({machine}: IconWrapperProps) {
   const isAnimated: boolean = useSubscribeSwitchStatus(machine) as boolean;

@@ -10,8 +10,9 @@ interface CustomTableFooterProps {
   handleChangePage: (event: any, newPage: React.SetStateAction<number>) => void
 }
 
-const CustomTableFooter = ({rowsLength, rowsPerPage, page, handleChangePage}: CustomTableFooterProps) => {
-  console.log(rowsLength)
+const CustomTableFooter = (
+  {rowsLength, rowsPerPage, page, handleChangePage}: CustomTableFooterProps
+) => {
   return(
     <TableRow>
       <TablePagination

@@ -1,4 +1,4 @@
-import React, {useImperativeHandle} from 'react';
+import React, {BaseSyntheticEvent, useImperativeHandle} from 'react';
 import Grid from '@material-ui/core/Grid';
 import {useDispatch} from "react-redux";
 import {controlAutomation, ReducerAutomationDto} from "@redux/modules/ControlAutomation";
@@ -9,16 +9,17 @@ import {StorageKeys} from "../../constants";
 import {AvailableMachines} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
-import {MachineProps} from "@interfaces/Switch";
+import {MachineProps} from "@interfaces/main";
 import {TaskNextButtonRef} from "./CustomStepper";
 import '@styles/components/automation_slider.scss';
 
 interface RangeSliderProps extends MachineProps {}
-export const RangeSlider = React.forwardRef(
-  ({ machine }: RangeSliderProps,
-            ref?: React.Ref<TaskNextButtonRef>) => {
-    const {Units} = require('../../values/units');
-    const {defaultAutomations} = require('../../values/defaults')
+export const RangeSlider = React.forwardRef((
+  { machine }: RangeSliderProps,
+  ref?: React.Ref<TaskNextButtonRef>
+  ) => {
+    const {Units} = require('@values/units');
+    const {defaultAutomations} = require('@values/defaults')
     const dispatch = useDispatch();
     const automationEnable: boolean = useSubscribeAutomationEnable(machine);
     const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine]
@@ -27,27 +28,29 @@ export const RangeSlider = React.forwardRef(
       +singleAutomation.end[0],
     ]);
 
-    const handleChange = (event: React.ChangeEvent<{}>, value: number | number[]) => {
+    function handleChange<T extends BaseSyntheticEvent, U extends number> (
+      event: T, value: U | U[]
+    ) {
       const values: number[] = value as number[];
       setAutomation(values);
-    };
+    }
 
     useImperativeHandle(ref, () => ({
       handleNextStep () {
         const updated: ReducerAutomationDto = update(singleAutomation, {
-          start: {$set: [automation[0]]},
-          end: {$set: [automation[1]]},
+          start: { $set: [ automation[0] ] },
+          end: { $set: [ automation[1] ] },
         })
         dispatch(controlAutomation(updated));
       }
-    }));
+    }))
 
-    function valuetext(value: number) {
+    function valuetext<T extends number>(value: T) {
       return `${value}${Units[machine]}`;
     }
 
 
-    const getOnExplanation = (machine: AvailableMachines) => {
+    function getOnExplanation<T extends AvailableMachines>(machine: T) {
       if (machine === "cooler") {
         return `ON : ${valuetext(automation[1])}`
       } else if (machine === "heater" || machine === "led") {
@@ -55,7 +58,7 @@ export const RangeSlider = React.forwardRef(
       }
     }
 
-    const getOffExplanation = (machine: AvailableMachines) => {
+  function getOffExplanation<T extends AvailableMachines>(machine: T) {
       if (machine === "cooler") {
         return `OFF : ${valuetext(automation[0])}`
       } else if (machine === "heater" || machine === "led") {
@@ -63,26 +66,26 @@ export const RangeSlider = React.forwardRef(
       }
     }
 
-    if (automationEnable) {
-      return (
-        <div>
-          <Grid className='slider-root'>
-            <CustomIosSlider
-              className='slider'
-              min={defaultAutomations[machine].start[0]}
-              max={defaultAutomations[machine].end[0]}
-              value={automation}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid className='explanation'>
-            <Chip className='on-chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
-            <Chip className='off-chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
-          </Grid>
-        </div>
-      );
-    } else {
-      return null;
-    }
+  if (automationEnable) {
+    return (
+      <div>
+        <Grid className='slider-root'>
+          <CustomIosSlider
+            className='slider'
+            min={defaultAutomations[machine].start[0]}
+            max={defaultAutomations[machine].end[0]}
+            value={automation}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid className='explanation'>
+          <Chip className='on-chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
+          <Chip className='off-chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
+        </Grid>
+      </div>
+    );
+  } else {
+    return null;
+  }
   }
 );

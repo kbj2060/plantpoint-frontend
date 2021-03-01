@@ -1,6 +1,7 @@
 import update from 'react-addons-update';
 import {loadState, saveState} from "../../components/LocalStorage/index.ts";
 import {checkEmpty} from "@funcUtils/checkEmpty.ts";
+import {StorageKeys} from "../../constants";
 
 
 export const AUTH_INIT = "AUTH_INIT";
@@ -48,7 +49,7 @@ function Authentication(state, action) {
 
     case AUTH_LOGIN_SUCCESS:
       console.log('login success');
-      return update(state, {
+      const successUpdated = update(state, {
         login: {
           status: { $set: 'SUCCESS' }
         },
@@ -58,17 +59,21 @@ function Authentication(state, action) {
         },
         accessToken: { $set: action.token},
       });
+      saveState( StorageKeys.AUTHENTICATION, successUpdated );
+      return successUpdated
 
     case AUTH_LOGIN_FAILURE:
       console.log('login failed');
-      return update(state, {
+      const failedUpdated = update(state, {
         login: {
           status: { $set: 'FAILURE' }
         }
       });
+      saveState( StorageKeys.AUTHENTICATION, failedUpdated );
+      return failedUpdated;
 
     case LOGOUT:
-      saveState("authentication", initialState)
+      saveState(StorageKeys.AUTHENTICATION, initialState)
       return initialState;
 
     default:

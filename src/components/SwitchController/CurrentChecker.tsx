@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from "axios";
 import {checkEmpty} from "@funcUtils/checkEmpty";
-import {MachineProps} from "@interfaces/Switch";
+import {MachineProps} from "@interfaces/main";
 import {HttpUrls, Reports} from "../../constants";
 import { ResponseCurrentRead } from "@interfaces/Current";
 import {currentPage} from "@funcUtils/currentPage";
@@ -26,7 +26,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	//     'Authorization': token
 	//   }, 을 추가하여 보안
 	useEffect(() => {
-		const {Criteria, UpdateTimeOut} = require('../../values/defaults')
+		const {Criteria, UpdateTimeOut} = require('@values/defaults')
 		const fetchCurrent = async () => {
 			const machineSection = currentPage();
 			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)

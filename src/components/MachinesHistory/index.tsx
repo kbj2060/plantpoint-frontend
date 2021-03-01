@@ -48,8 +48,8 @@ export default function MachineHistory() {
 		setPage(newPage);
   }, [])
 
-  const handleStatus = (row: SingleSwitchHistory) => {
-  		return row.status ? 'ON':'OFF'
+  function handleStatus <T extends SingleSwitchHistory> (row: T) {
+  		return row.status ? 'ON':'OFF';
 	}
 
 	const TableEmptyHandler = () => {
@@ -64,7 +64,7 @@ export default function MachineHistory() {
 		)
 	}
 
-	const updateRows = (switchHistory: SingleSwitchHistory) => {
+	function updateRows<T extends SingleSwitchHistory>(switchHistory: T) {
 		setRows(prevArray => {
 			prevArray.splice(-1, 1)
 			return [switchHistory, ...prevArray]
@@ -100,8 +100,8 @@ export default function MachineHistory() {
 						const { switchHistory }: ResponseSwitchHistoryRead = data;
 						setRows(() => (switchHistory.map((sw) => {
 							sw.created = changeToKoreanDate(sw.created);
-							return sw
-						})))
+							return sw;
+						})));
 						setState(state => ({
 							...state,
 							isLoaded: true,
