@@ -24,7 +24,6 @@ $md-width : 960px;
 .figure-card {
   @include dashboardComponent();
   width: 100%;
-  height: 100%;
   border-radius: 20px !important;
   box-shadow: $neum-out-shadow;
   text-align : center;

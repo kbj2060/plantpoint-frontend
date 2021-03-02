@@ -9,7 +9,6 @@ import {useDispatch} from "react-redux";
 import { Header, MonthSelector, YearSelector, DaysList } from './components';
 import {saveState} from "../LocalStorage";
 import * as PropTypes from "prop-types";
-import DatePicker from "@components/CustomScheduler/DatePicker";
 
 const Calendar = ({
   value,
