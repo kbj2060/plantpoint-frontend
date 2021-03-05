@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, memo, useCallback, useEffect} from 'react';
+import React, {BaseSyntheticEvent, memo, useCallback, useEffect, useMemo} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
@@ -10,33 +10,23 @@ import {MachineProps} from "@interfaces/main";
 import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
-//import socket from '../../socket';
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";
 import {currentUser} from "@funcUtils/currentUser";
+import socket from "../../socket";
+
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
-  const machineSection = currentPage();
+  const machineSection = useMemo(() => currentPage(), []);
   const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
 
-  /*const emitSocket = (status) => {
-    socket.emit('sendSwitchControl', {
-      machine : machine,
-      status : status
-    })
+  const emitSocket = (dto: ReducerControlSwitchesDto) => {
+    socket.open();
+    socket.emit('sendSwitchControl', dto);
+    console.log(socket);
   }
-
-  const receiveSocket = () => {
-    socket.on('receiveSwitchControl', (switchStatus) => {
-      if(machine === switchStatus.machine){
-        console.log(switchStatus)
-        setState({[machine] : switchStatus.status});
-        const _switch = store.getState()['switches'][machine];
-        if (_switch !== switchStatus.status){dispatch(controlSwitch({[machine] : switchStatus.status}));}
-      }})
-  }*/
 
   const postSwitchMachine = async <T extends boolean> (status: T) => {
     const convertedStatus: number = status? 1 : 0;
@@ -66,7 +56,7 @@ function Switches({machine}: SwitchesProps) {
 
     changeSwitchStatus( dto );
     setState( status );
-    //emitSocket(status);
+    emitSocket( dto );
     postSwitchMachine( status )
       .then(()=> { console.log(Reports.SWITCH_CHANGED); })
       .catch(() => { console.log(Errors.POST_SWITCH_FAILURE); })
@@ -89,11 +79,19 @@ function Switches({machine}: SwitchesProps) {
   }
 
   useEffect(() => {
-    //receiveSocket();
+    socket.open();
+
+    socket.on('receiveSwitchControl', (dto: ReducerControlSwitchesDto) => {
+      if(machine === dto.machine && machineSection === dto.machineSection){
+        setState( dto.status as boolean);
+        if (getReduxData(StorageKeys.SWITCHES)[machine] !== dto.status){
+          changeSwitchStatus(dto);
+        }
+      }})
     return () => {
       cleanup();
     }
-  }, [machine]);
+  }, [machine, changeSwitchStatus, machineSection]);
 
   return (
     <>
