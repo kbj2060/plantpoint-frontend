@@ -79,8 +79,6 @@ function Switches({machine}: SwitchesProps) {
   }
 
   useEffect(() => {
-    socket.open();
-
     socket.on('receiveSwitchControl', (dto: ReducerControlSwitchesDto) => {
       if(machine === dto.machine && machineSection === dto.machineSection){
         setState( dto.status as boolean);

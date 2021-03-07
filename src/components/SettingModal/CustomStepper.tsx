@@ -3,7 +3,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import {TimeSpanPickerWrapper} from "./TimePickerWrapper";
+import TimeSpanPickerWrapper from "./TimePickerWrapper";
 import axios from "axios";
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -53,6 +53,7 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
     'cooler' : <RangeSlider key={'cooler'} machine={'cooler'} ref={nextButtonRef} />,
     'fan' : <TimeSpanPickerWrapper key={'fan'} machine={'fan'} outerSize={150} ref={nextButtonRef} />,
     'waterpump' : <TimeSpanPickerWrapper key={'waterpump'} machine={'waterpump'} outerSize={150} ref={nextButtonRef} />,
+    'roofFan' :  <TimeSpanPickerWrapper key={'roofFan'} machine={'roofFan'} outerSize={150} ref={nextButtonRef} />,
     'tail' : <SettingExplanation key={'tail'} position={'tail'} />,
   }
 

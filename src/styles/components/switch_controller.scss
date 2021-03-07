@@ -5,7 +5,7 @@
   @include dashboardComponent();
   width: 100%;
   display: grid;
-  padding : 5% 7% 1% 10%;
+  padding : 3% 7% 1% 10%;
 }
 
 .control-form {
@@ -71,6 +71,10 @@
 
 .led-icon {
   @include iconColor($led-icon)
+}
+
+.roofFan-icon {
+  @include iconColor($roofFan-icon)
 }
 
 .current-icon {

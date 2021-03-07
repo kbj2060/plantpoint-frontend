@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useImperativeHandle} from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -10,15 +10,26 @@ import {StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationDto} from "@redux/modules/ControlAutomation";
 import {AvailableMachines} from "@interfaces/main";
+import {TaskNextButtonRef} from "@components/SettingModal/CustomStepper";
 
 interface TermControlButtonProp {
   machine: AvailableMachines;
 }
 
-function TermControlButton({machine}: TermControlButtonProp) {
+const TermControlButton = React.forwardRef((
+    {machine}: TermControlButtonProp, ref?: React.Ref<TaskNextButtonRef>
+  ) => {
   const dispatch = useDispatch();
   const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
   const [term, setTerm] = React.useState<number>( singleAutomation.term );
+
+  useImperativeHandle(ref, () => ({
+    handleNextStep () {
+      dispatch(controlAutomation(update(singleAutomation, {
+        term: { $set: term },
+      })))
+    }
+  }))
 
   const handleTermUp = () => {
     const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
@@ -34,7 +45,7 @@ function TermControlButton({machine}: TermControlButtonProp) {
   const handleTermDown = () => {
     const reduxSetting = store.getState()[ StorageKeys.AUTO ][ machine ];
     setTerm(prev => {
-      if(prev <= 1) { return 1; }
+      if( prev <= 1 ) { return 1; }
       const updated = update(reduxSetting, {
         term : { $set: --prev },
       })
@@ -57,5 +68,6 @@ function TermControlButton({machine}: TermControlButtonProp) {
     </>
   )
 }
+)
 
 export default React.memo(TermControlButton);
