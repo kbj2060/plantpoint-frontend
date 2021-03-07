@@ -1,7 +1,6 @@
-import {Auth, LoginState} from "@interfaces/Login";
+import {Auth} from "@interfaces/Login";
 import {ReducerSwitchState} from "@redux/modules/ControlSwitch";
 
-// TODO: 기본 값 데이터베이스에 두고 가져올 것.
 export const defaultAuth: Auth = {
   login: {
     status: 'INIT'
@@ -24,20 +23,19 @@ export const Criteria = {
   switchHistory: 20,
 }
 
-export const defaultLoginState: LoginState = {
-  username: "",
-  password: "",
-}
-
 export const defaultSwitchesState: ReducerSwitchState = {
     waterpump: false,
     led: false,
     cooler: false,
     heater: false,
-    fan: false
+    fan: false,
+    roofFan: false,
 }
 
-export const defaultMachines = ['waterpump', 'led', 'cooler', 'heater', 'fan']
+export const environments = ['co2', 'humidity', 'temperature'];
+export const environmentSections = ['d1', 'd2', 'd3'];
+export const machines = ['waterpump', 'led', 'cooler', 'heater', 'fan', 'roofFan'];
+
 export const defaultEnvironment = {
     "humidity": '0',
     "co2": '0',
@@ -55,6 +53,15 @@ export const defaultAutomations = {
     machineSection: 's1',
   },
   fan : {
+    start: [],
+    end: [],
+    term: 1,
+    enable: false,
+    machine: 'fan',
+    automationType: 'cycle',
+    machineSection: 's1',
+  },
+  roofFan : {
     start: [],
     end: [],
     term: 1,

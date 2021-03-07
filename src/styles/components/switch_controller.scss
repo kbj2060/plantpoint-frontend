@@ -5,7 +5,7 @@
   @include dashboardComponent();
   width: 100%;
   display: grid;
-  padding : 5% 5% 1% 5%;
+  padding : 3% 7% 1% 10%;
 }
 
 .control-form {
@@ -21,10 +21,6 @@
   padding-left : 10px;
   width : 40px;
   color : $button-off
-}
-
-// TODO : 섹션 별로 기계 수 체크하여 변수로 넣기
-.switch-wrapper {
 }
 
 .icons {
@@ -71,6 +67,10 @@
 
 .led-icon {
   @include iconColor($led-icon)
+}
+
+.roofFan-icon {
+  @include iconColor($roofFan-icon)
 }
 
 .current-icon {

@@ -83,7 +83,7 @@ function ScheduleAdd (
   }, [selectedDay])
 
   return (
-    <Grid container direction="column" justify="flex-start" alignItems="center" className='grid-container'  >
+    <Grid container direction="column" justify="flex-start" alignItems="center" className='schedule-grid-container'  >
         <Grid item className='date-header' >
           <DatePicker
             value={selectedDays}

@@ -10,7 +10,6 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
 import axios from "axios";
 import {Errors, HttpUrls, Reports } from "../../constants";
 import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
-import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
 import { updatedDiff } from 'deep-object-diff';
 import {AvailableMachines, ComponentState} from "@interfaces/main";
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
@@ -20,6 +19,7 @@ import {currentUser} from "@funcUtils/currentUser";
 import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
+import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
 
 const theme = createMuiTheme({
   overrides: {
@@ -32,7 +32,7 @@ const theme = createMuiTheme({
 });
 
 export default function MachineHistory() {
-	const { WordsTable } = require('@values/strings.json');
+	const { Translations } = require('@values/translations');
 	const [ page, setPage ] = React.useState<number>(0);
   const [ rows, setRows ] = React.useState<SingleSwitchHistory[]>([]);
 	const [ state, setState ] = React.useState<ComponentState>({
@@ -41,7 +41,7 @@ export default function MachineHistory() {
 	});
 	const rowsPerPage = 5;
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-	const refresh = useSubscribeSwitchStatus();
+	const refresh = useSubscribeSwitches();
 	const prevRefresh = usePrevious(refresh);
 
   const handleChangePage = useCallback((event: any, newPage: React.SetStateAction<number>) => {
@@ -122,7 +122,8 @@ export default function MachineHistory() {
 	}, []);
 
 	if (state.error) {
-		return <div>Error: {state.error.message}</div>;
+		console.log(state.error)
+		return <ColorCircularProgress />;
 	} else if (!state.isLoaded) {
 		return <ColorCircularProgress />;
 	} else {
@@ -138,7 +139,7 @@ export default function MachineHistory() {
 								).map((row, index) =>
 									<TableRow key={index}>
 										<TableCell className='text' align="center" component="th" scope="row">
-											{WordsTable[row.machine]}
+											{Translations[row.machine]}
 										</TableCell>
 										<TableCell className={row.status !== 0 ? 'status-on' : 'status-off'}
 															 align="center">{handleStatus(row)}</TableCell>

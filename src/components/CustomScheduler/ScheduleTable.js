@@ -83,7 +83,7 @@ export function ScheduleTable({selectedDay}) {
 
   const removeRows = useCallback((ids) => {
     setRows(rows.filter((row) => !ids.includes(row.id)))
-  }, []);
+  }, [rows]);
 
   const updateRow = ({id, date, title, content, binding}) => {
     setRows(rows.map((row) => id === row.id ? {id, date, title, content, binding} : row))
@@ -116,7 +116,6 @@ export function ScheduleTable({selectedDay}) {
       await axios.get(`${HttpUrls.SCHEDULES_READ}/${sDate}`)
         .then(({data}) => {
           const {SelectedDateSchedules} = data;
-          console.log(SelectedDateSchedules)
           setRows(SelectedDateSchedules);
           setIsLoaded(true);
         })

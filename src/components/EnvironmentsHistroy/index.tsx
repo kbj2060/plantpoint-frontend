@@ -12,6 +12,7 @@ import {EnvironmentsHistory,
         EnvironmentHistoryUnit,
         EnvironmentHistoryReadDto,
         ResponseEnvironmentHistoryRead } from "@interfaces/Environment";
+import {checkEmpty} from "@funcUtils/checkEmpty";
 
 interface EnvironmentsHistoryProps {
   environment : string;
@@ -42,6 +43,7 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
     await axios.get( `${HttpUrls.ENVIRONMENT_READ_HISTORY}/${dto.section}/${dto.environmentName}` )
       .then(({data})=> {
         const { histories }: ResponseEnvironmentHistoryRead = data;
+        if ( checkEmpty(histories) ) { return; }
         const grouped: EnvironmentsHistory = groupBy<EnvironmentHistoryUnit, AvailableEnvironmentSection> (
           histories, 'environmentSection' as AvailableEnvironmentSection
         );

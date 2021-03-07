@@ -6,6 +6,7 @@ export enum Translations {
     co2= "이산화탄소",
     led = "조명",
     fan = "환기",
+    roofFan = "루프팬",
     airconditioner = "공조기",
     waterpump = "급수",
     dashboard = "홈",

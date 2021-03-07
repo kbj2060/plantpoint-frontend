@@ -6,7 +6,7 @@ import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 const CONTROL_SWITCH = "CONTROL_SWITCH";
 const SAVE_SWITCH = "SAVE_SWITCH";
 
-export type ReducerControlSwitchesDto = {
+export interface ReducerControlSwitchesDto {
   machineSection: AvailableMachineSection;
   machine: AvailableMachines;
   status: number | boolean;

@@ -3,11 +3,10 @@
 $drawer-width: 300px;
 
 .drawer {
-  height: 100%;
   min-width : $drawer-width;
   overflow: hidden;
 }
-.container {
+.detail-container {
   height: 100%;
   min-width : $drawer-width - 10;
 }

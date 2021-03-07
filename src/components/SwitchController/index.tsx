@@ -43,13 +43,13 @@ const PowerSwitch = ({machine}: PowerSwitchProps) => {
 }
 
 export default function SwitchController() {
-  const machines = Object.keys(getReduxData(StorageKeys.SWITCHES));
+  const machines = Object.keys(getReduxData(StorageKeys.SWITCHES)).sort();
 
   const SwitchesWrapper = () => {
     return (
       <>
       {machines.map(machine =>
-        <Box key={machine.toString()} className='switch-wrapper' display='flex'>
+        <Box key={machine.toString()} display='flex'>
           <Icons machine={machine as AvailableMachines} />
           <Checkers machine={machine as AvailableMachines}/>
           <PowerSwitch machine={machine as AvailableMachines}/>

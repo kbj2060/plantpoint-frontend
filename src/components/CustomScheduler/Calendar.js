@@ -9,7 +9,6 @@ import {useDispatch} from "react-redux";
 import { Header, MonthSelector, YearSelector, DaysList } from './components';
 import {saveState} from "../LocalStorage";
 import * as PropTypes from "prop-types";
-import DatePicker from "@components/CustomScheduler/DatePicker";
 
 const Calendar = ({
   value,
@@ -209,7 +208,10 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  value : PropTypes.object,
+  value :  PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]),
   onChange: PropTypes.func,
   formatInputText: PropTypes.any,
   inputPlaceholder: PropTypes.any,

@@ -18,8 +18,8 @@ export type ActionTypes = {
   machines: ReducerMachineDto[];
 }
 
-const {defaultMachines} = require('../../values/defaults');
-const initialState = loadState(StorageKeys.MACHINE) || defaultMachines
+const {machines} = require('../../values/defaults');
+const initialState = loadState(StorageKeys.MACHINE) || machines
 
 function ControlMachine(
   state =initialState, action: ActionTypes
@@ -29,11 +29,6 @@ function ControlMachine(
       return  action.machines.map((m: ReducerMachineDto) => {
         return m.machine
       });
-/*
-      saveState(StorageKeys.MACHINE, _machines);
-
-      return  _machines;*/
-
     default:
       return initialState
   }
