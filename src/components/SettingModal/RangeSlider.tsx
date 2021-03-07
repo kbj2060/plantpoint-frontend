@@ -11,6 +11,7 @@ import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";
 import '@styles/components/automation_slider.scss';
+import {CoolerExplanationChip, RangeExplanationChip} from "@interfaces/Automation";
 
 interface RangeSliderProps {
   position: AvailableMachines;
@@ -20,7 +21,6 @@ export const RangeSlider = React.forwardRef((
   { position: machine }: RangeSliderProps,
   ref?: React.Ref<TaskNextButtonRef>
   ) => {
-    const {Units} = require('@values/units');
     const {defaultAutomations} = require('@values/defaults')
     const dispatch = useDispatch();
     const automationEnable: boolean = useSubscribeAutomationEnable(machine);
@@ -33,8 +33,7 @@ export const RangeSlider = React.forwardRef((
     function handleChange<T extends BaseSyntheticEvent, U extends number> (
       event: T, value: U | U[]
     ) {
-      const values: number[] = value as number[];
-      setAutomation(values);
+      setAutomation(value as number[]);
     }
 
     useImperativeHandle(ref, () => ({
@@ -47,24 +46,19 @@ export const RangeSlider = React.forwardRef((
       }
     }))
 
-    function valuetext<T extends number>(value: T) {
-      return `${value}${Units[machine]}`;
-    }
-
-
     function getOnExplanation<T extends AvailableMachines>(machine: T) {
-      if (machine === "cooler") {
-        return `ON : ${valuetext(automation[1])}`
-      } else if (machine === "heater" || machine === "led") {
-        return `ON : ${valuetext(automation[0])}`
+      if ( machine === "cooler" ) {
+        return new CoolerExplanationChip( machine, automation).onText();
+      } else {
+        return new RangeExplanationChip( machine, automation ).onText();
       }
     }
 
   function getOffExplanation<T extends AvailableMachines>(machine: T) {
-      if (machine === "cooler") {
-        return `OFF : ${valuetext(automation[0])}`
-      } else if (machine === "heater" || machine === "led") {
-        return `OFF : ${valuetext(automation[1])}`
+      if ( machine === "cooler" ) {
+        return new CoolerExplanationChip( machine, automation).offText();
+      } else {
+        return new RangeExplanationChip( machine, automation ).offText();
       }
     }
 

@@ -17,11 +17,11 @@ const customBackdrop = withStyles(() => ({
 export default function SettingModal() {
   	const [open, setOpen] = React.useState(false);
 
-    const handleClose = () => {
+    const handleClose = (): void => {
       setOpen(false)
     }
 
-    const AutoIconButton = () => {
+    const AutoIconButton = (): JSX.Element => {
     	const handleOpen = () => {
       	setOpen((prev) => !prev);
     	}
