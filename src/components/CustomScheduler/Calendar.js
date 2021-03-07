@@ -208,7 +208,10 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  value : PropTypes.object,
+  value :  PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]),
   onChange: PropTypes.func,
   formatInputText: PropTypes.any,
   inputPlaceholder: PropTypes.any,

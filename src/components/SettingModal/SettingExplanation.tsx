@@ -16,6 +16,7 @@ import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAuto
 import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
 import {currentPage} from "@funcUtils/currentPage";
+import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 
 interface SettingExplanationProps {
   position: string,
@@ -152,6 +153,14 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
         </td>
         <td className='center-icon'>
             {!getAutoEnable('waterpump') ? getOffChips() : getCycleChips('waterpump')}
+        </td>
+      </tr>
+      <tr className='cell'>
+        <td className='icon'>
+          <RoofFanIcon className='default-icon' />
+        </td>
+        <td className='center-icon'>
+          {!getAutoEnable('roofFan') ? getOffChips() : getCycleChips('roofFan')}
         </td>
       </tr>
       </tbody>

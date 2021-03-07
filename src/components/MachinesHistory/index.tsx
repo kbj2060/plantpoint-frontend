@@ -32,7 +32,7 @@ const theme = createMuiTheme({
 });
 
 export default function MachineHistory() {
-	const { WordsTable } = require('@values/strings.json');
+	const { Translations } = require('@values/translations');
 	const [ page, setPage ] = React.useState<number>(0);
   const [ rows, setRows ] = React.useState<SingleSwitchHistory[]>([]);
 	const [ state, setState ] = React.useState<ComponentState>({
@@ -139,7 +139,7 @@ export default function MachineHistory() {
 								).map((row, index) =>
 									<TableRow key={index}>
 										<TableCell className='text' align="center" component="th" scope="row">
-											{WordsTable[row.machine]}
+											{Translations[row.machine]}
 										</TableCell>
 										<TableCell className={row.status !== 0 ? 'status-on' : 'status-off'}
 															 align="center">{handleStatus(row)}</TableCell>

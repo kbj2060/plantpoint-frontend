@@ -116,7 +116,6 @@ export function ScheduleTable({selectedDay}) {
       await axios.get(`${HttpUrls.SCHEDULES_READ}/${sDate}`)
         .then(({data}) => {
           const {SelectedDateSchedules} = data;
-          console.log(SelectedDateSchedules)
           setRows(SelectedDateSchedules);
           setIsLoaded(true);
         })

@@ -23,7 +23,7 @@ interface TimeSpanPickerProp {
   outerSize: number;
 }
 
-export const TimeSpanPickerWrapper = React.forwardRef(
+const TimeSpanPickerWrapper = React.forwardRef(
   ({machine, outerSize}: TimeSpanPickerProp,
           ref?: React.Ref<TaskNextButtonRef>
   ) => {
@@ -46,7 +46,7 @@ export const TimeSpanPickerWrapper = React.forwardRef(
       start: { $set: formattedStartTimes },
       end: { $set: formattedEndTimes },
     }))
-  };
+  }
 
   useImperativeHandle(ref, () => ({
     handleNextStep () {
@@ -72,7 +72,7 @@ export const TimeSpanPickerWrapper = React.forwardRef(
               position: 'absolute', display:'flex',
               zIndex:'auto', fontSize:'1.1rem'
             }}>
-              <TermControlButton machine={machine}/>
+              <TermControlButton ref={ref} machine={machine}/>
             </div>
           </>
         : null
@@ -81,3 +81,5 @@ export const TimeSpanPickerWrapper = React.forwardRef(
   )
 }
 )
+
+export default React.memo(TimeSpanPickerWrapper);

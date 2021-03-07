@@ -4,6 +4,7 @@ export type AvailableMachines =
   | 'cooler'
   | 'heater'
   | 'fan'
+  | 'roofFan'
 
 export type AvailableMachineSection = 's1'
 

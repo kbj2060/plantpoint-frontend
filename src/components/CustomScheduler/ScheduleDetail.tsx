@@ -12,13 +12,6 @@ import {HttpUrls} from "../../constants";
 import '@styles/components/schedule_detail.scss';
 import {Row, SchedulerDate} from "@interfaces/Scheduler";
 
-/*
-interface Detail {
-  title: string;
-  content: string;
-}
-*/
-
 interface ScheduleDetailProps {
   toggleDrawer: () => void;
   selectedRow: Row;
