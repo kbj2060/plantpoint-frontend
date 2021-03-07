@@ -5,8 +5,12 @@ import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import {PagePaths} from "./constants";
 import Scheduler from "./views/Scheduler";
+import axios from "axios";
+import {getReduxData} from "@funcUtils/getReduxData";
 
 function App() {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${getReduxData('authentication')['accessToken'] || ""}`;
+
   return (
     <BrowserRouter>
       {/*className={classes.parent}*/}

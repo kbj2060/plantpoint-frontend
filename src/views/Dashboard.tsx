@@ -11,7 +11,6 @@ import {saveAutomation} from "@redux/modules/ControlAutomation";
 import { ResponseAutomationRead} from "@interfaces/Automation";
 import {ResponseSwitchesReadLast} from "@interfaces/Switch";
 import {ReducerSaveSwitchesDto, saveSwitch} from "@redux/modules/ControlSwitch";
-import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {saveMachines} from "@redux/modules/ControlMachine";
 import {groupBy} from "../utils/groupBy";
 import '../styles/layouts/dashboard.scss';
@@ -20,6 +19,8 @@ import MachineHistory from "@components/MachinesHistory";
 import StatusDisplay from "@components/StatusDisplay";
 import {currentPage} from "@funcUtils/currentPage";
 import EnvironmentsHistoryComponent from "@components/EnvironmentsHistroy";
+import {ResponseMachineRead} from "@interfaces/machine";
+import {environments, environmentSections} from "@values/defaults";
 
 interface DashboardProps {
   page: string;
@@ -27,51 +28,44 @@ interface DashboardProps {
 
 export default function Dashboard({page}: DashboardProps) {
   const dispatch = useDispatch();
-  const current_section: string = currentPage();
-
-  async function getAutomation () {
-    await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_section}`)
-      .then(
-        ({data}) => {
-          const {lastAutomations}: ResponseAutomationRead = data;
-          const groupedAutomations = groupBy(lastAutomations, 'machine');
-          dispatch(saveAutomation(groupedAutomations));
-        }
-      )
-  }
-
-  async function getSwitches () {
-      await axios.get(`${HttpUrls.SWITCHES_READ_LAST}/${current_section}`)
-        .then(
-          ({data}) => {
-            const grouped: ReducerSaveSwitchesDto =
-              groupBy(data as ResponseSwitchesReadLast[], 'machine');
-            dispatch(saveSwitch(grouped)
-          )}
-        )
-  }
-
-  interface ResponseMachineRead {
-    machine: AvailableMachines;
-    machineSection: AvailableMachineSection;
-  }
-
-  async function getAvailableMachines (machineSection: string) {
-    return await axios.get(`${HttpUrls.MACHINES_READ}/${machineSection}`)
-      .then(
-        ({data}) => {
-          dispatch( saveMachines(data as ResponseMachineRead[]) );
-        }
-      )
-  }
 
   useEffect(() => {
+    const current_section: string = currentPage();
+    async function getAvailableMachines (machineSection: string) {
+      return await axios.get(`${HttpUrls.MACHINES_READ}/${machineSection}`)
+        .then(
+          ({data}) => {
+            dispatch( saveMachines(data as ResponseMachineRead[]) );
+          }
+        )
+    }
+    async function getSwitches () {
+        await axios.get(`${HttpUrls.SWITCHES_READ_LAST}/${current_section}`)
+          .then(
+            ({data}) => {
+              const grouped: ReducerSaveSwitchesDto =
+                groupBy(data as ResponseSwitchesReadLast[], 'machine');
+              dispatch(saveSwitch(grouped))
+            }
+          )
+    }
+    async function getAutomation () {
+      await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_section}`)
+        .then(
+          ({data}) => {
+            const {lastAutomations}: ResponseAutomationRead = data;
+            const groupedAutomations = groupBy(lastAutomations, 'machine');
+            dispatch(saveAutomation(groupedAutomations));
+          }
+        )
+    }
+
     getAvailableMachines(current_section)
       .then(() => {
         getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
         getAutomation().then(() => console.log(Reports.AUTOMATION_LOADED));
       })
-  });
+  }, [ dispatch ]);
 
   return (
     checkLogin()
@@ -87,13 +81,13 @@ export default function Dashboard({page}: DashboardProps) {
             <Grid item xs={12} sm={12} md={4} className='item'>
               <MachineHistory/>
             </Grid>
-            {['d1', 'd2', 'd3'].map(section => {
+            {environmentSections.map(section => {
               return(
                 <Grid key={section.toString()} item xs={12} sm={12} md={4} className='status-display-item' >
                   <StatusDisplay plant={section} />
                 </Grid>)
               })}
-            {['co2', 'temperature', 'humidity'].map((environment) => {
+            {environments.map((environment) => {
               return (
                 <Grid key={environment.toString()} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
                   <EnvironmentsHistoryComponent environment={environment} />

@@ -63,7 +63,6 @@ export enum AuthResults {
   FAILURE = 'FAILURE',
 }
 
-// TODO: 추후에 DB에 저장할 것.
 export enum PagePaths {
   MAIN = 's1',
   SCHEDULER = 'scheduler',

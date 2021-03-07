@@ -49,7 +49,7 @@ export default function SwitchController() {
     return (
       <>
       {machines.map(machine =>
-        <Box key={machine.toString()} className='switch-wrapper' display='flex'>
+        <Box key={machine.toString()} display='flex'>
           <Icons machine={machine as AvailableMachines} />
           <Checkers machine={machine as AvailableMachines}/>
           <PowerSwitch machine={machine as AvailableMachines}/>
