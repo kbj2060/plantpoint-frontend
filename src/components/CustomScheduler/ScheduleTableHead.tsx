@@ -20,14 +20,14 @@ interface EnhancedTableHeadProps {
   rowCount: number;
 }
 
-export function EnhancedTableHead(
-  { onSelectAllClick,
+export function EnhancedTableHead({
+    onSelectAllClick,
     order,
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort }: EnhancedTableHeadProps)
-{
+    onRequestSort
+  }: EnhancedTableHeadProps ) {
   const createSortHandler = (property: string) => (event: BaseSyntheticEvent) => {
     onRequestSort(event, property);
   };
@@ -62,11 +62,14 @@ export function EnhancedTableHead(
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className='visually_hidden' >
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
+              {orderBy === headCell.id
+                ? (
+                  <span className='visually_hidden' >
+                  {order === 'desc'
+                    ? 'sorted descending'
+                    : 'sorted ascending'}
+                  </span>)
+                : null}
             </TableSortLabel>
           </TableCell>
         ))}

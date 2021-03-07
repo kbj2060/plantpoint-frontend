@@ -10,7 +10,7 @@ import moment from "moment";
 import {HttpUrls, Reports} from "../../constants";
 import {currentUser} from "@funcUtils/currentUser";
 import '@styles/components/schedule_add.scss';
-import {SchedulerDate} from "@interfaces/Scheduler";
+import {CreateScheduleDto, SchedulerDate} from "@interfaces/Scheduler";
 
 interface ScheduleAddProps {
   selectedDay: SchedulerDate | null;
@@ -21,8 +21,8 @@ function ScheduleAdd (
   {selectedDay, handleAddFinish}: ScheduleAddProps
 ) {
   const [selectedDays, setSelectedDays] = useState<SchedulerDate[]>([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
 
   const handleContentChange = <T extends BaseSyntheticEvent>(e: T) => {
     setContent(e.target.value)
@@ -43,15 +43,15 @@ function ScheduleAdd (
   }
 
   const getToday = () => {
-    const today = new Date()
-    return {"day":today.getDate(), "month":today.getMonth()+1, "year":today.getFullYear()}
+    const today = new Date();
+    return {"day": today.getDate(), "month": today.getMonth()+1, "year": today.getFullYear()};
   }
 
   const renderCustomInput = ({ ref }: any) => {
     let value: string
-    if (selectedDays.length > 1) {
+    if ( selectedDays.length > 1 ) {
       value = `${date2moment(selectedDays[0])} 외 ${selectedDays.length - 1}일`
-    } else if ( selectedDays.length === 1) {
+    } else if ( selectedDays.length === 1 ) {
       value = `${date2moment(selectedDays[0])}`
     } else {
       value = "날짜 설정"
@@ -62,13 +62,12 @@ function ScheduleAdd (
   }
 
   const postSaveSchedules = async () => {
-    const dto = {
+    await axios.post(HttpUrls.SCHEDULES_CREATE, {
       date: selectedDays.map((day) => date2moment(day)),
       title: title,
       content : content,
       createdBy : currentUser(),
-    }
-    await axios.post(HttpUrls.SCHEDULES_CREATE, dto)
+    } as CreateScheduleDto)
   }
 
   const handleAddSave = () => {

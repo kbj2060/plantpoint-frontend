@@ -9,13 +9,15 @@ import {StorageKeys} from "../../constants";
 import {AvailableMachines} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
-import {MachineProps} from "@interfaces/main";
 import {TaskNextButtonRef} from "./CustomStepper";
 import '@styles/components/automation_slider.scss';
 
-interface RangeSliderProps extends MachineProps {}
+interface RangeSliderProps {
+  position: AvailableMachines;
+}
+
 export const RangeSlider = React.forwardRef((
-  { machine }: RangeSliderProps,
+  { position: machine }: RangeSliderProps,
   ref?: React.Ref<TaskNextButtonRef>
   ) => {
     const {Units} = require('@values/units');

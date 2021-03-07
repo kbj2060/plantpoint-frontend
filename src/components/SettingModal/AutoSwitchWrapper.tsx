@@ -15,10 +15,8 @@ export default function AutoSwitchWrapper({machine}: AutoSwitchWrapperProps) {
   const changeAutomationEnable = useChangeAutomationEnable();
 
   function handleChange <T extends BaseSyntheticEvent> (event: T){
-    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine];
-    const updatedStatus = event.target.checked;
-    changeAutomationEnable(singleAutomation, updatedStatus);
-    setStatus(updatedStatus);
+    changeAutomationEnable(getReduxData(StorageKeys.AUTO)[machine] as ReducerAutomationDto, event.target.checked);
+    setStatus(event.target.checked);
   }
 
   return(

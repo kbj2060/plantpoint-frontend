@@ -10,7 +10,7 @@ import axios from "axios";
 import moment from "moment";
 import {HttpUrls} from "../../constants";
 import '@styles/components/schedule_detail.scss';
-import {Row, SchedulerDate} from "@interfaces/Scheduler";
+import {Row, SchedulerDate, UpdateScheduleDto} from "@interfaces/Scheduler";
 
 interface ScheduleDetailProps {
   toggleDrawer: () => void;
@@ -19,12 +19,12 @@ interface ScheduleDetailProps {
 }
 
 function ScheduleDetail(
-  {toggleDrawer, selectedRow, updateRow}: ScheduleDetailProps
+  { toggleDrawer, selectedRow, updateRow }: ScheduleDetailProps
 ) {
   const [selectedDays, setSelectedDays] = useState<SchedulerDate[]>([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [open] = useState(true);
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [open] = useState<boolean>(true);
 
   const closeDrawer = () => {
     toggleDrawer();
@@ -45,40 +45,37 @@ function ScheduleDetail(
   }
 
   const renderCustomInput = ({ ref }: any) => {
-    const start = obj2moment(selectedDays[0]);
-    const len = selectedDays.length - 1;
     return(
       <input
         readOnly
         ref={ref}
-        value={selectedDays.length ? `${start} 외 ${len}일` : "날짜 설정"}
+        value={ selectedDays.length
+                 ? `${obj2moment(selectedDays[0])} 외 ${selectedDays.length - 1}일`
+                 : "날짜 설정" }
         className='detail-input'
       />
     )
   }
 
   const updateSchedule = async () => {
-    const dto = {
+    await axios.post(HttpUrls.SCHEDULES_UPDATE, {
       id : selectedRow.id,
       date : selectedDays.map((day) => obj2moment(day)),
       title : title,
       content : content
-    }
-    await axios.post(HttpUrls.SCHEDULES_UPDATE, dto)
+    } as UpdateScheduleDto)
   }
 
   const handleSaveClick = () => {
     updateSchedule()
       .then(() => {
-        const updatedRow: Row = {
+        updateRow( {
           id : selectedRow.id,
           date : selectedDays.map((day) => obj2moment(day)),
           title : title,
           content : content,
           binding: selectedDays.length,
-        }
-        console.log(updatedRow)
-        updateRow( updatedRow );
+        } as Row );
       })
     closeDrawer();
   }
@@ -90,14 +87,16 @@ function ScheduleDetail(
   }
 
   useEffect(() => {
+    const handleDateFormat = (date: string) => {
+      const [year, month, day] = date.split('-')
+      return {"year": parseInt(year), "month":parseInt(month), "day":parseInt(day)}
+    }
+
     setContent(selectedRow.content);
     setTitle(selectedRow.title);
     setSelectedDays(
       selectedRow.date
-      ? selectedRow.date.map((date: string) => {
-          const [year, month, day] = date.split('-')
-          return {"year": parseInt(year), "month":parseInt(month), "day":parseInt(day)}
-        })
+      ? selectedRow.date.map(handleDateFormat)
       : []
     );
     return () => {

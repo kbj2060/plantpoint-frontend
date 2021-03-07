@@ -1,3 +1,5 @@
+import {currentUser} from "@funcUtils/currentUser";
+
 export interface SchedulerDate {
   year : number,
   month: number,
@@ -10,4 +12,18 @@ export interface Row {
   title: string;
   content: string;
   binding: number;
+}
+
+export interface UpdateScheduleDto {
+  id : number;
+  date : string[];
+  title : string;
+  content: string;
+}
+
+export interface CreateScheduleDto {
+  date: string[];
+  title: string;
+  content : string;
+  createdBy : string;
 }

@@ -41,8 +41,7 @@ const EnhancedTableToolbar = (
   const classes = useToolbarStyles();
 
   const postRemoveSchedule = async () => {
-    const dto = { ids : selectedIds }
-    await axios.post(HttpUrls.SCHEDULES_DELETE, dto)
+    await axios.post(HttpUrls.SCHEDULES_DELETE, { ids : selectedIds })
   }
 
   const handleDeleteSchedule = () => {

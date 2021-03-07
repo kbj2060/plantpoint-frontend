@@ -49,13 +49,12 @@ export function ScheduleTable({selectedDay}) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rows, setRows] = React.useState([])
-  const rowsPerPage = 5;
   const [selectedRow, setSelectedRow] = React.useState({})
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [drawer, setDrawer] = React.useState(false);
   const date = useSelector(state => state['date'], shallowEqual)
+  const rowsPerPage = 5;
 
-  //console.log(date, drawer, isLoading, selectedRow, rows, rowsPerPage, page, selected, order, orderBy);
   const toggleDrawer = useCallback(() => {
     setDrawer(!drawer);
   }, [drawer]);

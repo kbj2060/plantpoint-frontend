@@ -82,26 +82,27 @@ export default function MachineHistory() {
 		);
 		if ( entries.length !== 1 ) { return; }
 		const [machine, status] = entries.flat();
-		const switchHistory: SingleSwitchHistory = {
+		updateRows( {
 			machine : machine,
 			status: status,
 			controlledBy: currentUser() as string,
 			created: koreanDate(),
-		}
-		updateRows(switchHistory);
+		} as SingleSwitchHistory );
 	}, [refresh, prevRefresh])
 
 	useEffect(() => {
+		const handleDateLocale = (sw: SingleSwitchHistory) => {
+			sw.created = changeToKoreanDate(sw.created);
+			return sw;
+		}
+
 		const getSwitchHistory = async  () => {
 			const machineSection = currentPage();
 			await axios.get(`${HttpUrls.SWITCHES_READ}/${machineSection}`)
 				.then(
 					({data}) => {
 						const { switchHistory }: ResponseSwitchHistoryRead = data;
-						setRows(() => (switchHistory.map((sw) => {
-							sw.created = changeToKoreanDate(sw.created);
-							return sw;
-						})));
+						setRows(() => (switchHistory.map(handleDateLocale)));
 						setState(state => ({
 							...state,
 							isLoaded: true,
@@ -117,12 +118,11 @@ export default function MachineHistory() {
 		}
 
 		getSwitchHistory()
-			.then(() => { console.log(Reports.SWITCH_HISTORY_LOADED) })
-			.catch(() => { console.log(Errors.GET_MACHINE_HISTORY_FAILURE) })
+			.then( () => { console.log(Reports.SWITCH_HISTORY_LOADED) } )
+			.catch( () => { console.log(Errors.GET_MACHINE_HISTORY_FAILURE) } )
 	}, []);
 
 	if (state.error) {
-		console.log(state.error)
 		return <ColorCircularProgress />;
 	} else if (!state.isLoaded) {
 		return <ColorCircularProgress />;

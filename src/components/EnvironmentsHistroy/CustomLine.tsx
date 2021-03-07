@@ -16,8 +16,8 @@ interface CustomLineProps {
 export default function CustomLine({ environment, history, width, height }: CustomLineProps) {
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
-    const sections = ['d1', 'd2', 'd3'];
-    const primarySection = sections[0];
+    const {environmentSections} = require('@values/defaults');
+    const primarySection = environmentSections[0];
     let state: EnvironmentChart = {
         labels: [],
         datasets: []
@@ -30,7 +30,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     function makeDataset<T extends number>(n_sections: T) {
       let datasets = []
       for(let n = 0; n < n_sections; n++){
-        const section = sections[n] as AvailableEnvironmentSection;
+        const section = environmentSections[n] as AvailableEnvironmentSection;
         const data = history[section] === undefined
                       ? []
                       : history[section].map((h) => h[environment])
@@ -48,7 +48,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
       return datasets
     }
 
-    state.datasets = makeDataset<number>(sections.length);
+    state.datasets = makeDataset<number>(environmentSections.length);
     state.labels = history[primarySection as AvailableEnvironmentSection].map( (h ) => changeToKoreanDate(h.created) );
 
     return <Line options={options} data={state} width={width} height={height}/>

@@ -19,12 +19,12 @@ interface Times {
 }
 
 interface TimeSpanPickerProp {
-  machine: AvailableMachines;
+  position: AvailableMachines;
   outerSize: number;
 }
 
 const TimeSpanPickerWrapper = React.forwardRef(
-  ({machine, outerSize}: TimeSpanPickerProp,
+  ({position: machine, outerSize}: TimeSpanPickerProp,
           ref?: React.Ref<TaskNextButtonRef>
   ) => {
   const dispatch = useDispatch();
