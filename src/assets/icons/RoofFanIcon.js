@@ -2,7 +2,7 @@
 import SvgIcon from '@material-ui/core/SvgIcon';
 import React from 'react';
 
-export default function RoofFanIcon({className}) {
+export default function CustomRoofFanIcon({className}) {
   return (
     <SvgIcon className={className} xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
       <svg version="1.1"  x="0px" y="0px" viewBox="0 0 612 612"  xmlSpace="preserve">

@@ -1,9 +1,8 @@
-import React, {useRef} from 'react';
+import React, {ReactNode, useRef} from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import TimeSpanPickerWrapper from "./TimePickerWrapper";
 import axios from "axios";
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -11,12 +10,11 @@ import {saveState} from "../LocalStorage";
 import {HttpUrls, StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationState} from "@redux/modules/ControlAutomation";
-import SettingExplanation from "./SettingExplanation";
-import {RangeSlider} from "./RangeSlider";
 import AutoSwitchWrapper from "./AutoSwitchWrapper";
 import {AvailableMachines} from "@interfaces/main";
 import '@styles/components/automation_stepper.scss';
 import {currentUser} from "@funcUtils/currentUser";
+import {AutomationExplanationStepper, RangeStepper, TimePickerStepper} from '@interfaces/Stepper.class';
 
 function autoSwitchDisable<T extends number> (index: T, len: T) {
     return index === 0 || index === len -1;
@@ -46,15 +44,15 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
   const labels: string[] = getLabels(steps, Translations);
   const nextButtonRef = useRef<TaskNextButtonRef>(null);
 
-  const stepperComponents: Record<string, JSX.Element> = {
-    'head' : <SettingExplanation key={'head'} position={'head'} />,
-    'led' : <RangeSlider key={'led'} machine={'led'} ref={nextButtonRef} />,
-    'heater' : <RangeSlider key={'heater'} machine={'heater'} ref={nextButtonRef} />,
-    'cooler' : <RangeSlider key={'cooler'} machine={'cooler'} ref={nextButtonRef} />,
-    'fan' : <TimeSpanPickerWrapper key={'fan'} machine={'fan'} outerSize={150} ref={nextButtonRef} />,
-    'waterpump' : <TimeSpanPickerWrapper key={'waterpump'} machine={'waterpump'} outerSize={150} ref={nextButtonRef} />,
-    'roofFan' :  <TimeSpanPickerWrapper key={'roofFan'} machine={'roofFan'} outerSize={150} ref={nextButtonRef} />,
-    'tail' : <SettingExplanation key={'tail'} position={'tail'} />,
+  const stepperComponents: Record<string, ReactNode> = {
+    'head' : new AutomationExplanationStepper('head').render(),
+    'led' : new RangeStepper('led', nextButtonRef).render(),
+    'heater' : new RangeStepper('heater', nextButtonRef).render(),
+    'cooler' : new RangeStepper('cooler', nextButtonRef).render(),
+    'fan' : new TimePickerStepper('fan',150, nextButtonRef).render(),
+    'waterpump' : new TimePickerStepper('waterpump',150, nextButtonRef).render(),
+    'roofFan' :  new TimePickerStepper('roofFan',150, nextButtonRef).render(),
+    'tail' : new AutomationExplanationStepper('tail').render(),
   }
 
   function StepperRenderer (): JSX.Element {

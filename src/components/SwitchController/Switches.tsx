@@ -7,14 +7,14 @@ import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
 import {CreateSwitchDto} from "@interfaces/Switch";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
+import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";
 import {currentUser} from "@funcUtils/currentUser";
 import socket from "../../socket";
-
+import { StatusConverter } from '@interfaces/StatusConverter.class';
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
@@ -22,27 +22,18 @@ function Switches({machine}: SwitchesProps) {
   const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
 
-  const emitSocket = (dto: ReducerControlSwitchesDto) => {
-    socket.open();
-    socket.emit('sendSwitchControl', dto);
-    console.log(socket);
-  }
-
-  const postSwitchMachine = async <T extends boolean> (status: T) => {
-    const convertedStatus: number = status? 1 : 0;
-    const username = currentUser() as string;
-    const dto: CreateSwitchDto = {
+  const postSwitchMachine = async <T extends boolean> ( status: T ) => {
+    await axios.post(HttpUrls.SWITCHES_CREATE, {
       machine : machine,
       machineSection : machineSection as AvailableMachineSection,
-      status : convertedStatus,
-      controlledBy : username,
-    };
-    await axios.post(HttpUrls.SWITCHES_CREATE, dto);
+      status : new StatusConverter(status).toDatabaseStatus(),
+      controlledBy : currentUser() as string,
+    } as CreateSwitchDto);
   }
 
-  function handleChange<T extends BaseSyntheticEvent>(e: T) {
+  function handleChange <T extends BaseSyntheticEvent> ( e: T ) {
     e.persist();
-    const status: boolean = e.target.checked;
+    const status: boolean = new StatusConverter(e.target.checked).toSwitchStatus();
     const dto: ReducerControlSwitchesDto = {
       machineSection: machineSection as AvailableMachineSection,
       machine: machine as AvailableMachines,
@@ -54,16 +45,16 @@ function Switches({machine}: SwitchesProps) {
       return;
     }
 
-    changeSwitchStatus( dto );
     setState( status );
-    emitSocket( dto );
+    changeSwitchStatus( dto );
+    socket.emit(WebSocketEvent.SEND_SWITCH_TO_SERVER, dto);
     postSwitchMachine( status )
       .then(()=> { console.log(Reports.SWITCH_CHANGED); })
       .catch(() => { console.log(Errors.POST_SWITCH_FAILURE); })
   }
 
   const cleanup = () => {
-    //socket.disconnect();
+    socket.disconnect();
   }
 
   const getMemorizedMachineState = useCallback(() => {
@@ -79,13 +70,15 @@ function Switches({machine}: SwitchesProps) {
   }
 
   useEffect(() => {
-    socket.on('receiveSwitchControl', (dto: ReducerControlSwitchesDto) => {
-      if(machine === dto.machine && machineSection === dto.machineSection){
-        setState( dto.status as boolean);
-        if (getReduxData(StorageKeys.SWITCHES)[machine] !== dto.status){
+    socket.on(WebSocketEvent.SEND_SWITCH_TO_CLIENT,  (dto: ReducerControlSwitchesDto) => {
+      if( machine === dto.machine && machineSection === dto.machineSection ){
+        const convertedStatus = new StatusConverter(dto.status).toSwitchStatus()
+        setState( convertedStatus );
+        if (getReduxData(StorageKeys.SWITCHES)[machine] !== convertedStatus){
           changeSwitchStatus(dto);
         }
-      }})
+      }
+    })
     return () => {
       cleanup();
     }

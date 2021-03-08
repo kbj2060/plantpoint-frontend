@@ -1,10 +1,9 @@
-import {io} from "socket.io-client";
+import io from 'socket.io-client';
 
-// 9000은 맞음,
-const ENDPOINT = 'localhost:9000';
+const ENDPOINT = 'http://localhost:4000';
 const socket = io(ENDPOINT,{
   transports: [ 'websocket'],
   path:'/ws',
-});
+}).connect();
 
 export default socket;

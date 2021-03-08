@@ -9,6 +9,11 @@ export enum StorageKeys {
   ENVIRONMENTS='environments',
 }
 
+export enum WebSocketEvent {
+  SEND_SWITCH_TO_SERVER = 'sendSwitchToServer',
+  SEND_SWITCH_TO_CLIENT = 'sendSwitchToClient'
+}
+
 export enum HttpUrls {
   SIGNIN = `http://localhost:9000/authentication/signin`,
 

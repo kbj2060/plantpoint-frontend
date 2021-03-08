@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
@@ -6,7 +6,6 @@ import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import ToysIcon from '@material-ui/icons/Toys';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
-import LoopIcon from '@material-ui/icons/Loop';
 import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -17,30 +16,16 @@ import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
 import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
+import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 
 interface SettingExplanationProps {
   position: string,
 }
 
 export default function SettingExplanation({position}: SettingExplanationProps) {
-  const machineSection = currentPage();
   const [automations, setAutomations] = React.useState<ReducerAutomationState>(getReduxData(StorageKeys.AUTO));
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const dispatch = useDispatch();
-
-  // TODO : 리덕스에서 그냥 꺼내쓰는 것과 디비에서 꺼내 쓰는 것 비교해보기.
-  const getDatabaseAutomation = useCallback(async () => {
-    await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
-      .then(({data}) => {
-        const {lastAutomations} = data;
-        const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');
-        dispatch(saveAutomation(grouped));
-      })
-      .then(() => {
-        setAutomations(getReduxData(StorageKeys.AUTO));
-        setIsLoaded(true);
-      })
-  }, [dispatch, machineSection]);
 
   // TAIL(현재 설정) 데이터 보여주기 함수
   const getReduxAutomation = () => {
@@ -58,57 +43,46 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     return (<Chip key={'off'} className='chip' variant="outlined" size="small" label={"자동화 꺼짐"} /> )
   }
 
-  function getCycleChips<T extends AvailableMachines> (subject: T) {
-    if(!checkEmpty(automations[subject])){
-      let {start, end, term} = automations[subject];
-      let result = [];
-      result.push(<Chip key={'loop'} className='chip' icon={<LoopIcon className='chip'/>} variant="outlined" size="small" label={`${term} 일`} />)
-      start.forEach((s, i) => {
-        const label = `${s} - ${end[i]}`;
-        result.push(<Chip key={label} className='chip' variant="outlined" size="small" label={label} />);
-      });
-      return result;
+  function getCycleChips<T extends AvailableMachines> (machine: T) {
+    const {start, end, term} = automations[machine];
+    return new CycleExplanationChip( start, end, term ).explanation();
+  }
+
+  function getRangeChips <T extends AvailableMachines> (machine: T) {
+    if ( machine === 'cooler' ) {
+      return new CoolerExplanationChip(
+        machine,[ automations[machine].start[0], automations[machine].end[0] ]
+      ).explanation();
+    } else {
+      return new RangeExplanationChip(
+        machine,[ automations[machine].start[0], automations[machine].end[0] ]
+      ).explanation();
     }
-  }
-
-  const getLEDChips= () => {
-    const _min = automations.led.start[0], _max = automations.led.end[0];
-    return (
-      <>
-        <Chip className='chip' variant="outlined" size="small" label={`${_min}시 켜기`} />
-        <Chip className='chip' variant="outlined" size="small" label={`${_max}시 끄기`} />
-      </>
-    )
-  }
-
-  const getCoolerChips = () => {
-    const _min = automations.heater.start[0], _max = automations.heater.end[0];
-    return (
-        <>
-          <Chip className='chip' variant="outlined" size="small" label={`${_min}°C 냉방 끄기`} />
-          <Chip className='chip' variant="outlined" size="small" label={`${_max}°C 냉방 켜기`} />
-        </>
-    )
-  }
-
-  const getHeaterChips = () => {
-    const _min = automations.heater.start[0], _max = automations.heater.end[0];
-    return (
-      <>
-        <Chip className='chip' variant="outlined" size="small" label={`${_min}°C 난방 켜기`}/>
-        <Chip className='chip' variant="outlined" size="small" label={`${_max}°C 난방 끄기`}/>
-      </>
-    )
   }
 
   useEffect(() => {
+    const getDatabaseAutomation = async () => {
+      const machineSection = currentPage();
+      await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
+        .then(({data}) => {
+          const {lastAutomations} = data;
+          const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');
+          dispatch( saveAutomation( grouped ) );
+        })
+        .then(() => {
+          setAutomations(getReduxData(StorageKeys.AUTO));
+          setIsLoaded(true);
+        })
+    }
+
     position === 'head'
       ? getDatabaseAutomation()
       : getReduxAutomation()
+
     return () => {
       setIsLoaded(false);
     }
-  }, [position, getDatabaseAutomation])
+  }, [ position, dispatch ])
 
   return(
   !isLoaded
@@ -120,7 +94,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
           <WbSunnyIcon className='default-icon' />
         </td>
         <td className='center-icon'>
-            {!getAutoEnable('led') ? getOffChips() : getLEDChips()}
+            {!getAutoEnable('led') ? getOffChips() : getRangeChips('led')}
         </td>
       </tr>
       <tr className='cell'>
@@ -128,7 +102,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
           <WhatshotIcon className='default-icon' />
         </td>
         <td className='center-icon'>
-            {!getAutoEnable('heater') ? getOffChips() : getHeaterChips()}
+            {!getAutoEnable('heater') ? getOffChips() : getRangeChips('heater')}
         </td>
       </tr>
       <tr className='cell'>
@@ -136,7 +110,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
           <AcUnitIcon className='default-icon' />
         </td>
         <td className='center-icon'>
-          {!getAutoEnable('cooler') ? getOffChips() : getCoolerChips()}
+          {!getAutoEnable('cooler') ? getOffChips() : getRangeChips('cooler')}
         </td>
       </tr>
       <tr className='cell'>
