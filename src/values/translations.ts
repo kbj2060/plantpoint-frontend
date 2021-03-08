@@ -17,4 +17,5 @@ export enum Translations {
     d3 = "RIGHT",
     무들로29= "s1",
     s1= "무들로29",
+
 }
