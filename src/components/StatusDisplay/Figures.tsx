@@ -27,7 +27,7 @@ export default function Figures({ plant }: FiguresProps) {
             ...data,
             environmentSection: plant
           }
-          changeEnvironmentStatus(dto);
+          changeEnvironmentStatus( dto );
         });
     }
 

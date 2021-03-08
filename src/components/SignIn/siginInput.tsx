@@ -23,7 +23,8 @@ interface SignInProps {
 function SignInInput ({type, handleOnChange}: SignInProps) {
   return (
     <CssTextField id={type} InputProps={{className: 'signin-input'}}
-                  className="login" placeholder={type} type={type} onChange={handleOnChange}/>
+                  className="login" placeholder={type} type={type}
+                  onChange={handleOnChange}/>
   )
 }
 

@@ -48,7 +48,7 @@ export default function SignInComponent() {
     signin[type] = e.target.value
   }
 
-  function dispatchLoginSuccess<T extends string> (username: T, accessToken: T): void {
+  function dispatchLoginSuccess <T extends string> (username: T, accessToken: T): void {
     dispatch(loginSuccess(username, accessToken))
   }
 
@@ -61,17 +61,15 @@ export default function SignInComponent() {
     setAuth(defaultAuth);
   }
 
-  async function loginRequest<T extends string>(username: T, password: T) {
-    const dto: SigninDto = {
-      username: username,
-      password: password,
-    }
-    await axios.post(HttpUrls.SIGNIN, dto)
+  async function loginRequest <T extends string> (username: T, password: T) {
+    await axios.post(HttpUrls.SIGNIN, {
+        username: username,
+        password: password,
+    } as SigninDto)
       .then(({data}) => {
-        const result: SignInResult = data;
-        const accessToken = result.access_token;
-        const updatedAuth = getSuccessAuth(username, accessToken);
-        dispatchLoginSuccess(username, accessToken);
+        const {access_token}: SignInResult = data;
+        const updatedAuth = getSuccessAuth(username, access_token);
+        dispatchLoginSuccess(username, access_token);
         setAuth(updatedAuth);
       })
       .catch(() => {
@@ -81,11 +79,12 @@ export default function SignInComponent() {
 
   function handleSubmit<T extends BaseSyntheticEvent>(event: T): void {
     event.preventDefault();
-    loginRequest(signin.username, signin.password).then(() => Reports.SIGNIN_FINISH);
+    loginRequest(signin.username, signin.password)
+      .then(() => Reports.SIGNIN_FINISH);
   }
 
   useEffect(() => {
-    switch (auth.login.status) {
+    switch ( auth.login.status ) {
       case AuthResults.INIT :
         return;
       // TODO : 페이지는 나중에 DB에 저장할 것.

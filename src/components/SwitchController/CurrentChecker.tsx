@@ -9,6 +9,7 @@ import {currentPage} from "@funcUtils/currentPage";
 interface CurrentFlowingProps {
 	fillColor: string;
 }
+
 const CurrentFlowing = ({ fillColor }: CurrentFlowingProps) => {
 	return (
 		<svg className='current-icon' fill={fillColor} x="0px" y="0px" viewBox="0 0 1000 1000" enableBackground="new 0 0 1000 1000" xmlSpace="preserve">
@@ -22,17 +23,14 @@ interface CurrentCheckerProps extends MachineProps { }
 export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	const [flowing, setFlowing] = React.useState<boolean>(false);
 
-	// TODO : headers: {
-	//     'Authorization': token
-	//   }, 을 추가하여 보안
 	useEffect(() => {
 		const {Criteria, UpdateTimeOut} = require('@values/defaults')
 		const fetchCurrent = async () => {
 			const machineSection = currentPage();
 			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)
 				.then(({ data }) => {
-					const response: ResponseCurrentRead = data;
-					if(checkEmpty(response) || response.current < Criteria.current){
+					const {current}: ResponseCurrentRead = data;
+					if(checkEmpty(current) || current < Criteria.current){
 						setFlowing(false);
 					}
 					else {
@@ -45,6 +43,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 		const interval = setInterval(() => {
 			fetchCurrent().then(() => Reports.CURRENT_LOADED);
 		}, parseInt(UpdateTimeOut.current));
+
 		return () => {
 			clearInterval(interval);
 		}
