@@ -11,7 +11,7 @@ import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";
 import '@styles/components/automation_slider.scss';
-import {CoolerExplanationChip, RangeExplanationChip} from "@interfaces/Automation";
+import {CoolerExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip";
 
 interface RangeSliderProps {
   position: AvailableMachines;

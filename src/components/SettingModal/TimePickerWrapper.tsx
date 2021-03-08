@@ -72,7 +72,7 @@ const TimeSpanPickerWrapper = React.forwardRef(
               position: 'absolute', display:'flex',
               zIndex:'auto', fontSize:'1.1rem'
             }}>
-              <TermControlButton ref={ref} machine={machine}/>
+              <TermControlButton machine={machine}/>
             </div>
           </>
         : null

@@ -14,7 +14,7 @@ import AutoSwitchWrapper from "./AutoSwitchWrapper";
 import {AvailableMachines} from "@interfaces/main";
 import '@styles/components/automation_stepper.scss';
 import {currentUser} from "@funcUtils/currentUser";
-import {AutomationExplanationStepper, RangeStepper, TimePickerStepper} from '@interfaces/Automation';
+import {AutomationExplanationStepper, RangeStepper, TimePickerStepper} from '@interfaces/Stepper';
 
 function autoSwitchDisable<T extends number> (index: T, len: T) {
     return index === 0 || index === len -1;
