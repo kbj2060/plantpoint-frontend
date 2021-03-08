@@ -14,6 +14,7 @@ import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";
 import {currentUser} from "@funcUtils/currentUser";
 import socket from "../../socket";
+import { StatusConverter } from '@interfaces/StatusConverter.class';
 
 
 interface SwitchesProps extends MachineProps {}
@@ -28,21 +29,18 @@ function Switches({machine}: SwitchesProps) {
     console.log(socket);
   }
 
-  const postSwitchMachine = async <T extends boolean> (status: T) => {
-    const convertedStatus: number = status? 1 : 0;
-    const username = currentUser() as string;
-    const dto: CreateSwitchDto = {
+  const postSwitchMachine = async <T extends boolean> ( status: T ) => {
+    await axios.post(HttpUrls.SWITCHES_CREATE, {
       machine : machine,
       machineSection : machineSection as AvailableMachineSection,
-      status : convertedStatus,
-      controlledBy : username,
-    };
-    await axios.post(HttpUrls.SWITCHES_CREATE, dto);
+      status : new StatusConverter(status).toDatabaseStatus(),
+      controlledBy : currentUser() as string,
+    } as CreateSwitchDto);
   }
 
-  function handleChange<T extends BaseSyntheticEvent>(e: T) {
+  function handleChange <T extends BaseSyntheticEvent> ( e: T ) {
     e.persist();
-    const status: boolean = e.target.checked;
+    const status: boolean = new StatusConverter(e.target.checked).toSwitchStatus();
     const dto: ReducerControlSwitchesDto = {
       machineSection: machineSection as AvailableMachineSection,
       machine: machine as AvailableMachines,

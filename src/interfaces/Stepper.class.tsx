@@ -5,7 +5,7 @@ import {RangeSlider} from "@components/SettingModal/RangeSlider";
 import TimeSpanPickerWrapper from "@components/SettingModal/TimePickerWrapper";
 import SettingExplanation from "@components/SettingModal/SettingExplanation";
 
-class Stepper {
+class StepperClass {
   position: string; ref: React.Ref<TaskNextButtonRef>;
   constructor (
     position: string | AvailableMachines,
@@ -18,7 +18,7 @@ class Stepper {
   render() {}
 }
 
-export class RangeStepper extends Stepper {
+export class RangeStepper extends StepperClass {
   render(): ReactNode {
     return <RangeSlider key={this.position}
                         position={this.position as AvailableMachines}
@@ -26,7 +26,7 @@ export class RangeStepper extends Stepper {
   }
 }
 
-export class TimePickerStepper extends Stepper {
+export class TimePickerStepper extends StepperClass {
   outerSize: number;
   constructor(
     position: string,
@@ -45,7 +45,7 @@ export class TimePickerStepper extends Stepper {
   }
 }
 
-export class AutomationExplanationStepper extends Stepper {
+export class AutomationExplanationStepper extends StepperClass {
   render(): ReactNode {
     return <SettingExplanation key={this.position}
                                position={this.position} />

@@ -2,7 +2,7 @@ import {AvailableMachines, MachineProps} from "@interfaces/main";
 import '@styles/components/switch_controller.scss';
 import '@styles/animations/fan_out.scss';
 import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
-import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon";
+import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon.class";
 
 interface IconWrapperProps extends MachineProps {}
 export default function IconWrapper({machine}: IconWrapperProps) {

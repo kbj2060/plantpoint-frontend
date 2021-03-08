@@ -4,14 +4,14 @@ import Chip from "@material-ui/core/Chip";
 import LoopIcon from "@material-ui/icons/Loop";
 import React from "react";
 
-class ExplanationChip {
+class ExplanationChipClass {
   valuetext<T extends number, U extends string>(value: T, status: U) { }
   onText () {  }
   offText () {  }
   explanation () {  }
 }
 
-export class RangeExplanationChip extends ExplanationChip {
+export class RangeExplanationChip extends ExplanationChipClass {
   start: number; end: number; machine: keyof typeof Units;
   constructor (
     machine: string,
@@ -52,7 +52,7 @@ export class CoolerExplanationChip extends RangeExplanationChip {
   }
 }
 
-export class CycleExplanationChip extends ExplanationChip {
+export class CycleExplanationChip extends ExplanationChipClass {
   start:number[]; end: number[]; term: number;
   constructor(
     start: number[],

@@ -16,7 +16,7 @@ import {useDispatch} from "react-redux";
 import {AvailableMachines} from "@interfaces/main";
 import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
-import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip";
+import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 
 interface SettingExplanationProps {
   position: string,

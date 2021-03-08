@@ -8,7 +8,7 @@ import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import ToysIcon from "@material-ui/icons/Toys";
 import OpacityIcon from "@material-ui/icons/Opacity";
 
-abstract class Icon {
+abstract class IconClass {
   abstract activeIcon =  (): JSX.Element => { return <></> }
   abstract inactiveIcon =  (): JSX.Element => { return <></> }
   iconHandler = <T extends boolean>(active: T): JSX.Element => {
@@ -16,32 +16,32 @@ abstract class Icon {
   }
 }
 
-export class CoolerIcon extends Icon {
+export class CoolerIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <AcUnitIcon className='cooler-icon'/> }
   inactiveIcon = (): JSX.Element => { return <AcUnitIcon className='default-icon'/> }
 }
 
-export class HeaterIcon extends Icon {
+export class HeaterIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <WhatshotIcon className='heater-icon' /> }
   inactiveIcon = (): JSX.Element => { return <WhatshotIcon className='default-icon'/> }
 }
 
-export class LEDIcon extends Icon {
+export class LEDIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <WbSunnyIcon className='led-icon' /> }
   inactiveIcon = (): JSX.Element => { return <WbSunnyIcon className='default-icon' /> }
 }
 
-export class RoofFanIcon extends Icon {
+export class RoofFanIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <CustomRoofFanIcon className='roofFan-icon' /> }
   inactiveIcon = (): JSX.Element => { return <CustomRoofFanIcon className='default-icon' /> }
 }
 
-export class FanIcon extends Icon {
+export class FanIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <ToysIcon className="spin" /> }
   inactiveIcon = (): JSX.Element => { return <ToysIcon className='default-icon' /> }
 }
 
-export class WaterpumpIcon extends Icon {
+export class WaterpumpIcon extends IconClass {
   activeIcon = (): JSX.Element => { return <OpacityIcon className='waterpump-icon' /> }
   inactiveIcon = (): JSX.Element => { return <OpacityIcon className='default-icon' /> }
 }
