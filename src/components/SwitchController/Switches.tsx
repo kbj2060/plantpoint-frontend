@@ -7,7 +7,7 @@ import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
 import {CreateSwitchDto} from "@interfaces/Switch";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, StorageKeys, Reports, Errors} from "../../constants";
+import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../constants";
 import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
@@ -16,18 +16,11 @@ import {currentUser} from "@funcUtils/currentUser";
 import socket from "../../socket";
 import { StatusConverter } from '@interfaces/StatusConverter.class';
 
-
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
   const machineSection = useMemo(() => currentPage(), []);
   const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
-
-  const emitSocket = (dto: ReducerControlSwitchesDto) => {
-    socket.open();
-    socket.emit('sendSwitchControl', dto);
-    console.log(socket);
-  }
 
   const postSwitchMachine = async <T extends boolean> ( status: T ) => {
     await axios.post(HttpUrls.SWITCHES_CREATE, {
@@ -52,16 +45,16 @@ function Switches({machine}: SwitchesProps) {
       return;
     }
 
-    changeSwitchStatus( dto );
     setState( status );
-    emitSocket( dto );
+    changeSwitchStatus( dto );
+    socket.emit(WebSocketEvent.SEND_SWITCH_TO_SERVER, dto);
     postSwitchMachine( status )
       .then(()=> { console.log(Reports.SWITCH_CHANGED); })
       .catch(() => { console.log(Errors.POST_SWITCH_FAILURE); })
   }
 
   const cleanup = () => {
-    //socket.disconnect();
+    socket.disconnect();
   }
 
   const getMemorizedMachineState = useCallback(() => {
@@ -77,13 +70,15 @@ function Switches({machine}: SwitchesProps) {
   }
 
   useEffect(() => {
-    socket.on('receiveSwitchControl', (dto: ReducerControlSwitchesDto) => {
-      if(machine === dto.machine && machineSection === dto.machineSection){
-        setState( dto.status as boolean);
-        if (getReduxData(StorageKeys.SWITCHES)[machine] !== dto.status){
+    socket.on(WebSocketEvent.SEND_SWITCH_TO_CLIENT,  (dto: ReducerControlSwitchesDto) => {
+      if( machine === dto.machine && machineSection === dto.machineSection ){
+        const convertedStatus = new StatusConverter(dto.status).toSwitchStatus()
+        setState( convertedStatus );
+        if (getReduxData(StorageKeys.SWITCHES)[machine] !== convertedStatus){
           changeSwitchStatus(dto);
         }
-      }})
+      }
+    })
     return () => {
       cleanup();
     }
