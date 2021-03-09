@@ -37,6 +37,7 @@ export enum HttpUrls {
 }
 
 export enum Reports {
+  MACHINES_LOADED = 'Machines Loaded..',
   SIGNIN_FINISH = 'Login Finished..',
   SWITCH_CHANGED = 'Switch Changed..',
   SWITCH_LOADED = 'Switch Loaded..',

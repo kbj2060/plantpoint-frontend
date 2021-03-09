@@ -14,7 +14,7 @@ import { updatedDiff } from 'deep-object-diff';
 import {AvailableMachines, ComponentState} from "@interfaces/main";
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
 import {usePrevious} from "@hooks/usePrevious";
-import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
+import {Loader} from "@compUtils/Loader";
 import {currentUser} from "@funcUtils/currentUser";
 import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
@@ -123,9 +123,9 @@ export default function MachineHistory() {
 	}, []);
 
 	if (state.error) {
-		return <ColorCircularProgress />;
+		return <Loader />;
 	} else if (!state.isLoaded) {
-		return <ColorCircularProgress />;
+		return <Loader />;
 	} else {
 		return (
 			<MuiThemeProvider theme={theme}>

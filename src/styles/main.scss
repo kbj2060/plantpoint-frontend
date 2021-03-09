@@ -5,21 +5,19 @@
 @import "components/menu";
 @import "components/signin";
 @import "components/switch_controller";
-
 @import "components/automation_content";
 @import 'components/automation_stepper';
 @import 'components/automation_modal';
 @import 'components/automation_slider';
 @import 'components/machine_history';
-
 @import 'components/date_picker';
 @import 'components/schedule_add';
 @import 'components/schedule_detail';
 @import 'components/scheduler';
-
 @import 'components/cctv';
 @import 'components/custom_ios_switch';
 
 @import "animations/fan_out";
+@import "animations/loader";
 
 @import "layouts/dashboard";

@@ -13,7 +13,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/*className={classes.parent}*/}
       <div className="App">
         <Route exact path={`/${PagePaths.LOGIN}`}>
           <Login />
@@ -24,9 +23,6 @@ function App() {
         <Route exact path="/scheduler" >
           <Scheduler />
         </Route>
-        {/*<Route exact path="/setting" >
-          <Setting page={"setting"} />
-        </Route>*/}
       </div>
     </BrowserRouter>
   );

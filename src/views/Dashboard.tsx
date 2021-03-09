@@ -60,11 +60,9 @@ export default function Dashboard({page}: DashboardProps) {
         )
     }
 
-    getAvailableMachines(current_section)
-      .then(() => {
-        getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
-        getAutomation().then(() => console.log(Reports.AUTOMATION_LOADED));
-      })
+    getAvailableMachines(current_section).then(() => console.log(Reports.MACHINES_LOADED));
+    getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
+    getAutomation().then(() => console.log(Reports.AUTOMATION_LOADED));
   }, [ dispatch ]);
 
   return (

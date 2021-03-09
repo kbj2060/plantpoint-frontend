@@ -6,7 +6,6 @@ import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import ToysIcon from '@material-ui/icons/Toys';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
-import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import {getReduxData} from "@funcUtils/getReduxData";
 import {groupBy} from "@funcUtils/groupBy";
@@ -17,6 +16,7 @@ import {AvailableMachines} from "@interfaces/main";
 import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
+import {Loader} from "@compUtils/Loader";
 
 interface SettingExplanationProps {
   position: string,
@@ -86,7 +86,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
 
   return(
   !isLoaded
-    ? <ColorCircularProgress />
+    ? <Loader />
     : <table className='table'>
       <tbody>
       <tr className='cell'>

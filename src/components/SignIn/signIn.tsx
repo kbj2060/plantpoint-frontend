@@ -87,7 +87,6 @@ export default function SignInComponent() {
     switch ( auth.login.status ) {
       case AuthResults.INIT :
         return;
-      // TODO : 페이지는 나중에 DB에 저장할 것.
       case AuthResults.SUCCESS :
         history.push(`/${PagePaths.MAIN}`);
         break;

@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, memo, useCallback, useEffect, useMemo} from 'react';
+import React, {BaseSyntheticEvent, memo, useCallback, useEffect} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from "axios";
@@ -18,7 +18,7 @@ import { StatusConverter } from '@interfaces/StatusConverter.class';
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
-  const machineSection = useMemo(() => currentPage(), []);
+  const machineSection = currentPage();
   const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
   const changeSwitchStatus = useChangeSwitchStatus();
 
