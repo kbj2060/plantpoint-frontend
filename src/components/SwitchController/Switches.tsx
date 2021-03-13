@@ -15,11 +15,12 @@ import {currentPage} from "@funcUtils/currentPage";
 import {currentUser} from "@funcUtils/currentUser";
 import socket from "../../socket";
 import { StatusConverter } from '@interfaces/StatusConverter.class';
+import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
   const machineSection = currentPage();
-  const [state, setState] = React.useState<boolean>(getReduxData(StorageKeys.SWITCHES)[machine]);
+  const state = useSubscribeSwitchStatus(machine) as boolean;
   const changeSwitchStatus = useChangeSwitchStatus();
 
   const postSwitchMachine = async <T extends boolean> ( status: T ) => {
@@ -45,7 +46,6 @@ function Switches({machine}: SwitchesProps) {
       return;
     }
 
-    setState( status );
     changeSwitchStatus( dto );
     socket.emit(WebSocketEvent.SEND_SWITCH_TO_SERVER, dto);
     postSwitchMachine( status )
@@ -69,11 +69,11 @@ function Switches({machine}: SwitchesProps) {
     )
   }
 
+  // TODO : 현 상태와 redux를 비교해서 ui 바꾸기 listener 추
   useEffect(() => {
     socket.on(WebSocketEvent.SEND_SWITCH_TO_CLIENT,  (dto: ReducerControlSwitchesDto) => {
       if( machine === dto.machine && machineSection === dto.machineSection ){
-        const convertedStatus = new StatusConverter(dto.status).toSwitchStatus()
-        setState( convertedStatus );
+        const convertedStatus: boolean = new StatusConverter(dto.status).toSwitchStatus()
         if (getReduxData(StorageKeys.SWITCHES)[machine] !== convertedStatus){
           changeSwitchStatus(dto);
         }

@@ -25,22 +25,24 @@ const TermControlButton = (
   const handleTermUp = () => {
     const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
     setTerm(prev => {
-      const updated = update(singleAutomation, {
+      dispatch(controlAutomation( update( singleAutomation, {
         term : { $set: ++prev },
-      })
-      dispatch(controlAutomation( updated ));
+        })
+      ));
+      console.log(prev)
       return prev
     })
   }
 
   const handleTermDown = () => {
-    const reduxSetting = store.getState()[ StorageKeys.AUTO ][ machine ];
+    const singleAutomation = store.getState()[ StorageKeys.AUTO ][ machine ];
     setTerm(prev => {
       if( prev <= 1 ) { return 1; }
-      const updated = update(reduxSetting, {
+      dispatch(controlAutomation( update( singleAutomation, {
         term : { $set: --prev },
-      })
-      dispatch(controlAutomation( updated ));
+        })
+      ));
+      console.log(prev)
       return prev;
     })
   }

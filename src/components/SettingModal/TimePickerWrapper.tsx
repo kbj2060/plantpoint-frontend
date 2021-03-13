@@ -50,9 +50,11 @@ const TimeSpanPickerWrapper = React.forwardRef(
 
   useImperativeHandle(ref, () => ({
     handleNextStep () {
+      const singleAutomation = getReduxData(StorageKeys.AUTO)[machine]
       dispatch(controlAutomation(update(singleAutomation, {
         start: { $set: times.start }, end: { $set: times.end }
       })))
+
     }
   }))
 

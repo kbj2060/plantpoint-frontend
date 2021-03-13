@@ -37,6 +37,7 @@ export const RangeSlider = React.forwardRef((
     }
 
     useImperativeHandle(ref, () => ({
+
       handleNextStep () {
         const updated: ReducerAutomationDto = update(singleAutomation, {
           start: { $set: [ automation[0] ] },
