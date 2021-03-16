@@ -38,7 +38,6 @@ export class Humidity extends Environment {
 }
 
 export class Environments {
-  constructor() { }
   getEnvironments = () => {
     return [Co2, Temperature, Humidity]
   }

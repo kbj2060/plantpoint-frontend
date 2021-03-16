@@ -2,7 +2,7 @@ import { MachineProps} from "@interfaces/main";
 import '@styles/components/switch_controller.scss';
 import '@styles/animations/fan_out.scss';
 import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
-import {getMachine} from "../../classHandler";
+import {getMachine} from "../../handler/classHandler";
 
 interface IconWrapperProps extends MachineProps {}
 export default function IconWrapper({machine}: IconWrapperProps) {

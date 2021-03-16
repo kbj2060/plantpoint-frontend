@@ -5,7 +5,7 @@ import {
   LedMachine,
   RoofFanMachine,
   WaterPumpMachine
-} from "./reference/machines";
+} from "../reference/machines";
 
 export function getMachine(name: string) {
   switch (name) {

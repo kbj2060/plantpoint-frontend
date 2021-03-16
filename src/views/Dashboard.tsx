@@ -5,8 +5,6 @@ import {Redirect} from "react-router-dom";
 import {Grid} from "@material-ui/core";
 import SwitchController from "../components/SwitchController";
 import {useDispatch} from "react-redux";
-import axios from "axios";
-import {HttpUrls, Reports} from "../constants";
 import {saveAutomation} from "@redux/modules/ControlAutomation";
 import { ResponseAutomationRead} from "@interfaces/Automation";
 import {ResponseSwitchesReadLast} from "@interfaces/Switch";
@@ -24,6 +22,15 @@ import {saveSections} from "@redux/modules/ControlSection";
 import {Loader} from "@compUtils/Loader";
 import {Environments} from "../reference/environments";
 import {Environment} from "@interfaces/Environment.class";
+import {
+  getAutomation,
+  getAvailableMachines,
+  getAvailableSections,
+  getEnvironments,
+  getSwitches
+} from "../handler/httpHandler";
+import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
+import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
 
 interface DashboardProps {
   page: string;
@@ -34,52 +41,50 @@ export default function Dashboard({page}: DashboardProps) {
   const [loaded, setLoaded] = useState(false);
   const [eSections, setESections] = useState([]);
   const environments = new Environments().getEnvironments();
+  const changeEnvironmentStatus = useChangeEnvironmentStatus();
 
   useEffect(() => {
-    const current_section: string = currentPage();
-    async function getAvailableMachines (machineSection: string) {
-      return await axios.get(`${HttpUrls.MACHINES_READ}/${machineSection}`)
-        .then(
-          ({data}) => {
-            dispatch( saveMachines(data as ResponseMachineRead[]) );
-          }
-        )
-    }
-    async function getAvailableSections (machineSection: string) {
-      return await axios.get(`${HttpUrls.ENV_SECTION_READ}/${machineSection}`)
-        .then(
-          ({data}) => {
-            setESections( data.map((m: ResponseEnvSectionRead) => { return m.e_section }) )
-            dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
-          }
-        )
-    }
-    async function getSwitches () {
-        await axios.get(`${HttpUrls.SWITCHES_READ_LAST}/${current_section}`)
-          .then(
-            ({data}) => {
-              const grouped: ReducerSaveSwitchesDto =
-                groupBy(data as ResponseSwitchesReadLast[], 'machine');
-              dispatch(saveSwitch(grouped))
-            }
-          )
-    }
-    async function getAutomation () {
-      await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_section}`)
-        .then(
-          ({data}) => {
-            const {lastAutomations}: ResponseAutomationRead = data;
-            const groupedAutomations = groupBy(lastAutomations, 'machine');
-            dispatch(saveAutomation(groupedAutomations));
-          }
-        )
-    }
+    const machineSection: string = currentPage();
 
-    getAvailableMachines(current_section).then(() => console.log(Reports.MACHINES_LOADED));
-    getAvailableSections(current_section).then(() => console.log(Reports.ENV_SECTIONS_LOADED));
-    getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
-    getAutomation().then(() => setLoaded(true));
-  }, [ dispatch ]);
+    getAvailableMachines(machineSection)
+      .then(({data}) => { dispatch( saveMachines(data as ResponseMachineRead[]) ) })
+
+    getAvailableSections(machineSection)
+      .then(({data}) => {
+        dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
+        setESections(data.map((m: ResponseEnvSectionRead) => {
+          getEnvironments(m.e_section)
+            .then(({data}) => {
+              const dto: ReducerEnvironmentDto = {
+                ...data,
+                environmentSection: m.e_section
+              }
+              changeEnvironmentStatus( dto );
+            });
+          return m.e_section;
+        }))
+        }
+      )
+
+    getSwitches(machineSection)
+      .then(
+        ({data}) => {
+          const grouped: ReducerSaveSwitchesDto =
+            groupBy(data as ResponseSwitchesReadLast[], 'machine');
+          dispatch(saveSwitch(grouped))
+        }
+      )
+
+    getAutomation(machineSection)
+      .then(
+        ({data}) => {
+          const {lastAutomations}: ResponseAutomationRead = data;
+          const groupedAutomations = groupBy(lastAutomations, 'machine');
+          dispatch( saveAutomation( groupedAutomations ) );
+          setLoaded(true)
+        }
+      )
+  }, [ dispatch, changeEnvironmentStatus ]);
 
   return (
     checkLogin()

@@ -1,8 +1,9 @@
-import {loadState} from "@components/LocalStorage";
+import {loadState, saveState} from "@components/LocalStorage";
 import {StorageKeys} from "../../constants";
 import update from "immutability-helper";
 
 const CONTROL_ENVIRONMENT = "CONTROL_ENVIRONMENT";
+const SAVE_ENVIRONMENT = "SAVE_ENVIRONMENT";
 
 export interface ReducerEnvironmentDto {
   environmentSection : string;
@@ -17,9 +18,13 @@ export function controlEnvironment(environment: ReducerEnvironmentDto) {
   return { type: CONTROL_ENVIRONMENT, environment }
 }
 
+export function saveEnvironment(environment: ReducerEnvironmentState) {
+  return { type: CONTROL_ENVIRONMENT, environment }
+}
+
 export interface actionTypes {
-  type: "CONTROL_ENVIRONMENT";
-  environment: ReducerEnvironmentDto;
+  type: "CONTROL_ENVIRONMENT" | "SAVE_ENVIRONMENT";
+  environment: ReducerEnvironmentDto | ReducerEnvironmentState;
 }
 
 const initialState: ReducerEnvironmentState = loadState(StorageKeys.ENVIRONMENTS) || {}
@@ -29,10 +34,14 @@ function ControlEnvironment(
 ): ReducerEnvironmentState {
   switch(action.type){
     case CONTROL_ENVIRONMENT:
-      const environment = action.environment;
-      return update(state, {
-        [environment.environmentSection]: { $set: environment }
-      });
+      const environment = action.environment as ReducerEnvironmentDto;
+      const updated: ReducerEnvironmentState = update(state, {
+        [ environment.environmentSection ]: { $set: environment }
+      })
+      saveState(StorageKeys.ENVIRONMENTS, updated)
+      return updated;
+    case SAVE_ENVIRONMENT:
+      return action.environment as ReducerEnvironmentState;
 
     default:
       return state

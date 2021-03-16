@@ -4,10 +4,10 @@ import {StorageKeys} from "../constants";
 import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
 
 export default function useSubscribeEnvironmentStatus(
-  environmentSection: string,
-  environmentName: string,
+  section: string,
+  name: string,
 ) {
   return useSelector((state: RootState) =>
-    state[StorageKeys.ENVIRONMENTS][environmentSection][environmentName as keyof ReducerEnvironmentDto], shallowEqual
+    state[StorageKeys.ENVIRONMENTS][section][name as keyof ReducerEnvironmentDto], shallowEqual
   )
 }
