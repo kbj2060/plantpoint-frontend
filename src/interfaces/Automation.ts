@@ -1,5 +1,3 @@
-import {AvailableAutomationType} from "./main";
-
 export interface ResponseAutomationRead {
   lastAutomations: Automation[];
 }
@@ -10,7 +8,7 @@ export interface Automation {
   term: number;
   enable: boolean;
   machine: string;
-  automationType: AvailableAutomationType;
+  automationType: string;
   machineSection: string;
 }
 

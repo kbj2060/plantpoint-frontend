@@ -69,6 +69,7 @@ export default function SignInComponent() {
       .then(({data}) => {
         const {access_token}: SignInResult = data;
         const updatedAuth = getSuccessAuth(username, access_token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token || ""}`;
         dispatchLoginSuccess(username, access_token);
         setAuth(updatedAuth);
       })

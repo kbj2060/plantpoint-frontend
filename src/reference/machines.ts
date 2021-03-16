@@ -1,4 +1,4 @@
-import {CycleMachine, TemperatureRangeMachine, TimeRangeMachine} from "@interfaces/Machine";
+import {CycleMachine, TemperatureRangeMachine, TimeRangeMachine} from "@interfaces/Machine.class";
 import {RangeStepper, TimePickerStepper} from "@interfaces/Stepper.class";
 import {ReactNode, Ref} from "react";
 import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon.class";

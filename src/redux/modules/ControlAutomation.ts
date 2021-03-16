@@ -1,6 +1,5 @@
 import {loadState, saveState} from "../../components/LocalStorage";
 import {StorageKeys} from "../../constants";
-import {AvailableAutomationType} from "@interfaces/main";
 import update  from 'immutability-helper';
 
 const CONTROL_AUTOMATION = "CONTROL_AUTOMATION";
@@ -13,7 +12,7 @@ export interface ReducerAutomationDto {
   term: number;
   enable: boolean;
   machine: string;
-  automationType: AvailableAutomationType;
+  automationType: string;
   machineSection: string;
 }
 

@@ -68,7 +68,6 @@ function Switches({machine}: SwitchesProps) {
     )
   }
 
-  // TODO : 현 상태와 redux를 비교해서 ui 바꾸기 listener 추
   useEffect(() => {
     socket.on(WebSocketEvent.SEND_SWITCH_TO_CLIENT,  (dto: ReducerControlSwitchesDto) => {
       if( machine === dto.machine && machineSection === dto.machineSection ){

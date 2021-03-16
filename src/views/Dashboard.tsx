@@ -20,9 +20,10 @@ import StatusDisplay from "@components/StatusDisplay";
 import {currentPage} from "@funcUtils/currentPage";
 import EnvironmentsHistoryComponent from "@components/EnvironmentsHistroy";
 import {ResponseEnvSectionRead, ResponseMachineRead} from "@interfaces/Machine";
-import {environments} from "@values/defaults";
 import {saveSections} from "@redux/modules/ControlSection";
 import {Loader} from "@compUtils/Loader";
+import {Environments} from "../reference/environments";
+import {Environment} from "@interfaces/Environment.class";
 
 interface DashboardProps {
   page: string;
@@ -32,6 +33,7 @@ export default function Dashboard({page}: DashboardProps) {
   const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [eSections, setESections] = useState([]);
+  const environments = new Environments().getEnvironments();
 
   useEffect(() => {
     const current_section: string = currentPage();
@@ -100,10 +102,11 @@ export default function Dashboard({page}: DashboardProps) {
                     <StatusDisplay plant={section} />
                   </Grid>)
                 })}
-              {environments.map((environment) => {
+              {environments.map((environment: typeof Environment) => {
+                const name = new environment().name;
                 return (
-                  <Grid key={environment.toString()} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
-                    <EnvironmentsHistoryComponent environment={environment} />
+                  <Grid key={name} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
+                    <EnvironmentsHistoryComponent environment={name} />
                   </Grid>)
                 })}
             </Grid>

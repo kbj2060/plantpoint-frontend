@@ -1,18 +1,17 @@
 import {loadState} from "@components/LocalStorage";
 import {StorageKeys} from "../../constants";
-import {AvailableEnvironmentSection} from "@interfaces/main";
 import update from "immutability-helper";
 
 const CONTROL_ENVIRONMENT = "CONTROL_ENVIRONMENT";
 
 export interface ReducerEnvironmentDto {
-  environmentSection : AvailableEnvironmentSection;
+  environmentSection : string;
   co2: number;
   humidity: number;
   temperature: number;
 }
 
-export type ReducerEnvironmentState = Record<AvailableEnvironmentSection, ReducerEnvironmentDto>
+export type ReducerEnvironmentState = Record<string, ReducerEnvironmentDto>
 
 export function controlEnvironment(environment: ReducerEnvironmentDto) {
   return { type: CONTROL_ENVIRONMENT, environment }
@@ -23,14 +22,7 @@ export interface actionTypes {
   environment: ReducerEnvironmentDto;
 }
 
-const {defaultEnvironment} = require('../../values/defaults');
-const initialState: ReducerEnvironmentState =
-  loadState(StorageKeys.ENVIRONMENTS)
-  || {
-    'd1': defaultEnvironment,
-    'd2': defaultEnvironment,
-    'd3': defaultEnvironment,
-  }
+const initialState: ReducerEnvironmentState = loadState(StorageKeys.ENVIRONMENTS) || {}
 
 function ControlEnvironment(
   state =initialState, action: actionTypes

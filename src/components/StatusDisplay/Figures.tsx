@@ -7,7 +7,8 @@ import axios from "axios";
 import EnvironmentText from "@components/StatusDisplay/EnvironmentText";
 import { ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
 import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
+import {Environments} from "../../reference/environments";
+import {Environment} from "@interfaces/Environment.class";
 
 interface FiguresProps {
   plant: string;
@@ -15,8 +16,8 @@ interface FiguresProps {
 
 export default function Figures({ plant }: FiguresProps) {
   const { Translations } = require('@values/translations');
-  const {defaultEnvironment} = require('@values/defaults');
   const changeEnvironmentStatus = useChangeEnvironmentStatus();
+  const environments = new Environments().getEnvironments();
 
   useEffect(() => {
     const { Time } = require('@values/time');
@@ -47,14 +48,15 @@ export default function Figures({ plant }: FiguresProps) {
   return (
     <div className='figures-wrapper'>
       {
-        Object.keys(defaultEnvironment).map((environmentName: string) => {
+        environments.map((environment: typeof Environment) => {
+          const name = new environment().name
           return (
-            <div key={environmentName}>
-              <Typography className='title'>{Translations[environmentName]}</Typography>
+            <div key={name}>
+              <Typography className='title'>{Translations[name]}</Typography>
               <Paper className='figure' >
                 <EnvironmentText
-                  section={plant as AvailableEnvironmentSection}
-                  name={environmentName as AvailableEnvironment} />
+                  section={plant}
+                  name={name} />
               </Paper>
             </div>
             )

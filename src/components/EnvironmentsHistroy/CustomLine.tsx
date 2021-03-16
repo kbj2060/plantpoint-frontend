@@ -2,12 +2,11 @@ import {Line} from 'react-chartjs-2';
 import React from "react";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
 import {EnvironmentChart, EnvironmentsHistory} from "@interfaces/Environment";
 import {options} from "@components/EnvironmentsHistroy/EnvironmentHistoryOptions";
 
 interface CustomLineProps {
-  environment: AvailableEnvironment;
+  environment: string;
   width: number;
   height: number;
   history: EnvironmentsHistory;
@@ -30,7 +29,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     function makeDataset<T extends number>(n_sections: T) {
       let datasets = []
       for(let n = 0; n < n_sections; n++){
-        const section = environmentSections[n] as AvailableEnvironmentSection;
+        const section = environmentSections[n];
         const data = history[section] === undefined
                       ? []
                       : history[section].map((h) => h[environment])
@@ -52,7 +51,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     }
 
     state.datasets = makeDataset<number>(environmentSections.length);
-    state.labels = history[primarySection as AvailableEnvironmentSection].map( (h ) => changeToKoreanDate(h.created) );
+    state.labels = history[primarySection].map( (h ) => changeToKoreanDate(h.created) );
 
     return <Line options={options} data={state} width={width} height={height}/>
 }

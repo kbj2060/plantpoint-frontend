@@ -6,7 +6,6 @@ import {CustomIosSlider} from "@compUtils/CustomIosSlider";
 import update from 'react-addons-update';
 import Chip from "@material-ui/core/Chip";
 import {StorageKeys} from "../../constants";
-
 import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";

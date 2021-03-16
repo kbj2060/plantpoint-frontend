@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import axios from "axios";
 import '@styles/components/environment_history.scss';
 import {HttpUrls, Reports} from "../../constants";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
 import _ from "lodash";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import {EnvironmentsHistory,
@@ -37,15 +36,15 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
 
     const dto: EnvironmentHistoryReadDto = {
       section : current_page,
-      environmentName : environment as AvailableEnvironment,
+      environmentName : environment,
     }
 
     await axios.get( `${HttpUrls.ENVIRONMENT_READ_HISTORY}/${dto.section}/${dto.environmentName}` )
       .then(({data})=> {
         const { histories }: ResponseEnvironmentHistoryRead = data;
         if ( checkEmpty(histories) ) { return; }
-        const grouped: EnvironmentsHistory = groupBy<EnvironmentHistoryUnit, AvailableEnvironmentSection> (
-          histories, 'environmentSection' as AvailableEnvironmentSection
+        const grouped: EnvironmentsHistory = groupBy<EnvironmentHistoryUnit, string> (
+          histories, 'environmentSection'
         );
         const lastUpdated = _.sortBy( histories, 'created' )[ histories.length - 1 ].created;
         setLastUpdate(changeToKoreanDate(lastUpdated));
@@ -58,7 +57,7 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
 
 
   const cleanup = () => {
-    setHistory({} as Record<AvailableEnvironmentSection, EnvironmentHistoryUnit[]>);
+    setHistory({} as Record<string, EnvironmentHistoryUnit[]>);
     setLastUpdate('');
   }
 
@@ -80,7 +79,7 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
     <div className='foreground'>
       <Typography className='title'> { Translations[ environment ] } </Typography>
       <CustomLine
-        environment={environment as AvailableEnvironment}
+        environment={environment}
         history={history}
         width={5} height={2} />
       <div className='update-info'>

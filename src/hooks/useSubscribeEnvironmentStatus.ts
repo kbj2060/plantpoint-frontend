@@ -1,13 +1,13 @@
 import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from "@redux/modules";
 import {StorageKeys} from "../constants";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
+import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
 
 export default function useSubscribeEnvironmentStatus(
-  environmentSection: AvailableEnvironmentSection,
-  environmentName: AvailableEnvironment,
+  environmentSection: string,
+  environmentName: string,
 ) {
   return useSelector((state: RootState) =>
-    state[StorageKeys.ENVIRONMENTS][environmentSection][environmentName], shallowEqual
+    state[StorageKeys.ENVIRONMENTS][environmentSection][environmentName as keyof ReducerEnvironmentDto], shallowEqual
   )
 }
