@@ -7,7 +7,7 @@ import axios from "axios";
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {saveState} from "../LocalStorage";
-import {HttpUrls, StorageKeys} from "../../constants";
+import {HttpUrls, StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationState} from "@redux/modules/ControlAutomation";
 import AutoSwitchWrapper from "./AutoSwitchWrapper";

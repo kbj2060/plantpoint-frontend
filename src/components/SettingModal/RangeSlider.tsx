@@ -5,7 +5,7 @@ import {controlAutomation, ReducerAutomationDto} from "@redux/modules/ControlAut
 import {CustomIosSlider} from "@compUtils/CustomIosSlider";
 import update from 'react-addons-update';
 import Chip from "@material-ui/core/Chip";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";

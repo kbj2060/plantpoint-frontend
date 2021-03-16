@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {DrawerDirection, PageNames, PagePaths} from "../../constants";
+import {DrawerDirection, PageNames, PagePaths} from "../../reference/constants";
 import logo from '../../logo.jpeg';
 import "@styles/components/menu.scss";
 

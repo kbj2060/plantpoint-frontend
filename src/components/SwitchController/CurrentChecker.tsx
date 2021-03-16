@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
-import axios from "axios";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, Reports} from "../../constants";
+import { Reports} from "../../reference/constants";
 import { ResponseCurrentRead } from "@interfaces/Current";
 import {currentPage} from "@funcUtils/currentPage";
 import {Loader} from "@compUtils/Loader";
+import {getMachineCurrents} from "../../handler/httpHandler";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -29,7 +29,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 		const {Criteria, UpdateTimeOut} = require('@values/defaults')
 		const fetchCurrent = async () => {
 			const machineSection = currentPage();
-			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)
+			getMachineCurrents(machineSection, machine)
 				.then(({ data }) => {
 					const {current}: ResponseCurrentRead = data;
 					if(checkEmpty(current) || current < Criteria.current){

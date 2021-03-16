@@ -38,16 +38,23 @@ interface DashboardProps {
 
 export default function Dashboard({page}: DashboardProps) {
   const dispatch = useDispatch();
-  const [loaded, setLoaded] = useState(false);
+
+  const [machineLoaded, setMachineLoaded] = useState(false);
+  const [sectionLoaded, setSectionLoaded] = useState(false);
+  const [switchLoaded, setSwitchLoaded] = useState(false);
+  const [automationLoaded, setAutomationLoaded] = useState(false);
+
   const [eSections, setESections] = useState([]);
   const environments = new Environments().getEnvironments();
   const changeEnvironmentStatus = useChangeEnvironmentStatus();
+  const machineSection: string = currentPage();
 
   useEffect(() => {
-    const machineSection: string = currentPage();
-
     getAvailableMachines(machineSection)
-      .then(({data}) => { dispatch( saveMachines(data as ResponseMachineRead[]) ) })
+      .then(({data}) => {
+        dispatch( saveMachines(data as ResponseMachineRead[]) )
+        setMachineLoaded(true)
+      })
 
     getAvailableSections(machineSection)
       .then(({data}) => {
@@ -63,6 +70,7 @@ export default function Dashboard({page}: DashboardProps) {
             });
           return m.e_section;
         }))
+        setSectionLoaded(true)
         }
       )
 
@@ -71,7 +79,8 @@ export default function Dashboard({page}: DashboardProps) {
         ({data}) => {
           const grouped: ReducerSaveSwitchesDto =
             groupBy(data as ResponseSwitchesReadLast[], 'machine');
-          dispatch(saveSwitch(grouped))
+          dispatch( saveSwitch(grouped) )
+          setSwitchLoaded(true)
         }
       )
 
@@ -81,14 +90,21 @@ export default function Dashboard({page}: DashboardProps) {
           const {lastAutomations}: ResponseAutomationRead = data;
           const groupedAutomations = groupBy(lastAutomations, 'machine');
           dispatch( saveAutomation( groupedAutomations ) );
-          setLoaded(true)
+          setAutomationLoaded(true)
         }
       )
-  }, [ dispatch, changeEnvironmentStatus ]);
+
+    return () => {
+      setMachineLoaded(false);
+      setSwitchLoaded(false);
+      setAutomationLoaded(false);
+      setSectionLoaded(false);
+    }
+  }, [ dispatch, changeEnvironmentStatus, machineSection ]);
 
   return (
     checkLogin()
-      ? loaded
+      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded
         ? <div className='dashboard-root'>
             <AppBar page={page}/>
             <Grid container className='grid-container'>
@@ -104,7 +120,7 @@ export default function Dashboard({page}: DashboardProps) {
               {eSections.map((section: string) => {
                 return(
                   <Grid key={section} item xs={12} sm={12} md={4} className='status-display-item' >
-                    <StatusDisplay plant={section} />
+                    <StatusDisplay environmentSection={section} />
                   </Grid>)
                 })}
               {environments.map((environment: typeof Environment) => {

@@ -1,5 +1,5 @@
 import {loadState, saveState} from "@components/LocalStorage";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {ResponseEnvSectionRead} from "@interfaces/Machine";
 
 const SAVE_SECTIONS = "SAVE_SECTIONS";
@@ -26,7 +26,7 @@ function ControlSections(
       saveState(StorageKeys.SECTION, eSections)
       return eSections;
     default:
-      return initialState
+      return state
   }
 }
 

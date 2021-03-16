@@ -1,5 +1,5 @@
 import {loadState, saveState} from "@components/LocalStorage";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 
 import {ResponseMachineRead} from "@interfaces/Machine";
 
@@ -19,7 +19,7 @@ export type ActionTypes = {
 const initialState = loadState(StorageKeys.MACHINE) || []
 
 function ControlMachine(
-  state =initialState, action: ActionTypes
+  state = initialState, action: ActionTypes
 ): string[] {
   switch(action.type){
     case SAVE_MACHINES:
@@ -29,7 +29,7 @@ function ControlMachine(
       saveState(StorageKeys.MACHINE, machines)
       return  machines
     default:
-      return initialState
+      return state
   }
 }
 

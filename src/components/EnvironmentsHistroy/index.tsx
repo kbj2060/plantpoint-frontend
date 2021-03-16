@@ -2,9 +2,8 @@ import React, {useCallback, useEffect} from 'react';
 import CustomLine from './CustomLine';
 import TimerIcon from '../../assets/icons/TimerIcon';
 import Typography from '@material-ui/core/Typography';
-import axios from "axios";
 import '@styles/components/environment_history.scss';
-import {HttpUrls, Reports} from "../../constants";
+import {Reports} from "../../reference/constants";
 import _ from "lodash";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import {EnvironmentsHistory,
@@ -12,6 +11,7 @@ import {EnvironmentsHistory,
         EnvironmentHistoryReadDto,
         ResponseEnvironmentHistoryRead } from "@interfaces/Environment";
 import {checkEmpty} from "@funcUtils/checkEmpty";
+import {getHistoryEnvironment} from "../../handler/httpHandler";
 
 interface EnvironmentsHistoryProps {
   environment : string;
@@ -36,10 +36,10 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
 
     const dto: EnvironmentHistoryReadDto = {
       section : current_page,
-      environmentName : environment,
+      name : environment,
     }
 
-    await axios.get( `${HttpUrls.ENVIRONMENT_READ_HISTORY}/${dto.section}/${dto.environmentName}` )
+    getHistoryEnvironment(dto.section, dto.name)
       .then(({data})=> {
         const { histories }: ResponseEnvironmentHistoryRead = data;
         if ( checkEmpty(histories) ) { return; }
@@ -47,9 +47,10 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
           histories, 'environmentSection'
         );
         const lastUpdated = _.sortBy( histories, 'created' )[ histories.length - 1 ].created;
-        setLastUpdate(changeToKoreanDate(lastUpdated));
-        setHistory(grouped);
-      }).catch((err) => {
+        setLastUpdate( changeToKoreanDate(lastUpdated) );
+        setHistory( grouped );
+      })
+      .catch((err) => {
         console.log("HISTORY FETCH ERROR!");
         console.log(err);
       })

@@ -4,7 +4,7 @@ import moment from 'moment';
 import '@styles/components/timepicker.scss';
 import PropTypes from 'prop-types';
 import {getReduxData} from "@funcUtils/getReduxData";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 
 const config = {
   labelsPAdding: 13,

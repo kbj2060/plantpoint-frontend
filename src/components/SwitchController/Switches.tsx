@@ -7,7 +7,7 @@ import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
 import {CreateSwitchDto} from "@interfaces/Switch";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../constants";
+import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";

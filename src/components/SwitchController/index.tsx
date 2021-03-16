@@ -6,7 +6,7 @@ import IconWrapper from "./IconWrapper";
 import AutomationChecker from "./AutomationChecker";
 import SettingModal from "../SettingModal";
 import {getReduxData} from "@funcUtils/getReduxData";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {MachineProps} from "@interfaces/main";
 
 import CurrentChecker from "@components/SwitchController/CurrentChecker";

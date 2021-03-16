@@ -7,8 +7,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import axios from "axios";
-import {Errors, HttpUrls, Reports } from "../../constants";
+import {Errors, Reports } from "../../reference/constants";
 import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
 import { updatedDiff } from 'deep-object-diff';
 import {ComponentState} from "@interfaces/main";
@@ -20,6 +19,7 @@ import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
+import {getHistorySwitches} from "../../handler/httpHandler";
 
 const theme = createMuiTheme({
   overrides: {
@@ -98,7 +98,7 @@ export default function MachineHistory() {
 
 		const getSwitchHistory = async  () => {
 			const machineSection = currentPage();
-			await axios.get(`${HttpUrls.SWITCHES_READ}/${machineSection}`)
+			getHistorySwitches(machineSection)
 				.then(
 					({data}) => {
 						const { switchHistory }: ResponseSwitchHistoryRead = data;

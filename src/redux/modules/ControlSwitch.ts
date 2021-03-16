@@ -1,6 +1,6 @@
 import {loadState, saveState} from "../../components/LocalStorage";
 import update from 'react-addons-update';
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 
 const CONTROL_SWITCH = "CONTROL_SWITCH";
 const SAVE_SWITCH = "SAVE_SWITCH";
@@ -26,9 +26,7 @@ export interface actionTypes {
   _switch: ReducerSaveSwitchesDto | ReducerControlSwitchesDto;
 }
 
-const {defaultSwitchesState} = require('../../values/defaults');
-const initialState: ReducerSwitchState =
-  loadState(StorageKeys.SWITCHES) || defaultSwitchesState
+const initialState: ReducerSwitchState = loadState(StorageKeys.SWITCHES) || {}
 
 function ControlSwitch(
   state =initialState, action: actionTypes

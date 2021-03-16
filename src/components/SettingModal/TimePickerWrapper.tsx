@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
 import useWindowDimensions from "@hooks/useWindowDimensions";
 import TermControlButton from "./TermControlButton";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";

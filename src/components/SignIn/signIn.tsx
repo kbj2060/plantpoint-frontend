@@ -5,7 +5,7 @@ import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
-import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../constants";
+import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../reference/constants";
 import CustomDialog from "@compUtils/CustomDialog";
 import SignInInput from "./SiginInput";
 import '@styles/components/signin.scss'

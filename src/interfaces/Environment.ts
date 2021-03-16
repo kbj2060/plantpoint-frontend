@@ -6,7 +6,7 @@ export interface ResponseEnvironmentRead {
 
 export interface EnvironmentHistoryReadDto {
   section : string,
-  environmentName : string,
+  name : string,
 }
 
 export interface EnvironmentHistoryUnit {

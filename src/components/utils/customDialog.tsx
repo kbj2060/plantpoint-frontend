@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
-import {Texts} from "../../constants";
+import {Texts} from "../../reference/constants";
 
 interface DialogProps {
   open: boolean,

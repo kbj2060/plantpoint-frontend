@@ -4,6 +4,8 @@ import {checkEmpty} from "@funcUtils/checkEmpty";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import {EnvironmentChart, EnvironmentsHistory} from "@interfaces/Environment";
 import {options} from "@components/EnvironmentsHistroy/EnvironmentHistoryOptions";
+import {getReduxData} from "@funcUtils/getReduxData";
+import {StorageKeys} from "../../reference/constants";
 
 interface CustomLineProps {
   environment: string;
@@ -15,8 +17,9 @@ interface CustomLineProps {
 export default function CustomLine({ environment, history, width, height }: CustomLineProps) {
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
-    const {environmentSections} = require('@values/defaults');
-    const primarySection = environmentSections[0];
+    const environmentSections = getReduxData(StorageKeys.SECTION);
+    const primarySection = environmentSections[0]
+
     let state: EnvironmentChart = {
         labels: [],
         datasets: []
@@ -26,7 +29,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
       return <Line options={options} data={state} width={width} height={height}/>
     }
 
-    function makeDataset<T extends number>(n_sections: T) {
+    function makeDataset <T extends number> (n_sections: T) {
       let datasets = []
       for(let n = 0; n < n_sections; n++){
         const section = environmentSections[n];

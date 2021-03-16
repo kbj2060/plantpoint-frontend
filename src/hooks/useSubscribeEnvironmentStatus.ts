@@ -1,6 +1,6 @@
 import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from "@redux/modules";
-import {StorageKeys} from "../constants";
+import {StorageKeys} from "../reference/constants";
 import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
 
 export default function useSubscribeEnvironmentStatus(

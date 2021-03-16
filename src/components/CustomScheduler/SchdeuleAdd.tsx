@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import axios from "axios";
 import moment from "moment";
-import {HttpUrls, Reports} from "../../constants";
+import {HttpUrls, Reports} from "../../reference/constants";
 import {currentUser} from "@funcUtils/currentUser";
 import '@styles/components/schedule_add.scss';
 import {CreateScheduleDto, SchedulerDate} from "@interfaces/Scheduler";

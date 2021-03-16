@@ -5,7 +5,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
 import update from 'immutability-helper';
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationDto} from "@redux/modules/ControlAutomation";
 

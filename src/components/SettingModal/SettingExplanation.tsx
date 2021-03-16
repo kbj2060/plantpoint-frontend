@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import axios from 'axios';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
@@ -9,7 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import {getReduxData} from "@funcUtils/getReduxData";
 import {groupBy} from "@funcUtils/groupBy";
-import {HttpUrls, StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
 
@@ -17,6 +16,7 @@ import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 import {Loader} from "@compUtils/Loader";
+import {getAutomation} from "../../handler/httpHandler";
 
 interface SettingExplanationProps {
   position: string,
@@ -63,7 +63,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
   useEffect(() => {
     const getDatabaseAutomation = async () => {
       const machineSection = currentPage();
-      await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
+      getAutomation(machineSection)
         .then(({data}) => {
           const {lastAutomations} = data;
           const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');

@@ -1,5 +1,5 @@
 import {loadState, saveState} from "@components/LocalStorage";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import update from "immutability-helper";
 
 const CONTROL_ENVIRONMENT = "CONTROL_ENVIRONMENT";
