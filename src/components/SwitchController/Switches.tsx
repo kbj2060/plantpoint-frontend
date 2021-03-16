@@ -8,7 +8,6 @@ import '@styles/components/switch_controller.scss';
 import {CreateSwitchDto} from "@interfaces/Switch";
 import {MachineProps} from "@interfaces/main";
 import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../constants";
-import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";
@@ -26,7 +25,7 @@ function Switches({machine}: SwitchesProps) {
   const postSwitchMachine = async <T extends boolean> ( status: T ) => {
     await axios.post(HttpUrls.SWITCHES_CREATE, {
       machine : machine,
-      machineSection : machineSection as AvailableMachineSection,
+      machineSection : machineSection,
       status : new StatusConverter(status).toDatabaseStatus(),
       controlledBy : currentUser() as string,
     } as CreateSwitchDto);
@@ -36,8 +35,8 @@ function Switches({machine}: SwitchesProps) {
     e.persist();
     const status: boolean = new StatusConverter(e.target.checked).toSwitchStatus();
     const dto: ReducerControlSwitchesDto = {
-      machineSection: machineSection as AvailableMachineSection,
-      machine: machine as AvailableMachines,
+      machineSection: machineSection,
+      machine: machine as string,
       status: status,
     }
 

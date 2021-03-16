@@ -34,6 +34,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
         const data = history[section] === undefined
                       ? []
                       : history[section].map((h) => h[environment])
+
         datasets.push({
           label: Translations[section],
           fill: false,
@@ -42,8 +43,10 @@ export default function CustomLine({ environment, history, width, height }: Cust
           borderColor: `${Colors[section]}`,
           borderWidth: 2,
           pointRadius: 0,
-          data: data
+          data: data,
+          spanGaps: true,
         })
+        console.log(data.length)
       }
       return datasets
     }

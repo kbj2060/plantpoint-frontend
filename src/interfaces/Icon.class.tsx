@@ -11,7 +11,7 @@ import OpacityIcon from "@material-ui/icons/Opacity";
 abstract class IconClass {
   abstract activeIcon =  (): JSX.Element => { return <></> }
   abstract inactiveIcon =  (): JSX.Element => { return <></> }
-  iconHandler = <T extends boolean>(active: T): JSX.Element => {
+  iconHandler = <T extends boolean> (active: T): JSX.Element => {
     return active ? this.activeIcon() : this.inactiveIcon();
   }
 }

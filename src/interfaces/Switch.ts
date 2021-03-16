@@ -1,9 +1,8 @@
-import {AvailableMachines, AvailableMachineSection} from "./main";
 import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch";
 
 export interface CreateSwitchDto {
-  machine : AvailableMachines;
-  machineSection : AvailableMachineSection;
+  machine : string;
+  machineSection : string;
   status : number;
   controlledBy : string;
 }

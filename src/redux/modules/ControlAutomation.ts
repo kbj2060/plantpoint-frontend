@@ -1,6 +1,6 @@
 import {loadState, saveState} from "../../components/LocalStorage";
 import {StorageKeys} from "../../constants";
-import {AvailableAutomationType, AvailableMachines, AvailableMachineSection} from "@interfaces/main";
+import {AvailableAutomationType} from "@interfaces/main";
 import update  from 'immutability-helper';
 
 const CONTROL_AUTOMATION = "CONTROL_AUTOMATION";
@@ -12,12 +12,12 @@ export interface ReducerAutomationDto {
   end: number[];
   term: number;
   enable: boolean;
-  machine: AvailableMachines;
+  machine: string;
   automationType: AvailableAutomationType;
-  machineSection: AvailableMachineSection;
+  machineSection: string;
 }
 
-export type ReducerAutomationState = Record<AvailableMachines, ReducerAutomationDto>
+export type ReducerAutomationState = Record<string, ReducerAutomationDto>
 
 export const  controlAutomation = (automation: ReducerAutomationDto) => {
   return { type: CONTROL_AUTOMATION, automation }
@@ -27,9 +27,9 @@ export const  saveAutomation = (automation: ReducerAutomationState) => {
   return { type: SAVE_AUTOMATION, automation }
 }
 
-export const  resetAutomation = () => {
-  return { type: RESET_AUTOMATION }
-}
+// export const  resetAutomation = () => {
+//   return { type: RESET_AUTOMATION }
+// }
 
 export type actionTypes = {
   type: "CONTROL_AUTOMATION" | "SAVE_AUTOMATION" | 'RESET_AUTOMATION';
@@ -37,16 +37,16 @@ export type actionTypes = {
 }
 
 const {defaultAutomations} = require('../../values/defaults');
-let initialState: ReducerAutomationState = loadState(StorageKeys.AUTO) || defaultAutomations
+let initialState: ReducerAutomationState = loadState(StorageKeys.AUTO) || {}
 
 function ControlAutomation(
   state = initialState, action: actionTypes
-): ReducerAutomationState {
+) {
   switch(action.type){
     case CONTROL_AUTOMATION:
       const {machine} = action.automation as ReducerAutomationDto;
       const updated: ReducerAutomationState = update(state, {
-        [machine]: { $set: action.automation }
+        [machine]: { $set: action.automation as ReducerAutomationDto}
       });
       saveState(StorageKeys.AUTO, updated)
       return updated;
@@ -55,7 +55,7 @@ function ControlAutomation(
       const automation = action.automation as ReducerAutomationState;
       Object.keys(initialState).forEach((key) => {
         if ( !Object.keys(automation).includes(key) ) {
-          automation[key as AvailableMachines] = initialState[key as AvailableMachines]
+          automation[key as string] = initialState[key as string]
         }
       })
       saveState(StorageKeys.AUTO, automation)

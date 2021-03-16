@@ -16,7 +16,7 @@ $offset: $lat - $thickness;
   height: $size;
   transform: rotate(165deg);
   margin : auto;
-  display : block;
+  display : contents;
 
   &:before,
   &:after {

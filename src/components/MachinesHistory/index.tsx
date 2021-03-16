@@ -11,7 +11,7 @@ import axios from "axios";
 import {Errors, HttpUrls, Reports } from "../../constants";
 import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
 import { updatedDiff } from 'deep-object-diff';
-import {AvailableMachines, ComponentState} from "@interfaces/main";
+import {ComponentState} from "@interfaces/main";
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
 import {usePrevious} from "@hooks/usePrevious";
 import {Loader} from "@compUtils/Loader";
@@ -78,7 +78,7 @@ export default function MachineHistory() {
 	useEffect(() => {
 		if ( !prevRefresh ) { return; }
 		const entries: Array<any> = Object.entries(
-			updatedDiff(prevRefresh as object, refresh as object) as Record<AvailableMachines, boolean>
+			updatedDiff(prevRefresh as object, refresh as object) as Record<string, boolean>
 		);
 		if ( entries.length !== 1 ) { return; }
 		const [machine, status] = entries.flat();

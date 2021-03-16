@@ -1,4 +1,4 @@
-import {AvailableAutomationType, AvailableMachines, AvailableMachineSection} from "./main";
+import {AvailableAutomationType} from "./main";
 
 export interface ResponseAutomationRead {
   lastAutomations: Automation[];
@@ -9,9 +9,9 @@ export interface Automation {
   end: string[];
   term: number;
   enable: boolean;
-  machine: AvailableMachines;
+  machine: string;
   automationType: AvailableAutomationType;
-  machineSection: AvailableMachineSection;
+  machineSection: string;
 }
 
 

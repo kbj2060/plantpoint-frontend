@@ -1,7 +1,7 @@
-import {AvailableMachines} from "@interfaces/main";
+
 
 export interface SingleSwitchHistory {
-  machine: AvailableMachines;
+  machine: string;
   status: number;
   controlledBy: string;
   created: string;

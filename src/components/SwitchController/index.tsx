@@ -8,7 +8,7 @@ import SettingModal from "../SettingModal";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {StorageKeys} from "../../constants";
 import {MachineProps} from "@interfaces/main";
-import {AvailableMachines} from "@interfaces/main";
+
 import CurrentChecker from "@components/SwitchController/CurrentChecker";
 import '@styles/components/switch_controller.scss';
 import {checkLogin} from "@funcUtils/checkLogin";
@@ -50,9 +50,9 @@ export default function SwitchController() {
       <>
       {machines.map(machine =>
         <Box key={machine.toString()} display='flex'>
-          <Icons machine={machine as AvailableMachines} />
-          <Checkers machine={machine as AvailableMachines}/>
-          <PowerSwitch machine={machine as AvailableMachines}/>
+          <Icons machine={machine as string} />
+          <Checkers machine={machine as string}/>
+          <PowerSwitch machine={machine as string}/>
         </Box>)}
       </>
     )

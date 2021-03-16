@@ -7,6 +7,7 @@ export enum StorageKeys {
   AUTO='automation',
   MACHINE='machine',
   ENVIRONMENTS='environments',
+  SECTION='section',
 }
 
 export enum WebSocketEvent {
@@ -26,6 +27,7 @@ export enum HttpUrls {
 
   MACHINES_READ = 'http://localhost:9000/machines/read',
   CURRENT_READ = 'http://localhost:9000/currents/read',
+  ENV_SECTION_READ = 'http://localhost:9000/sections/read',
 
   ENVIRONMENTS_READ_LAST = 'http://localhost:9000/environments/read/last',
   ENVIRONMENT_READ_HISTORY = 'http://localhost:9000/environments/read/history',
@@ -38,6 +40,7 @@ export enum HttpUrls {
 
 export enum Reports {
   MACHINES_LOADED = 'Machines Loaded..',
+  ENV_SECTIONS_LOADED = 'Environment Sections Loaded..',
   SIGNIN_FINISH = 'Login Finished..',
   SWITCH_CHANGED = 'Switch Changed..',
   SWITCH_LOADED = 'Switch Loaded..',

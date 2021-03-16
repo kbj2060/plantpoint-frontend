@@ -4,15 +4,14 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
-import {store} from "@redux/store";
 import update from 'immutability-helper';
 import {StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationDto} from "@redux/modules/ControlAutomation";
-import {AvailableMachines} from "@interfaces/main";
+
 
 interface TermControlButtonProp {
-  machine: AvailableMachines;
+  machine: string;
 }
 
 const TermControlButton = (
@@ -29,20 +28,18 @@ const TermControlButton = (
         term : { $set: ++prev },
         })
       ));
-      console.log(prev)
       return prev
     })
   }
 
   const handleTermDown = () => {
-    const singleAutomation = store.getState()[ StorageKeys.AUTO ][ machine ];
+    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[ machine ];
     setTerm(prev => {
       if( prev <= 1 ) { return 1; }
       dispatch(controlAutomation( update( singleAutomation, {
         term : { $set: --prev },
         })
       ));
-      console.log(prev)
       return prev;
     })
   }

@@ -6,7 +6,7 @@ import useWindowDimensions from "@hooks/useWindowDimensions";
 import TermControlButton from "./TermControlButton";
 import {StorageKeys} from "../../constants";
 import {getReduxData} from "@funcUtils/getReduxData";
-import {AvailableMachines} from "@interfaces/main";
+
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";
 import {Moment} from "moment";
@@ -19,7 +19,7 @@ interface Times {
 }
 
 interface TimeSpanPickerProp {
-  position: AvailableMachines;
+  position: string;
   outerSize: number;
 }
 

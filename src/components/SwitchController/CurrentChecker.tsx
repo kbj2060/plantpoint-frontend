@@ -5,6 +5,7 @@ import {MachineProps} from "@interfaces/main";
 import {HttpUrls, Reports} from "../../constants";
 import { ResponseCurrentRead } from "@interfaces/Current";
 import {currentPage} from "@funcUtils/currentPage";
+import {Loader} from "@compUtils/Loader";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -22,6 +23,7 @@ const CurrentFlowing = ({ fillColor }: CurrentFlowingProps) => {
 interface CurrentCheckerProps extends MachineProps { }
 export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	const [flowing, setFlowing] = React.useState<boolean>(false);
+	const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
 
 	useEffect(() => {
 		const {Criteria, UpdateTimeOut} = require('@values/defaults')
@@ -36,6 +38,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 					else {
 						setFlowing(true);
 					}
+					setIsLoaded(true);
 			})
 		}
 
@@ -46,12 +49,13 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 
 		return () => {
 			clearInterval(interval);
+			setIsLoaded(false);
+			setFlowing(false);
 		}
 	}, [machine]);
 
-	if (!flowing) {
-		return <></>
-	}
-	return <CurrentFlowing fillColor={'#F6BD60'}/>
+	if (!isLoaded) { return <Loader />}
+	if (!flowing) { return <></> }
 
+	return <CurrentFlowing fillColor={'#F6BD60'}/>
 }

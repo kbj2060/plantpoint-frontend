@@ -12,7 +12,7 @@ import {groupBy} from "@funcUtils/groupBy";
 import {HttpUrls, StorageKeys} from "../../constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
-import {AvailableMachines} from "@interfaces/main";
+
 import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
@@ -33,7 +33,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     setIsLoaded(true);
   }
 
-  function getAutoEnable<T extends AvailableMachines>(subject: T) {
+  function getAutoEnable<T extends string>(subject: T) {
     if(!checkEmpty(subject)){
       return automations[subject].enable;
     }
@@ -43,12 +43,12 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     return (<Chip key={'off'} className='chip' variant="outlined" size="small" label={"자동화 꺼짐"} /> )
   }
 
-  function getCycleChips<T extends AvailableMachines> (machine: T) {
+  function getCycleChips<T extends string> (machine: T) {
     const {start, end, term} = automations[machine];
     return new CycleExplanationChip( start, end, term ).explanation();
   }
 
-  function getRangeChips <T extends AvailableMachines> (machine: T) {
+  function getRangeChips <T extends string> (machine: T) {
     if ( machine === 'cooler' ) {
       return new CoolerExplanationChip(
         machine,[ automations[machine].start[0], automations[machine].end[0] ]

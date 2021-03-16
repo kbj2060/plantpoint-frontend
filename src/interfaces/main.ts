@@ -1,13 +1,12 @@
-export type AvailableMachines =
-  | 'waterpump'
-  | 'led'
-  | 'cooler'
-  | 'heater'
-  | 'fan'
-  | 'roofFan'
+// export type string =
+//   | 'waterpump'
+//   | 'led'
+//   | 'cooler'
+//   | 'heater'
+//   | 'fan'
+//   | 'roofFan'
 
-export type AvailableMachineSection = 's1'
-
+// TODO : Available 변수들 디비에서 꺼내오는 방식으로 바꿀 것.
 export type AvailableEnvironment =
   | 'co2'
   | 'temperature'
@@ -28,5 +27,5 @@ export interface ComponentState {
 }
 
 export interface MachineProps {
-  machine: AvailableMachines;
+  machine: string;
 }
