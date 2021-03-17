@@ -70,7 +70,6 @@ function Switches({machine}: SwitchesProps) {
 
   useEffect(() => {
     socket.on(WebSocketEvent.SEND_SWITCH_TO_CLIENT,  (dto: ReducerControlSwitchesDto) => {
-	console.log(dto);
       if( machine === dto.machine && machineSection === dto.machineSection ){
         const convertedStatus: boolean = new StatusConverter(dto.status).toSwitchStatus()
         if (getReduxData(StorageKeys.SWITCHES)[machine] !== convertedStatus){
