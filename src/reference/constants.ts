@@ -1,3 +1,5 @@
+import {API} from "./secret";
+
 export const AppName = 'Plant Point';
 export const DrawerDirection = 'right';
 
@@ -15,27 +17,27 @@ export enum WebSocketEvent {
   SEND_SWITCH_TO_CLIENT = 'sendSwitchToClient'
 }
 
-export enum HttpUrls {
-  SIGNIN = `http://localhost:9000/authentication/signin`,
+export const HttpUrls = {
+  SIGNIN : `${API}/authentication/signin`,
 
-  AUTOMATION_READ = 'http://localhost:9000/automations/read',
-  AUTOMATION_CREATE = 'http://localhost:9000/automations/create',
+  AUTOMATION_READ : `${API}/automations/read`,
+  AUTOMATION_CREATE : `${API}/automations/create`,
 
-  SWITCHES_CREATE = 'http://localhost:9000/switches/create',
-  SWITCHES_READ_LAST = 'http://localhost:9000/switches/read/last',
-  SWITCHES_READ = 'http://localhost:9000/switches/read/history',
+  SWITCHES_CREATE : `${API}/switches/create`,
+  SWITCHES_READ_LAST : `${API}/switches/read/last`,
+  SWITCHES_READ : `${API}/switches/read/history`,
 
-  MACHINES_READ = 'http://localhost:9000/machines/read',
-  CURRENT_READ = 'http://localhost:9000/currents/read',
-  ENV_SECTION_READ = 'http://localhost:9000/sections/read',
+  MACHINES_READ : `${API}/machines/read`,
+  CURRENT_READ : `${API}/currents/read`,
+  ENV_SECTION_READ : `${API}/sections/read`,
 
-  ENVIRONMENTS_READ_LAST = 'http://localhost:9000/environments/read/last',
-  ENVIRONMENT_READ_HISTORY = 'http://localhost:9000/environments/read/history',
+  ENVIRONMENTS_READ_LAST : `${API}/environments/read/last`,
+  ENVIRONMENT_READ_HISTORY : `${API}/environments/read/history`,
 
-  SCHEDULES_CREATE = 'http://localhost:9000/schedules/create',
-  SCHEDULES_READ = 'http://localhost:9000/schedules/read',
-  SCHEDULES_UPDATE = 'http://localhost:9000/schedules/update',
-  SCHEDULES_DELETE = 'http://localhost:9000/schedules/delete',
+  SCHEDULES_CREATE : `${API}/schedules/create`,
+  SCHEDULES_READ : `${API}/schedules/read`,
+  SCHEDULES_UPDATE : `${API}/schedules/update`,
+  SCHEDULES_DELETE : `${API}/schedules/delete`,
 }
 
 export enum Reports {
