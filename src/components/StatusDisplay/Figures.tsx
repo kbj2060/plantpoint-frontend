@@ -24,16 +24,17 @@ export default function Figures({ environmentSection }: FiguresProps) {
     const getCurrentStatus = async () => {
       getLastEnvironment(environmentSection)
         .then(({data}) => {
-          changeEnvironmentStatus( {
+          const dto: ReducerEnvironmentDto = {
             ...data,
-            environmentSection: environmentSection
-          } as ReducerEnvironmentDto );
+            section: environmentSection
+          }
+          changeEnvironmentStatus( dto );
         });
     }
 
-    getCurrentStatus().then(() => console.log(Reports.ENVIRONMENTS_LOADED));
     const interval = setInterval(() => {
-      getCurrentStatus().then(() => console.log(Reports.ENVIRONMENTS_LOADED));
+      getCurrentStatus()
+        .then(() => console.log(Reports.ENVIRONMENTS_LOADED));
     }, parseInt(Time.statusUpdateTime));
 
     return () => {

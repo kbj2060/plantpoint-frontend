@@ -25,11 +25,11 @@ import {Environment} from "@interfaces/Environment.class";
 import {
   getAutomation,
   getAvailableMachines,
-  getAvailableSections,
-  getEnvironments,
+  getAvailableSections, getLastAllEnvironments,
+  getLastEnvironment,
   getSwitches
 } from "../handler/httpHandler";
-import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
+import {ReducerEnvironmentDto, saveEnvironment} from "@redux/modules/ControlEnvironment";
 import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
 
 interface DashboardProps {
@@ -43,8 +43,9 @@ export default function Dashboard({page}: DashboardProps) {
   const [sectionLoaded, setSectionLoaded] = useState(false);
   const [switchLoaded, setSwitchLoaded] = useState(false);
   const [automationLoaded, setAutomationLoaded] = useState(false);
+  const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
-  const [eSections, setESections] = useState([]);
+  const [eSections, setESections] = useState<string[]>([]);
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
 
@@ -58,34 +59,31 @@ export default function Dashboard({page}: DashboardProps) {
     getAvailableSections(machineSection)
       .then(({data}) => {
         dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
-        setESections(data.map((m: ResponseEnvSectionRead) => {
-          // getEnvironments(m.e_section)
-          //   .then(({data}) => {
-          //     const dto: ReducerEnvironmentDto = {
-          //       ...data,
-          //       environmentSection: m.e_section
-          //     }
-          //     changeEnvironmentStatus( dto );
-          //   });
+        const sections: string[] = data.map((m: ResponseEnvSectionRead) => {
           return m.e_section;
-        }))
+        })
+        setESections(sections)
         setSectionLoaded(true)
         }
       )
 
+    getLastAllEnvironments(machineSection)
+      .then(({data}) => {
+        dispatch( saveEnvironment( data ))
+        setEnvironmentLoaded(true);
+      }
+    )
+
     getSwitches(machineSection)
-      .then(
-        ({data}) => {
-          const grouped: ReducerSaveSwitchesDto =
-            groupBy(data as ResponseSwitchesReadLast[], 'machine');
+      .then(({data}) => {
+          const grouped: ReducerSaveSwitchesDto = groupBy(data as ResponseSwitchesReadLast[], 'machine');
           dispatch( saveSwitch(grouped) )
           setSwitchLoaded(true)
         }
       )
 
     getAutomation(machineSection)
-      .then(
-        ({data}) => {
+      .then(({data}) => {
           const {lastAutomations}: ResponseAutomationRead = data;
           const groupedAutomations = groupBy(lastAutomations, 'machine');
           dispatch( saveAutomation( groupedAutomations ) );
@@ -98,12 +96,13 @@ export default function Dashboard({page}: DashboardProps) {
       setSwitchLoaded(false);
       setAutomationLoaded(false);
       setSectionLoaded(false);
+      setEnvironmentLoaded(false);
     }
   }, [ dispatch, machineSection ]);
 
   return (
     checkLogin()
-      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded
+      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded && environmentLoaded
         ? <div className='dashboard-root'>
             <AppBar page={page}/>
             <Grid container className='grid-container'>

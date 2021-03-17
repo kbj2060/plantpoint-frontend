@@ -32,6 +32,7 @@ export const HttpUrls = {
   ENV_SECTION_READ : `${API}/sections/read`,
 
   ENVIRONMENTS_READ_LAST : `${API}/environments/read/last`,
+  ENVIRONMENTS_READ_LASTALL : `${API}/environments/read/lastAll`,
   ENVIRONMENT_READ_HISTORY : `${API}/environments/read/history`,
 
   SCHEDULES_CREATE : `${API}/schedules/create`,

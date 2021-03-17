@@ -18,16 +18,16 @@ export async function getAutomation <T extends string> (machineSection: T) {
   return await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
 }
 
-export async function getEnvironments <T extends string> (environmentSection: T) {
-  return await axios.get(`${HttpUrls.ENVIRONMENTS_READ_LAST}/${environmentSection}`)
-}
-
 export async function getSchedules <T extends string> (date: T) {
   return await axios.get(`${HttpUrls.SCHEDULES_READ}/${date}`)
 }
 
 export async function getLastEnvironment <T extends string> (environmentSection: T) {
   return await axios.get(`${HttpUrls.ENVIRONMENTS_READ_LAST}/${environmentSection}`)
+}
+
+export async function getLastAllEnvironments <T extends string> (machineSection: T) {
+  return await axios.get(`${HttpUrls.ENVIRONMENTS_READ_LASTALL}/${machineSection}`)
 }
 
 export async function getHistoryEnvironment <T extends string> (section: T, name: T) {
