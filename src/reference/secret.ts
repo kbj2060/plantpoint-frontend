@@ -1,5 +1,5 @@
-export const API = 'http://121.157.207.47:9000';
-export const WS = 'http://121.157.207.47:4000';
+export const API = 'http://localhost:9000';
+export const WS = 'http://localhost:4000';
 export const DB = {
   "host" : "localhost",
   "user" : "root",
