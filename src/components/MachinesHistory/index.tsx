@@ -7,19 +7,19 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import axios from "axios";
-import {Errors, HttpUrls, Reports } from "../../constants";
+import {Errors, Reports } from "../../reference/constants";
 import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
 import { updatedDiff } from 'deep-object-diff';
-import {AvailableMachines, ComponentState} from "@interfaces/main";
+import {ComponentState} from "@interfaces/main";
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
 import {usePrevious} from "@hooks/usePrevious";
-import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
+import {Loader} from "@compUtils/Loader";
 import {currentUser} from "@funcUtils/currentUser";
 import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
+import {getHistorySwitches} from "../../handler/httpHandler";
 
 const theme = createMuiTheme({
   overrides: {
@@ -78,7 +78,7 @@ export default function MachineHistory() {
 	useEffect(() => {
 		if ( !prevRefresh ) { return; }
 		const entries: Array<any> = Object.entries(
-			updatedDiff(prevRefresh as object, refresh as object) as Record<AvailableMachines, boolean>
+			updatedDiff(prevRefresh as object, refresh as object) as Record<string, boolean>
 		);
 		if ( entries.length !== 1 ) { return; }
 		const [machine, status] = entries.flat();
@@ -98,7 +98,7 @@ export default function MachineHistory() {
 
 		const getSwitchHistory = async  () => {
 			const machineSection = currentPage();
-			await axios.get(`${HttpUrls.SWITCHES_READ}/${machineSection}`)
+			getHistorySwitches(machineSection)
 				.then(
 					({data}) => {
 						const { switchHistory }: ResponseSwitchHistoryRead = data;
@@ -123,9 +123,9 @@ export default function MachineHistory() {
 	}, []);
 
 	if (state.error) {
-		return <ColorCircularProgress />;
+		return <Loader />;
 	} else if (!state.isLoaded) {
-		return <ColorCircularProgress />;
+		return <Loader />;
 	} else {
 		return (
 			<MuiThemeProvider theme={theme}>

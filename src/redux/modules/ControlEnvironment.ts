@@ -1,46 +1,47 @@
-import {loadState} from "@components/LocalStorage";
-import {StorageKeys} from "../../constants";
-import {AvailableEnvironmentSection} from "@interfaces/main";
+import {loadState, saveState} from "@components/LocalStorage";
+import {StorageKeys} from "../../reference/constants";
 import update from "immutability-helper";
 
 const CONTROL_ENVIRONMENT = "CONTROL_ENVIRONMENT";
+const SAVE_ENVIRONMENT = "SAVE_ENVIRONMENT";
 
 export interface ReducerEnvironmentDto {
-  environmentSection : AvailableEnvironmentSection;
+  environmentSection : string;
   co2: number;
   humidity: number;
   temperature: number;
 }
 
-export type ReducerEnvironmentState = Record<AvailableEnvironmentSection, ReducerEnvironmentDto>
+export type ReducerEnvironmentState = Record<string, ReducerEnvironmentDto>
 
 export function controlEnvironment(environment: ReducerEnvironmentDto) {
   return { type: CONTROL_ENVIRONMENT, environment }
 }
 
-export interface actionTypes {
-  type: "CONTROL_ENVIRONMENT";
-  environment: ReducerEnvironmentDto;
+export function saveEnvironment(environment: ReducerEnvironmentState) {
+  return { type: CONTROL_ENVIRONMENT, environment }
 }
 
-const {defaultEnvironment} = require('../../values/defaults');
-const initialState: ReducerEnvironmentState =
-  loadState(StorageKeys.ENVIRONMENTS)
-  || {
-    'd1': defaultEnvironment,
-    'd2': defaultEnvironment,
-    'd3': defaultEnvironment,
-  }
+export interface actionTypes {
+  type: "CONTROL_ENVIRONMENT" | "SAVE_ENVIRONMENT";
+  environment: ReducerEnvironmentDto | ReducerEnvironmentState;
+}
+
+const initialState: ReducerEnvironmentState = loadState(StorageKeys.ENVIRONMENTS) || {}
 
 function ControlEnvironment(
   state =initialState, action: actionTypes
 ): ReducerEnvironmentState {
   switch(action.type){
     case CONTROL_ENVIRONMENT:
-      const environment = action.environment;
-      return update(state, {
-        [environment.environmentSection]: { $set: environment }
-      });
+      const environment = action.environment as ReducerEnvironmentDto;
+      const updated: ReducerEnvironmentState = update(state, {
+        [ environment.environmentSection ]: { $set: environment }
+      })
+      saveState(StorageKeys.ENVIRONMENTS, updated)
+      return updated;
+    case SAVE_ENVIRONMENT:
+      return action.environment as ReducerEnvironmentState;
 
     default:
       return state

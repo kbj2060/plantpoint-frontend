@@ -2,12 +2,13 @@ import {Line} from 'react-chartjs-2';
 import React from "react";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
 import {EnvironmentChart, EnvironmentsHistory} from "@interfaces/Environment";
 import {options} from "@components/EnvironmentsHistroy/EnvironmentHistoryOptions";
+import {getReduxData} from "@funcUtils/getReduxData";
+import {StorageKeys} from "../../reference/constants";
 
 interface CustomLineProps {
-  environment: AvailableEnvironment;
+  environment: string;
   width: number;
   height: number;
   history: EnvironmentsHistory;
@@ -16,8 +17,9 @@ interface CustomLineProps {
 export default function CustomLine({ environment, history, width, height }: CustomLineProps) {
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
-    const {environmentSections} = require('@values/defaults');
-    const primarySection = environmentSections[0];
+    const environmentSections = getReduxData(StorageKeys.SECTION);
+    const primarySection = environmentSections[0]
+
     let state: EnvironmentChart = {
         labels: [],
         datasets: []
@@ -27,13 +29,14 @@ export default function CustomLine({ environment, history, width, height }: Cust
       return <Line options={options} data={state} width={width} height={height}/>
     }
 
-    function makeDataset<T extends number>(n_sections: T) {
+    function makeDataset <T extends number> (n_sections: T) {
       let datasets = []
       for(let n = 0; n < n_sections; n++){
-        const section = environmentSections[n] as AvailableEnvironmentSection;
+        const section = environmentSections[n];
         const data = history[section] === undefined
                       ? []
                       : history[section].map((h) => h[environment])
+
         datasets.push({
           label: Translations[section],
           fill: false,
@@ -42,14 +45,15 @@ export default function CustomLine({ environment, history, width, height }: Cust
           borderColor: `${Colors[section]}`,
           borderWidth: 2,
           pointRadius: 0,
-          data: data
+          data: data,
+          spanGaps: true,
         })
       }
       return datasets
     }
 
     state.datasets = makeDataset<number>(environmentSections.length);
-    state.labels = history[primarySection as AvailableEnvironmentSection].map( (h ) => changeToKoreanDate(h.created) );
+    state.labels = history[primarySection].map( (h ) => changeToKoreanDate(h.created) );
 
     return <Line options={options} data={state} width={width} height={height}/>
 }

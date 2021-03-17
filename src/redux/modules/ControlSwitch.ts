@@ -1,18 +1,17 @@
 import {loadState, saveState} from "../../components/LocalStorage";
 import update from 'react-addons-update';
-import {StorageKeys} from "../../constants";
-import {AvailableMachines, AvailableMachineSection} from "@interfaces/main";
+import {StorageKeys} from "../../reference/constants";
 
 const CONTROL_SWITCH = "CONTROL_SWITCH";
 const SAVE_SWITCH = "SAVE_SWITCH";
 
 export interface ReducerControlSwitchesDto {
-  machineSection: AvailableMachineSection;
-  machine: AvailableMachines;
+  machineSection: string;
+  machine: string;
   status: number | boolean;
 }
-export type ReducerSaveSwitchesDto = Record<AvailableMachines, ReducerControlSwitchesDto>;
-export type ReducerSwitchState = Record<AvailableMachines, boolean>
+export type ReducerSaveSwitchesDto = Record<string, ReducerControlSwitchesDto>;
+export type ReducerSwitchState = Record<string, boolean>
 
 export function controlSwitch(_switch: ReducerControlSwitchesDto) {
   return { type: CONTROL_SWITCH, _switch }
@@ -27,9 +26,7 @@ export interface actionTypes {
   _switch: ReducerSaveSwitchesDto | ReducerControlSwitchesDto;
 }
 
-const {defaultSwitchesState} = require('../../values/defaults');
-const initialState: ReducerSwitchState =
-  loadState(StorageKeys.SWITCHES) || defaultSwitchesState
+const initialState: ReducerSwitchState = loadState(StorageKeys.SWITCHES) || {}
 
 function ControlSwitch(
   state =initialState, action: actionTypes
@@ -47,7 +44,7 @@ function ControlSwitch(
       const switches = action._switch as ReducerSaveSwitchesDto;
       const reducerSwitchState: ReducerSwitchState = {} as ReducerSwitchState;
       Object.keys(switches).forEach((key: string) => {
-        reducerSwitchState[key as AvailableMachines] = switches[key as AvailableMachines]['status'] >= 1;
+        reducerSwitchState[key as string] = switches[key as string]['status'] >= 1;
       })
       saveState(StorageKeys.SWITCHES, reducerSwitchState);
       return reducerSwitchState;

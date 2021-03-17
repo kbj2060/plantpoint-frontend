@@ -8,7 +8,7 @@ import {OutlinedInput} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import moment from "moment";
-import {HttpUrls} from "../../constants";
+import {HttpUrls} from "../../reference/constants";
 import '@styles/components/schedule_detail.scss';
 import {Row, SchedulerDate, UpdateScheduleDto} from "@interfaces/Scheduler";
 

@@ -14,6 +14,7 @@
 }
 
 @mixin dashboardComponent () {
+  padding : 8px;
   margin: 1% !important;
   height : auto;
   border-radius: $component-radius !important;

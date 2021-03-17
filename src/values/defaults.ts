@@ -32,16 +32,6 @@ export const defaultSwitchesState: ReducerSwitchState = {
     roofFan: false,
 }
 
-export const environments = ['co2', 'humidity', 'temperature'];
-export const environmentSections = ['d1', 'd2', 'd3'];
-export const machines = ['waterpump', 'led', 'cooler', 'heater', 'fan', 'roofFan'];
-
-export const defaultEnvironment = {
-    "humidity": '0',
-    "co2": '0',
-    "temperature": '0'
-  }
-
 export const defaultAutomations = {
   waterpump : {
     start: [],

@@ -4,15 +4,14 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
-import {store} from "@redux/store";
 import update from 'immutability-helper';
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationDto} from "@redux/modules/ControlAutomation";
-import {AvailableMachines} from "@interfaces/main";
+
 
 interface TermControlButtonProp {
-  machine: AvailableMachines;
+  machine: string;
 }
 
 const TermControlButton = (
@@ -25,22 +24,22 @@ const TermControlButton = (
   const handleTermUp = () => {
     const singleAutomation: ReducerAutomationDto = getReduxData( StorageKeys.AUTO )[ machine ]
     setTerm(prev => {
-      const updated = update(singleAutomation, {
+      dispatch(controlAutomation( update( singleAutomation, {
         term : { $set: ++prev },
-      })
-      dispatch(controlAutomation( updated ));
+        })
+      ));
       return prev
     })
   }
 
   const handleTermDown = () => {
-    const reduxSetting = store.getState()[ StorageKeys.AUTO ][ machine ];
+    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[ machine ];
     setTerm(prev => {
       if( prev <= 1 ) { return 1; }
-      const updated = update(reduxSetting, {
+      dispatch(controlAutomation( update( singleAutomation, {
         term : { $set: --prev },
-      })
-      dispatch(controlAutomation( updated ));
+        })
+      ));
       return prev;
     })
   }

@@ -4,16 +4,16 @@ import React from 'react';
 import Figures from "./Figures";
 
 interface StatusDisplayProps {
-  plant: string;
+  environmentSection: string;
 }
 
-export default function StatusDisplay({plant}: StatusDisplayProps) {
+export default function StatusDisplay({environmentSection}: StatusDisplayProps) {
   const {Translations} = require('@values/translations');
 
   const FigureTitle = () => {
     return (
       <Typography className='figure-title' >
-        {Translations[plant]}
+        {Translations[environmentSection]}
       </Typography>
     )
   }
@@ -21,7 +21,7 @@ export default function StatusDisplay({plant}: StatusDisplayProps) {
   return (
     <Card className='figure-card' >
       <FigureTitle />
-      <Figures plant={plant}/>
+      <Figures environmentSection={environmentSection}/>
     </Card>
   );
 }

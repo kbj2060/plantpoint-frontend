@@ -4,9 +4,9 @@ import {useDispatch} from "react-redux";
 import {controlAutomation} from "@redux/modules/ControlAutomation";
 import useWindowDimensions from "@hooks/useWindowDimensions";
 import TermControlButton from "./TermControlButton";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
-import {AvailableMachines} from "@interfaces/main";
+
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";
 import {Moment} from "moment";
@@ -19,7 +19,7 @@ interface Times {
 }
 
 interface TimeSpanPickerProp {
-  position: AvailableMachines;
+  position: string;
   outerSize: number;
 }
 
@@ -50,9 +50,11 @@ const TimeSpanPickerWrapper = React.forwardRef(
 
   useImperativeHandle(ref, () => ({
     handleNextStep () {
+      const singleAutomation = getReduxData(StorageKeys.AUTO)[machine]
       dispatch(controlAutomation(update(singleAutomation, {
         start: { $set: times.start }, end: { $set: times.end }
       })))
+
     }
   }))
 

@@ -2,7 +2,7 @@ import React, {BaseSyntheticEvent} from 'react';
 import Grid from "@material-ui/core/Grid";
 import {CustomAntSwitch} from "@compUtils/CustomAntSwitch";
 import { ReducerAutomationDto } from "@redux/modules/ControlAutomation";
-import {StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import '@styles/components/automation_content.scss';
 import {MachineProps} from "@interfaces/main";

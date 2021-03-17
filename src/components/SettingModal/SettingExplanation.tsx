@@ -1,22 +1,22 @@
 import React, {useEffect} from 'react';
-import axios from 'axios';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import ToysIcon from '@material-ui/icons/Toys';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
-import {ColorCircularProgress} from "@compUtils/ColorCircularProgress";
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import {getReduxData} from "@funcUtils/getReduxData";
 import {groupBy} from "@funcUtils/groupBy";
-import {HttpUrls, StorageKeys} from "../../constants";
+import {StorageKeys} from "../../reference/constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
-import {AvailableMachines} from "@interfaces/main";
+
 import {currentPage} from "@funcUtils/currentPage";
 import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
+import {Loader} from "@compUtils/Loader";
+import {getAutomation} from "../../handler/httpHandler";
 
 interface SettingExplanationProps {
   position: string,
@@ -33,7 +33,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     setIsLoaded(true);
   }
 
-  function getAutoEnable<T extends AvailableMachines>(subject: T) {
+  function getAutoEnable<T extends string>(subject: T) {
     if(!checkEmpty(subject)){
       return automations[subject].enable;
     }
@@ -43,12 +43,12 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     return (<Chip key={'off'} className='chip' variant="outlined" size="small" label={"자동화 꺼짐"} /> )
   }
 
-  function getCycleChips<T extends AvailableMachines> (machine: T) {
+  function getCycleChips<T extends string> (machine: T) {
     const {start, end, term} = automations[machine];
     return new CycleExplanationChip( start, end, term ).explanation();
   }
 
-  function getRangeChips <T extends AvailableMachines> (machine: T) {
+  function getRangeChips <T extends string> (machine: T) {
     if ( machine === 'cooler' ) {
       return new CoolerExplanationChip(
         machine,[ automations[machine].start[0], automations[machine].end[0] ]
@@ -63,7 +63,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
   useEffect(() => {
     const getDatabaseAutomation = async () => {
       const machineSection = currentPage();
-      await axios.get(`${HttpUrls.AUTOMATION_READ}/${machineSection}`)
+      getAutomation(machineSection)
         .then(({data}) => {
           const {lastAutomations} = data;
           const grouped: ReducerAutomationState = groupBy(lastAutomations, 'machine');
@@ -86,7 +86,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
 
   return(
   !isLoaded
-    ? <ColorCircularProgress />
+    ? <Loader />
     : <table className='table'>
       <tbody>
       <tr className='cell'>

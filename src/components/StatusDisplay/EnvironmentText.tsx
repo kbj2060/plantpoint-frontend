@@ -1,10 +1,9 @@
 import React from "react";
 import useSubscribeEnvironmentStatus from "@hooks/useSubscribeEnvironmentStatus";
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
 
 interface EnvironmentTextProps {
-  name: AvailableEnvironment;
-  section: AvailableEnvironmentSection
+  name: string;
+  section: string;
 }
 
 const EnvironmentText = ({ section, name }: EnvironmentTextProps) => {

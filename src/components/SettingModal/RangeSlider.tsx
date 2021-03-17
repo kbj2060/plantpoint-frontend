@@ -5,8 +5,7 @@ import {controlAutomation, ReducerAutomationDto} from "@redux/modules/ControlAut
 import {CustomIosSlider} from "@compUtils/CustomIosSlider";
 import update from 'react-addons-update';
 import Chip from "@material-ui/core/Chip";
-import {StorageKeys} from "../../constants";
-import {AvailableMachines} from "@interfaces/main";
+import {StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useSubscribeAutomationEnable from "@hooks/useSubscribeAutomationEnable";
 import {TaskNextButtonRef} from "./CustomStepper";
@@ -14,7 +13,7 @@ import '@styles/components/automation_slider.scss';
 import {CoolerExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 
 interface RangeSliderProps {
-  position: AvailableMachines;
+  position: string;
 }
 
 export const RangeSlider = React.forwardRef((
@@ -37,6 +36,7 @@ export const RangeSlider = React.forwardRef((
     }
 
     useImperativeHandle(ref, () => ({
+
       handleNextStep () {
         const updated: ReducerAutomationDto = update(singleAutomation, {
           start: { $set: [ automation[0] ] },
@@ -46,7 +46,7 @@ export const RangeSlider = React.forwardRef((
       }
     }))
 
-    function getOnExplanation<T extends AvailableMachines>(machine: T) {
+    function getOnExplanation<T extends string>(machine: T) {
       if ( machine === "cooler" ) {
         return new CoolerExplanationChip( machine, automation).onText();
       } else {
@@ -54,7 +54,7 @@ export const RangeSlider = React.forwardRef((
       }
     }
 
-  function getOffExplanation<T extends AvailableMachines>(machine: T) {
+  function getOffExplanation<T extends string>(machine: T) {
       if ( machine === "cooler" ) {
         return new CoolerExplanationChip( machine, automation).offText();
       } else {

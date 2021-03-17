@@ -5,7 +5,7 @@ import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
-import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../constants";
+import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../reference/constants";
 import CustomDialog from "@compUtils/CustomDialog";
 import SignInInput from "./SiginInput";
 import '@styles/components/signin.scss'
@@ -69,6 +69,7 @@ export default function SignInComponent() {
       .then(({data}) => {
         const {access_token}: SignInResult = data;
         const updatedAuth = getSuccessAuth(username, access_token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token || ""}`;
         dispatchLoginSuccess(username, access_token);
         setAuth(updatedAuth);
       })
@@ -87,7 +88,6 @@ export default function SignInComponent() {
     switch ( auth.login.status ) {
       case AuthResults.INIT :
         return;
-      // TODO : 페이지는 나중에 DB에 저장할 것.
       case AuthResults.SUCCESS :
         history.push(`/${PagePaths.MAIN}`);
         break;

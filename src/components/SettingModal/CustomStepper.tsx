@@ -7,14 +7,14 @@ import axios from "axios";
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {saveState} from "../LocalStorage";
-import {HttpUrls, StorageKeys} from "../../constants";
+import {HttpUrls, StorageKeys} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import {ReducerAutomationState} from "@redux/modules/ControlAutomation";
 import AutoSwitchWrapper from "./AutoSwitchWrapper";
-import {AvailableMachines} from "@interfaces/main";
 import '@styles/components/automation_stepper.scss';
 import {currentUser} from "@funcUtils/currentUser";
-import {AutomationExplanationStepper, RangeStepper, TimePickerStepper} from '@interfaces/Stepper.class';
+import {AutomationExplanationStepper} from '@interfaces/Stepper.class';
+import {getMachine } from "../../handler/classHandler";
 
 function autoSwitchDisable<T extends number> (index: T, len: T) {
     return index === 0 || index === len -1;
@@ -44,16 +44,17 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
   const labels: string[] = getLabels(steps, Translations);
   const nextButtonRef = useRef<TaskNextButtonRef>(null);
 
-  const stepperComponents: Record<string, ReactNode> = {
-    'head' : new AutomationExplanationStepper('head').render(),
-    'led' : new RangeStepper('led', nextButtonRef).render(),
-    'heater' : new RangeStepper('heater', nextButtonRef).render(),
-    'cooler' : new RangeStepper('cooler', nextButtonRef).render(),
-    'fan' : new TimePickerStepper('fan',150, nextButtonRef).render(),
-    'waterpump' : new TimePickerStepper('waterpump',150, nextButtonRef).render(),
-    'roofFan' :  new TimePickerStepper('roofFan',150, nextButtonRef).render(),
-    'tail' : new AutomationExplanationStepper('tail').render(),
-  }
+  //
+  // const stepperComponents: Record<string, ReactNode> = {
+  //   'head' : new AutomationExplanationStepper('head').render(),
+  //   'led' : new RangeStepper('led', nextButtonRef).render(),
+  //   'heater' : new RangeStepper('heater', nextButtonRef).render(),
+  //   'cooler' : new RangeStepper('cooler', nextButtonRef).render(),
+  //   'fan' : new TimePickerStepper('fan', nextButtonRef).render(),
+  //   'waterpump' : new TimePickerStepper('waterpump', nextButtonRef).render(),
+  //   'roofFan' :  new TimePickerStepper('roofFan', nextButtonRef).render(),
+  //   'tail' : new AutomationExplanationStepper('tail').render(),
+  // }
 
   function StepperRenderer (): JSX.Element {
     return (
@@ -78,10 +79,17 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
   }
 
   function ContentRenderer({children}: any): JSX.Element {
+    let render: ReactNode | null;
+    const machine = getMachine(steps[activeStep])
+    if ( machines.includes(new machine().name) ) {
+      render = new machine().getStepper(steps[activeStep], nextButtonRef);
+    } else {
+      render = new AutomationExplanationStepper(steps[activeStep]).render();
+    }
     return (
       <div>
         <div className='content'>
-          {stepperComponents[steps[activeStep]]}
+          {render}
         </div>
         <div className='content-bottom'>
           {children}
@@ -100,7 +108,7 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
               control={
                 <AutoSwitchWrapper
                   key={steps[activeStep]}
-                  machine={steps[activeStep] as AvailableMachines} /> }
+                  machine={steps[activeStep] as string} /> }
               label=""
               labelPlacement="top"
               classes={{ label:'button-label' }}

@@ -1,6 +1,6 @@
 import {makeStyles} from "@material-ui/core/styles";
 import axios from "axios";
-import {HttpUrls, Reports} from "../../constants";
+import {HttpUrls, Reports} from "../../reference/constants";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";

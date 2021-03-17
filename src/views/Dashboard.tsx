@@ -1,12 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppBar from '@components/AppBar/Appbar';
 import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
 import {Grid} from "@material-ui/core";
 import SwitchController from "../components/SwitchController";
 import {useDispatch} from "react-redux";
-import axios from "axios";
-import {HttpUrls, Reports} from "../constants";
 import {saveAutomation} from "@redux/modules/ControlAutomation";
 import { ResponseAutomationRead} from "@interfaces/Automation";
 import {ResponseSwitchesReadLast} from "@interfaces/Switch";
@@ -19,8 +17,20 @@ import MachineHistory from "@components/MachinesHistory";
 import StatusDisplay from "@components/StatusDisplay";
 import {currentPage} from "@funcUtils/currentPage";
 import EnvironmentsHistoryComponent from "@components/EnvironmentsHistroy";
-import {ResponseMachineRead} from "@interfaces/machine";
-import {environments, environmentSections} from "@values/defaults";
+import {ResponseEnvSectionRead, ResponseMachineRead} from "@interfaces/Machine";
+import {saveSections} from "@redux/modules/ControlSection";
+import {Loader} from "@compUtils/Loader";
+import {Environments} from "../reference/environments";
+import {Environment} from "@interfaces/Environment.class";
+import {
+  getAutomation,
+  getAvailableMachines,
+  getAvailableSections,
+  getEnvironments,
+  getSwitches
+} from "../handler/httpHandler";
+import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
+import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
 
 interface DashboardProps {
   page: string;
@@ -29,72 +39,100 @@ interface DashboardProps {
 export default function Dashboard({page}: DashboardProps) {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const current_section: string = currentPage();
-    async function getAvailableMachines (machineSection: string) {
-      return await axios.get(`${HttpUrls.MACHINES_READ}/${machineSection}`)
-        .then(
-          ({data}) => {
-            dispatch( saveMachines(data as ResponseMachineRead[]) );
-          }
-        )
-    }
-    async function getSwitches () {
-        await axios.get(`${HttpUrls.SWITCHES_READ_LAST}/${current_section}`)
-          .then(
-            ({data}) => {
-              const grouped: ReducerSaveSwitchesDto =
-                groupBy(data as ResponseSwitchesReadLast[], 'machine');
-              dispatch(saveSwitch(grouped))
-            }
-          )
-    }
-    async function getAutomation () {
-      await axios.get(`${HttpUrls.AUTOMATION_READ}/${current_section}`)
-        .then(
-          ({data}) => {
-            const {lastAutomations}: ResponseAutomationRead = data;
-            const groupedAutomations = groupBy(lastAutomations, 'machine');
-            dispatch(saveAutomation(groupedAutomations));
-          }
-        )
-    }
+  const [machineLoaded, setMachineLoaded] = useState(false);
+  const [sectionLoaded, setSectionLoaded] = useState(false);
+  const [switchLoaded, setSwitchLoaded] = useState(false);
+  const [automationLoaded, setAutomationLoaded] = useState(false);
 
-    getAvailableMachines(current_section)
-      .then(() => {
-        getSwitches().then(() => console.log(Reports.SWITCH_LOADED));
-        getAutomation().then(() => console.log(Reports.AUTOMATION_LOADED));
+  const [eSections, setESections] = useState([]);
+  const environments = new Environments().getEnvironments();
+  const changeEnvironmentStatus = useChangeEnvironmentStatus();
+  const machineSection: string = currentPage();
+
+  useEffect(() => {
+    getAvailableMachines(machineSection)
+      .then(({data}) => {
+        dispatch( saveMachines(data as ResponseMachineRead[]) )
+        setMachineLoaded(true)
       })
-  }, [ dispatch ]);
+
+    getAvailableSections(machineSection)
+      .then(({data}) => {
+        dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
+        setESections(data.map((m: ResponseEnvSectionRead) => {
+          getEnvironments(m.e_section)
+            .then(({data}) => {
+              const dto: ReducerEnvironmentDto = {
+                ...data,
+                environmentSection: m.e_section
+              }
+              changeEnvironmentStatus( dto );
+            });
+          return m.e_section;
+        }))
+        setSectionLoaded(true)
+        }
+      )
+
+    getSwitches(machineSection)
+      .then(
+        ({data}) => {
+          const grouped: ReducerSaveSwitchesDto =
+            groupBy(data as ResponseSwitchesReadLast[], 'machine');
+          dispatch( saveSwitch(grouped) )
+          setSwitchLoaded(true)
+        }
+      )
+
+    getAutomation(machineSection)
+      .then(
+        ({data}) => {
+          const {lastAutomations}: ResponseAutomationRead = data;
+          const groupedAutomations = groupBy(lastAutomations, 'machine');
+          dispatch( saveAutomation( groupedAutomations ) );
+          setAutomationLoaded(true)
+        }
+      )
+
+    return () => {
+      setMachineLoaded(false);
+      setSwitchLoaded(false);
+      setAutomationLoaded(false);
+      setSectionLoaded(false);
+    }
+  }, [ dispatch, changeEnvironmentStatus, machineSection ]);
 
   return (
     checkLogin()
-      ? <div className='dashboard-root'>
-          <AppBar page={page}/>
-          <Grid container className='grid-container'>
-            <Grid item xs={12} sm={12} md={4} className='item'>
-              <SwitchController/>
+      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded
+        ? <div className='dashboard-root'>
+            <AppBar page={page}/>
+            <Grid container className='grid-container'>
+              <Grid item xs={12} sm={12} md={4} className='item'>
+                <SwitchController/>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} className='cctv-item'>
+                <CCTV/>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} className='item'>
+                <MachineHistory/>
+              </Grid>
+              {eSections.map((section: string) => {
+                return(
+                  <Grid key={section} item xs={12} sm={12} md={4} className='status-display-item' >
+                    <StatusDisplay environmentSection={section} />
+                  </Grid>)
+                })}
+              {environments.map((environment: typeof Environment) => {
+                const name = new environment().name;
+                return (
+                  <Grid key={name} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
+                    <EnvironmentsHistoryComponent environment={name} />
+                  </Grid>)
+                })}
             </Grid>
-            <Grid item xs={12} sm={12} md={4} className='cctv-item'>
-              <CCTV/>
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} className='item'>
-              <MachineHistory/>
-            </Grid>
-            {environmentSections.map(section => {
-              return(
-                <Grid key={section.toString()} item xs={12} sm={12} md={4} className='status-display-item' >
-                  <StatusDisplay plant={section} />
-                </Grid>)
-              })}
-            {environments.map((environment) => {
-              return (
-                <Grid key={environment.toString()} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
-                  <EnvironmentsHistoryComponent environment={environment} />
-                </Grid>)
-              })}
-          </Grid>
-        </div>
+          </div>
+        : <Loader />
       : <Redirect to='/'/>
   )
 }

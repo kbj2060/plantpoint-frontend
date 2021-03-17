@@ -3,7 +3,7 @@ import './App.scss';
 import {BrowserRouter, Route} from "react-router-dom";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
-import {PagePaths} from "./constants";
+import {PagePaths} from "./reference/constants";
 import Scheduler from "./views/Scheduler";
 import axios from "axios";
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -13,7 +13,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/*className={classes.parent}*/}
       <div className="App">
         <Route exact path={`/${PagePaths.LOGIN}`}>
           <Login />
@@ -24,9 +23,6 @@ function App() {
         <Route exact path="/scheduler" >
           <Scheduler />
         </Route>
-        {/*<Route exact path="/setting" >
-          <Setting page={"setting"} />
-        </Route>*/}
       </div>
     </BrowserRouter>
   );

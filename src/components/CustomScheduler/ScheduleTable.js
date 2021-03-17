@@ -8,14 +8,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import ScheduleDetail from "./ScheduleDetail.tsx";
-import axios from "axios";
 import moment from "moment";
 import {shallowEqual, useSelector} from "react-redux";
-import {HttpUrls} from "../../constants";
 import '@styles/components/date_picker.scss';
 import EnhancedTableHead from "@components/CustomScheduler/ScheduleTableHead";
 import EnhancedTableToolbar from "@components/CustomScheduler/TableToolbar";
 import '@styles/components/schedule_table.scss'
+import {getSchedules} from "../../handler/httpHandler";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -100,29 +99,36 @@ export function ScheduleTable({selectedDay}) {
   }
 
   useEffect(() => {
-    const getDaySchedule = async () => {
-      const sDate = `${selectedDay.year}-${datePadding(selectedDay.month)}-${datePadding(selectedDay.day)}`
-      await axios.get(`${HttpUrls.SCHEDULES_READ}/${sDate}`)
-        .then(({data}) => {
-          const {SelectedDateSchedules} = data;
-          setRows(SelectedDateSchedules);
-          setIsLoaded(true);
-        })
-    }
+    // const getDaySchedule = async () => {
+    //   const sDate = `${selectedDay.year}-${datePadding(selectedDay.month)}-${datePadding(selectedDay.day)}`
+    //   getSchedules(sDate)
+    //     .then(({data}) => {
+    //       const {SelectedDateSchedules} = data;
+    //       setRows(SelectedDateSchedules);
+    //       setIsLoaded(true);
+    //     })
+    // }
+    //
+    // const getMonthSchedule = async () => {
+    //   const sDate = `${date.year}-${datePadding(date.month)}`
+    //   getSchedules(sDate)
+    //     .then(({data}) => {
+    //       const {SelectedDateSchedules} = data;
+    //       setRows(SelectedDateSchedules);
+    //       setIsLoaded(true);
+    //     })
+    // }
 
-    const getMonthSchedule = async () => {
-      const sDate = `${date.year}-${datePadding(date.month)}`
-      await axios.get(`${HttpUrls.SCHEDULES_READ}/${sDate}`)
-        .then(({data}) => {
-          const {SelectedDateSchedules} = data;
-          setRows(SelectedDateSchedules);
-          setIsLoaded(true);
-        })
-    }
+    const dayOrMonth = selectedDay
+      ? `${selectedDay.year}-${datePadding(selectedDay.month)}-${datePadding(selectedDay.day)}`
+      : `${date.year}-${datePadding(date.month)}`;
+    getSchedules(dayOrMonth)
+      .then(({data}) => {
+        const {SelectedDateSchedules} = data;
+        setRows(SelectedDateSchedules);
+        setIsLoaded(true);
+      })
 
-    selectedDay
-      ? getDaySchedule()
-      : getMonthSchedule();
     return () => { cleanup();}
   }, [selectedDay, date])
 

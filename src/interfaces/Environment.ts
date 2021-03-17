@@ -1,5 +1,3 @@
-import {AvailableEnvironment, AvailableEnvironmentSection} from "@interfaces/main";
-
 export interface ResponseEnvironmentRead {
   co2: number;
   temperature: number;
@@ -8,7 +6,7 @@ export interface ResponseEnvironmentRead {
 
 export interface EnvironmentHistoryReadDto {
   section : string,
-  environmentName : AvailableEnvironment,
+  name : string,
 }
 
 export interface EnvironmentHistoryUnit {
@@ -26,4 +24,4 @@ export interface EnvironmentChart {
   datasets: Record<string,any>[];
 }
 
-export type EnvironmentsHistory = Record<AvailableEnvironmentSection, EnvironmentHistoryUnit[]>
+export type EnvironmentsHistory = Record<string, EnvironmentHistoryUnit[]>

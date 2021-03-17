@@ -19,7 +19,7 @@ export const options = {
         displayFormats: {
           minute: 'hA'
         },
-        parser: "YYYY/MM/DD HH:mm:ss",
+        parser: 'LLLL',
       }
     }],
     yAxes: [{

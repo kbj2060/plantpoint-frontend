@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
-import axios from "axios";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, Reports} from "../../constants";
+import { Reports} from "../../reference/constants";
 import { ResponseCurrentRead } from "@interfaces/Current";
 import {currentPage} from "@funcUtils/currentPage";
+import {Loader} from "@compUtils/Loader";
+import {getMachineCurrents} from "../../handler/httpHandler";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -22,12 +23,13 @@ const CurrentFlowing = ({ fillColor }: CurrentFlowingProps) => {
 interface CurrentCheckerProps extends MachineProps { }
 export default function CurrentChecker({machine}: CurrentCheckerProps) {
 	const [flowing, setFlowing] = React.useState<boolean>(false);
+	const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
 
 	useEffect(() => {
 		const {Criteria, UpdateTimeOut} = require('@values/defaults')
 		const fetchCurrent = async () => {
 			const machineSection = currentPage();
-			await axios.get(`${HttpUrls.CURRENT_READ}/${machineSection}/${machine}`)
+			getMachineCurrents(machineSection, machine)
 				.then(({ data }) => {
 					const {current}: ResponseCurrentRead = data;
 					if(checkEmpty(current) || current < Criteria.current){
@@ -36,6 +38,7 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 					else {
 						setFlowing(true);
 					}
+					setIsLoaded(true);
 			})
 		}
 
@@ -46,12 +49,13 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 
 		return () => {
 			clearInterval(interval);
+			setIsLoaded(false);
+			setFlowing(false);
 		}
 	}, [machine]);
 
-	if (!flowing) {
-		return <></>
-	}
-	return <CurrentFlowing fillColor={'#F6BD60'}/>
+	if (!isLoaded) { return <Loader />}
+	if (!flowing) { return <></> }
 
+	return <CurrentFlowing fillColor={'#F6BD60'}/>
 }
