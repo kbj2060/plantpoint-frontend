@@ -12,7 +12,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {DrawerDirection, PageNames, PagePaths} from "../../reference/constants";
 import logo from '../../logo.jpeg';
@@ -59,7 +58,7 @@ export default function Menu() {
       </List>
       <Divider />
       <List>
-				<LinkButton icon={<SettingsIcon />} value={PageNames.SETTING} to={PagePaths.SETTING}  />
+				{/*<LinkButton icon={<SettingsIcon />} value={PageNames.SETTING} to={PagePaths.SETTING}  />*/}
 				<LinkButton onClick={() => dispatch(logout())} icon={<ExitToAppIcon />}
 										value={PageNames.LOGOUT} to={PagePaths.LOGIN}  />
       </List>
