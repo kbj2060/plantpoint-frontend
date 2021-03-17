@@ -65,7 +65,11 @@ export default function SignInComponent() {
     await axios.post(HttpUrls.SIGNIN, {
         username: username,
         password: password,
-    } as SigninDto)
+    } as SigninDto, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then(({data}) => {
         const {access_token}: SignInResult = data;
         const updatedAuth = getSuccessAuth(username, access_token);

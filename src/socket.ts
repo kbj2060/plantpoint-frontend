@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
+import {WS} from "./reference/secret";
 
-const ENDPOINT = 'http://localhost:4000/switch';
-const socket = io(ENDPOINT,{
+const socket = io(WS,{
   path:'/ws',
 }).connect();
 
