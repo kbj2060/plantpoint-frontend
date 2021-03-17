@@ -46,7 +46,6 @@ export default function Dashboard({page}: DashboardProps) {
 
   const [eSections, setESections] = useState([]);
   const environments = new Environments().getEnvironments();
-  const changeEnvironmentStatus = useChangeEnvironmentStatus();
   const machineSection: string = currentPage();
 
   useEffect(() => {
@@ -100,7 +99,7 @@ export default function Dashboard({page}: DashboardProps) {
       setAutomationLoaded(false);
       setSectionLoaded(false);
     }
-  }, [ dispatch, changeEnvironmentStatus, machineSection ]);
+  }, [ dispatch, machineSection ]);
 
   return (
     checkLogin()
