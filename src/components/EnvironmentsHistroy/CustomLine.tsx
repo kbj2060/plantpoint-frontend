@@ -48,7 +48,6 @@ export default function CustomLine({ environment, history, width, height }: Cust
           data: data,
           spanGaps: true,
         })
-        console.log(data.length)
       }
       return datasets
     }

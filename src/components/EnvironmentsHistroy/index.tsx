@@ -25,7 +25,7 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
   const fetchHistory = useCallback(async () => {
     const current_page: string = decodeURI(window.location.pathname.replace('/',''));
 
-    function groupBy<T extends EnvironmentHistoryUnit, U extends keyof T>(
+    function groupBy <T extends EnvironmentHistoryUnit, U extends keyof T> (
       xs: T[], key: U
     ) {
       return xs.reduce((rv: any, x) => {
