@@ -60,14 +60,14 @@ export default function Dashboard({page}: DashboardProps) {
       .then(({data}) => {
         dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
         setESections(data.map((m: ResponseEnvSectionRead) => {
-          getEnvironments(m.e_section)
-            .then(({data}) => {
-              const dto: ReducerEnvironmentDto = {
-                ...data,
-                environmentSection: m.e_section
-              }
-              changeEnvironmentStatus( dto );
-            });
+          // getEnvironments(m.e_section)
+          //   .then(({data}) => {
+          //     const dto: ReducerEnvironmentDto = {
+          //       ...data,
+          //       environmentSection: m.e_section
+          //     }
+          //     changeEnvironmentStatus( dto );
+          //   });
           return m.e_section;
         }))
         setSectionLoaded(true)

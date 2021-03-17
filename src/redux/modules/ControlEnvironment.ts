@@ -40,6 +40,7 @@ function ControlEnvironment(
       })
       saveState(StorageKeys.ENVIRONMENTS, updated)
       return updated;
+
     case SAVE_ENVIRONMENT:
       return action.environment as ReducerEnvironmentState;
 
