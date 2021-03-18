@@ -102,11 +102,11 @@ export default function MachineHistory() {
 
 		getSwitchHistory()
 			.then(() => {
-				customLogger.success(LogMessage.SUCCESS_GET_SWITCHES_HISTORY)
+				customLogger.success(LogMessage.SUCCESS_GET_SWITCHES_HISTORY, 'MachineHistory' as string)
 			})
 			.catch((err) => {
 				console.log(err)
-				customLogger.error(LogMessage.FAILED_GET_SWITCHES_HISTORY)
+				customLogger.error(LogMessage.FAILED_GET_SWITCHES_HISTORY,'MachineHistory' as string);
 			})
 	}, []);
 

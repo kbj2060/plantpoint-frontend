@@ -36,11 +36,11 @@ export default function Figures({ environmentSection }: FiguresProps) {
     const interval = setInterval(() => {
       getCurrentStatus()
         .then(() => {
-          customLogger.success(`${environmentSection} : `+LogMessage.SUCCESS_GET_CURRENT_ENVIRONMENT)
+          customLogger.success(`${environmentSection} : `+LogMessage.SUCCESS_GET_CURRENT_ENVIRONMENT, 'Figure' as string)
         })
         .catch((err) => {
           console.log(err)
-          customLogger.error(LogMessage.FAILED_GET_CURRENT_ENVIRONMENT)
+          customLogger.error(LogMessage.FAILED_GET_CURRENT_ENVIRONMENT, 'Figure' as string)
         })
     }, parseInt(Time.statusUpdateTime));
 

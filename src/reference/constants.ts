@@ -75,6 +75,10 @@ export enum LogMessage {
   FAILED_CHANGE_SWITCH = 'Switch Change Failed',
   SUCCESS_GET_CURRENT_ENVIRONMENT = 'Current Environments Loading Success',
   FAILED_GET_CURRENT_ENVIRONMENT= 'Current Environments Loading Failed',
+  SUCCESS_SIGNIN = 'Signin Success',
+  FAILED_SIGNIN = 'Signin Failed',
+  SUCCESS_GET_CURRENTS = 'Currents Loading Success',
+  FAILED_GET_CURRENTS = 'Currents Loading Failed',
 }
 
 export enum Texts {

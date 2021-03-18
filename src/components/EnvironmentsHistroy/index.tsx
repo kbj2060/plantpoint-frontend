@@ -64,20 +64,20 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
 
     fetchHistory()
       .then(() => {
-        customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY)
+        customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY)
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
       })
     const interval = setInterval(() => {
       fetchHistory()
         .then(() => {
-          customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY)
+          customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
         })
         .catch((err) => {
           console.log(err)
-          customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY)
+          customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
         })
     }, parseInt(Time.historyUpdateTime));
 

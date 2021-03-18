@@ -49,18 +49,17 @@ export default function Dashboard({page}: DashboardProps) {
   const [eSections, setESections] = useState<string[]>([]);
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
-  customLogger.set_component('Dashboard');
 
   useEffect(() => {
     getAvailableMachines(machineSection)
       .then(({data}) => {
         dispatch( saveMachines(data as ResponseMachineRead[]) )
         setMachineLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_MACHINES)
+        customLogger.success(LogMessage.SUCCESS_GET_MACHINES, "Dashboard" as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_MACHINES)
+        customLogger.error(LogMessage.FAILED_GET_MACHINES, "Dashboard" as string)
       })
 
     getAvailableSections(machineSection)
@@ -71,22 +70,22 @@ export default function Dashboard({page}: DashboardProps) {
         })
         setESections(sections)
         setSectionLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_SECTIONS)
+        customLogger.success(LogMessage.SUCCESS_GET_SECTIONS, "Dashboard" as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_SECTIONS)
+        customLogger.error(LogMessage.FAILED_GET_SECTIONS, "Dashboard" as string)
       })
 
     getLastAllEnvironments(machineSection)
       .then(({data}) => {
         dispatch( saveEnvironment( data ))
         setEnvironmentLoaded(true);
-        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS)
+        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS)
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string)
       })
 
     getSwitches(machineSection)
@@ -94,11 +93,11 @@ export default function Dashboard({page}: DashboardProps) {
         const grouped: ReducerSaveSwitchesDto = groupBy(data as ResponseSwitchesReadLast[], 'machine');
         dispatch( saveSwitch(grouped) )
         setSwitchLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_SWITCHES)
+        customLogger.success(LogMessage.SUCCESS_GET_SWITCHES, "Dashboard" as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_SWITCHES)
+        customLogger.error(LogMessage.FAILED_GET_SWITCHES, "Dashboard" as string)
       })
 
     getAutomation(machineSection)
@@ -107,11 +106,11 @@ export default function Dashboard({page}: DashboardProps) {
         const groupedAutomations = groupBy(lastAutomations, 'machine');
         dispatch( saveAutomation( groupedAutomations ) );
         setAutomationLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_AUTOMATIONS)
+        customLogger.success(LogMessage.SUCCESS_GET_AUTOMATIONS, "Dashboard" as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS)
+        customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS, "Dashboard" as string)
       })
 
     return () => {

@@ -50,11 +50,11 @@ function Switches({machine}: SwitchesProps) {
     socket.emit(WebSocketEvent.SEND_SWITCH_TO_SERVER, dto);
     postSwitchMachine( status )
       .then(() => {
-        customLogger.success(`${machine}: `+ LogMessage.SUCCESS_CHANGE_SWITCH)
+        customLogger.success(`${machine}: `+ LogMessage.SUCCESS_CHANGE_SWITCH, 'Switches' as string)
       })
       .catch((err) => {
         console.log(err)
-        customLogger.error(`${machine}: `+ LogMessage.FAILED_CHANGE_SWITCH)
+        customLogger.error(`${machine}: `+ LogMessage.FAILED_CHANGE_SWITCH, 'Switches' as string)
       })
   }
 
