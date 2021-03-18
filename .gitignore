@@ -4,7 +4,9 @@
 /node_modules
 /.pnp
 .pnp.js
-*/secret.ts
+
+# secret file
+src/reference/secret.ts
 
 # testing
 /coverage
