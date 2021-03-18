@@ -56,6 +56,27 @@ export enum Reports {
   SCHEDULES_CREATED = 'Schedules Created..',
 }
 
+export enum LogMessage {
+  SUCCESS_GET_MACHINES = 'Machines Loading Success',
+  FAILED_GET_MACHINES = 'Machines Loading Failed',
+  SUCCESS_GET_SECTIONS = 'Sections Loading Success',
+  FAILED_GET_SECTIONS = 'Sections Loading Failed',
+  SUCCESS_GET_ENVIRONMENTS = 'Environemts Loading Success',
+  FAILED_GET_ENVIRONMENTS = 'Environemts Loading Failed',
+  SUCCESS_GET_SWITCHES = 'Switches Loading Success',
+  FAILED_GET_SWITCHES = 'Switches Loading Failed',
+  SUCCESS_GET_AUTOMATIONS = 'Automations Loading Success',
+  FAILED_GET_AUTOMATIONS = 'Automations Loading Failed',
+  SUCCESS_GET_ENVIRONMENTS_HISTORY = 'Environment History Loading Success',
+  FAILED_GET_ENVIRONMENTS_HISTORY = 'Environment History Loading Failed',
+  SUCCESS_GET_SWITCHES_HISTORY = 'Switches History Loading Success',
+  FAILED_GET_SWITCHES_HISTORY = 'Switches History Loading Failed',
+  SUCCESS_CHANGE_SWITCH = 'Switch Change Success',
+  FAILED_CHANGE_SWITCH = 'Switch Change Failed',
+  SUCCESS_GET_CURRENT_ENVIRONMENT = 'Current Environments Loading Success',
+  FAILED_GET_CURRENT_ENVIRONMENT= 'Current Environments Loading Failed',
+}
+
 export enum Texts {
   LOGIN = '로그인',
   OK = '확인',
