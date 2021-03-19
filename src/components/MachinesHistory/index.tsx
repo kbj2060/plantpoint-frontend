@@ -7,10 +7,9 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import {Errors, Reports } from "../../reference/constants";
+import {LogMessage} from "../../reference/constants";
 import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
 import { updatedDiff } from 'deep-object-diff';
-import {ComponentState} from "@interfaces/main";
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
 import {usePrevious} from "@hooks/usePrevious";
 import {Loader} from "@compUtils/Loader";
@@ -20,6 +19,7 @@ import {currentPage} from "@funcUtils/currentPage";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
 import {getHistorySwitches} from "../../handler/httpHandler";
+import {customLogger} from "../../logger/Logger";
 
 const theme = createMuiTheme({
   overrides: {
@@ -35,10 +35,7 @@ export default function MachineHistory() {
 	const { Translations } = require('@values/translations');
 	const [ page, setPage ] = React.useState<number>(0);
   const [ rows, setRows ] = React.useState<SingleSwitchHistory[]>([]);
-	const [ state, setState ] = React.useState<ComponentState>({
-		isLoaded : false,
-		error: null,
-	});
+	const [ isLoaded, setIsLoaded ] = React.useState(false );
 	const rowsPerPage = 5;
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 	const refresh = useSubscribeSwitches();
@@ -69,10 +66,7 @@ export default function MachineHistory() {
 			prevArray.splice(-1, 1)
 			return [switchHistory, ...prevArray]
 		});
-		setState(state => ({
-			...state,
-			isLoaded: true,
-		}));
+		setIsLoaded( true );
 	}
 
 	useEffect(() => {
@@ -99,32 +93,24 @@ export default function MachineHistory() {
 		const getSwitchHistory = async  () => {
 			const machineSection = currentPage();
 			getHistorySwitches(machineSection)
-				.then(
-					({data}) => {
-						const { switchHistory }: ResponseSwitchHistoryRead = data;
-						setRows(() => (switchHistory.map(handleDateLocale)));
-						setState(state => ({
-							...state,
-							isLoaded: true,
-						}));
-					},
-					(error) => {
-						setState(() => ({
-							isLoaded: true,
-							error
-						}));
-					}
-				)
+				.then(({data}) => {
+					const { switchHistory }: ResponseSwitchHistoryRead = data;
+					setRows(() => (switchHistory.map(handleDateLocale)));
+					setIsLoaded(true);
+				})
 		}
 
 		getSwitchHistory()
-			.then( () => { console.log(Reports.SWITCH_HISTORY_LOADED) } )
-			.catch( () => { console.log(Errors.GET_MACHINE_HISTORY_FAILURE) } )
+			.then(() => {
+				customLogger.success(LogMessage.SUCCESS_GET_SWITCHES_HISTORY, 'MachineHistory' as string)
+			})
+			.catch((err) => {
+				console.log(err)
+				customLogger.error(LogMessage.FAILED_GET_SWITCHES_HISTORY,'MachineHistory' as string);
+			})
 	}, []);
 
-	if (state.error) {
-		return <Loader />;
-	} else if (!state.isLoaded) {
+	if (!isLoaded) {
 		return <Loader />;
 	} else {
 		return (

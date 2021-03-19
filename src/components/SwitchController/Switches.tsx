@@ -7,7 +7,7 @@ import {ReducerControlSwitchesDto} from "@redux/modules/ControlSwitch"
 import '@styles/components/switch_controller.scss';
 import {CreateSwitchDto} from "@interfaces/Switch";
 import {MachineProps} from "@interfaces/main";
-import {HttpUrls, StorageKeys, Reports, Errors, WebSocketEvent} from "../../reference/constants";
+import {HttpUrls, StorageKeys, WebSocketEvent, LogMessage} from "../../reference/constants";
 import {getReduxData} from "@funcUtils/getReduxData";
 import useChangeSwitchStatus from "@hooks/useChangeSwitchStatus";
 import {currentPage} from "@funcUtils/currentPage";
@@ -15,6 +15,7 @@ import {currentUser} from "@funcUtils/currentUser";
 import socket from "../../socket";
 import { StatusConverter } from '@interfaces/StatusConverter.class';
 import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
+import {customLogger} from "../../logger/Logger";
 
 interface SwitchesProps extends MachineProps {}
 function Switches({machine}: SwitchesProps) {
@@ -48,8 +49,13 @@ function Switches({machine}: SwitchesProps) {
     changeSwitchStatus( dto );
     socket.emit(WebSocketEvent.SEND_SWITCH_TO_SERVER, dto);
     postSwitchMachine( status )
-      .then(()=> { console.log(Reports.SWITCH_CHANGED); })
-      .catch(() => { console.log(Errors.POST_SWITCH_FAILURE); })
+      .then(() => {
+        customLogger.success(`${machine}: `+ LogMessage.SUCCESS_CHANGE_SWITCH, 'Switches' as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(`${machine}: `+ LogMessage.FAILED_CHANGE_SWITCH, 'Switches' as string)
+      })
   }
 
   const cleanup = () => {

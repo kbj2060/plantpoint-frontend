@@ -17,4 +17,4 @@ const EnvironmentText = ({ section, name }: EnvironmentTextProps) => {
   )
 }
 
-export default React.memo(EnvironmentText);
+export default EnvironmentText;

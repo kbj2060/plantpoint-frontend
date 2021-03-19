@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import '@styles/components/status_figure.scss';
-import {Reports} from "../../reference/constants";
+import {LogMessage} from "../../reference/constants";
 import EnvironmentText from "@components/StatusDisplay/EnvironmentText";
 import { ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
 import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
 import {Environments} from "../../reference/environments";
 import {Environment} from "@interfaces/Environment.class";
 import {getLastEnvironment} from "../../handler/httpHandler";
+import {customLogger} from "../../logger/Logger";
 
 interface FiguresProps {
   environmentSection: string;
@@ -24,16 +25,23 @@ export default function Figures({ environmentSection }: FiguresProps) {
     const getCurrentStatus = async () => {
       getLastEnvironment(environmentSection)
         .then(({data}) => {
-          changeEnvironmentStatus( {
+          const dto: ReducerEnvironmentDto = {
             ...data,
-            environmentSection: environmentSection
-          } as ReducerEnvironmentDto );
+            section: environmentSection
+          }
+          changeEnvironmentStatus( dto );
         });
     }
 
-    getCurrentStatus().then(() => console.log(Reports.ENVIRONMENTS_LOADED));
     const interval = setInterval(() => {
-      getCurrentStatus().then(() => console.log(Reports.ENVIRONMENTS_LOADED));
+      getCurrentStatus()
+        .then(() => {
+          customLogger.success(`${environmentSection} : `+LogMessage.SUCCESS_GET_CURRENT_ENVIRONMENT, 'Figure' as string)
+        })
+        .catch((err) => {
+          console.log(err)
+          customLogger.error(LogMessage.FAILED_GET_CURRENT_ENVIRONMENT, 'Figure' as string)
+        })
     }, parseInt(Time.statusUpdateTime));
 
     return () => {

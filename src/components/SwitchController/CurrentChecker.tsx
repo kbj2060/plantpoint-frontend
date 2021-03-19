@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {MachineProps} from "@interfaces/main";
-import { Reports} from "../../reference/constants";
+import {LogMessage} from "../../reference/constants";
 import { ResponseCurrentRead } from "@interfaces/Current";
 import {currentPage} from "@funcUtils/currentPage";
 import {Loader} from "@compUtils/Loader";
 import {getMachineCurrents} from "../../handler/httpHandler";
+import {customLogger} from "../../logger/Logger";
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -42,9 +43,23 @@ export default function CurrentChecker({machine}: CurrentCheckerProps) {
 			})
 		}
 
-		fetchCurrent().then(() => Reports.CURRENT_LOADED);
+		fetchCurrent()
+			.then(() => {
+				customLogger.success(`${machine} : `+LogMessage.SUCCESS_GET_CURRENTS, 'CurrentChecker' as string)
+			})
+			.catch((err) => {
+				console.log(err)
+				customLogger.error(LogMessage.FAILED_GET_CURRENTS, 'CurrentChecker' as string)
+			})
 		const interval = setInterval(() => {
-			fetchCurrent().then(() => Reports.CURRENT_LOADED);
+			fetchCurrent()
+				.then(() => {
+					customLogger.success(`${machine} : `+LogMessage.SUCCESS_GET_CURRENTS, 'CurrentChecker' as string)
+				})
+				.catch((err) => {
+					console.log(err)
+					customLogger.error(LogMessage.FAILED_GET_CURRENTS, 'CurrentChecker' as string)
+				})
 		}, parseInt(UpdateTimeOut.current));
 
 		return () => {

@@ -25,12 +25,13 @@ import {Environment} from "@interfaces/Environment.class";
 import {
   getAutomation,
   getAvailableMachines,
-  getAvailableSections,
-  getEnvironments,
+  getAvailableSections, getLastAllEnvironments,
   getSwitches
 } from "../handler/httpHandler";
-import {ReducerEnvironmentDto} from "@redux/modules/ControlEnvironment";
-import useChangeEnvironmentStatus from "@hooks/useChangeEnvironmentStatus";
+import { saveEnvironment} from "@redux/modules/ControlEnvironment";
+import {customLogger} from "../logger/Logger";
+import {LogMessage} from "../reference/constants";
+
 
 interface DashboardProps {
   page: string;
@@ -43,10 +44,10 @@ export default function Dashboard({page}: DashboardProps) {
   const [sectionLoaded, setSectionLoaded] = useState(false);
   const [switchLoaded, setSwitchLoaded] = useState(false);
   const [automationLoaded, setAutomationLoaded] = useState(false);
+  const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
-  const [eSections, setESections] = useState([]);
+  const [eSections, setESections] = useState<string[]>([]);
   const environments = new Environments().getEnvironments();
-  const changeEnvironmentStatus = useChangeEnvironmentStatus();
   const machineSection: string = currentPage();
 
   useEffect(() => {
@@ -54,57 +55,76 @@ export default function Dashboard({page}: DashboardProps) {
       .then(({data}) => {
         dispatch( saveMachines(data as ResponseMachineRead[]) )
         setMachineLoaded(true)
+        customLogger.success(LogMessage.SUCCESS_GET_MACHINES, "Dashboard" as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_MACHINES, "Dashboard" as string)
       })
 
     getAvailableSections(machineSection)
       .then(({data}) => {
         dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
-        setESections(data.map((m: ResponseEnvSectionRead) => {
-          getEnvironments(m.e_section)
-            .then(({data}) => {
-              const dto: ReducerEnvironmentDto = {
-                ...data,
-                environmentSection: m.e_section
-              }
-              changeEnvironmentStatus( dto );
-            });
+        const sections: string[] = data.map((m: ResponseEnvSectionRead) => {
           return m.e_section;
-        }))
+        })
+        setESections(sections)
         setSectionLoaded(true)
-        }
-      )
+        customLogger.success(LogMessage.SUCCESS_GET_SECTIONS, "Dashboard" as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_SECTIONS, "Dashboard" as string)
+      })
+
+    getLastAllEnvironments(machineSection)
+      .then(({data}) => {
+        dispatch( saveEnvironment( data ))
+        setEnvironmentLoaded(true);
+        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string)
+      })
 
     getSwitches(machineSection)
-      .then(
-        ({data}) => {
-          const grouped: ReducerSaveSwitchesDto =
-            groupBy(data as ResponseSwitchesReadLast[], 'machine');
-          dispatch( saveSwitch(grouped) )
-          setSwitchLoaded(true)
-        }
-      )
+      .then(({data}) => {
+        const grouped: ReducerSaveSwitchesDto = groupBy(data as ResponseSwitchesReadLast[], 'machine');
+        dispatch( saveSwitch(grouped) )
+        setSwitchLoaded(true)
+        customLogger.success(LogMessage.SUCCESS_GET_SWITCHES, "Dashboard" as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_SWITCHES, "Dashboard" as string)
+      })
 
     getAutomation(machineSection)
-      .then(
-        ({data}) => {
-          const {lastAutomations}: ResponseAutomationRead = data;
-          const groupedAutomations = groupBy(lastAutomations, 'machine');
-          dispatch( saveAutomation( groupedAutomations ) );
-          setAutomationLoaded(true)
-        }
-      )
+      .then(({data}) => {
+        const {lastAutomations}: ResponseAutomationRead = data;
+        const groupedAutomations = groupBy(lastAutomations, 'machine');
+        dispatch( saveAutomation( groupedAutomations ) );
+        setAutomationLoaded(true)
+        customLogger.success(LogMessage.SUCCESS_GET_AUTOMATIONS, "Dashboard" as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS, "Dashboard" as string)
+      })
 
     return () => {
       setMachineLoaded(false);
       setSwitchLoaded(false);
       setAutomationLoaded(false);
       setSectionLoaded(false);
+      setEnvironmentLoaded(false);
     }
-  }, [ dispatch, changeEnvironmentStatus, machineSection ]);
+  }, [ dispatch, machineSection ]);
 
   return (
     checkLogin()
-      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded
+      ? machineLoaded && sectionLoaded && automationLoaded && switchLoaded && environmentLoaded
         ? <div className='dashboard-root'>
             <AppBar page={page}/>
             <Grid container className='grid-container'>

@@ -32,6 +32,7 @@ export const HttpUrls = {
   ENV_SECTION_READ : `${API}/sections/read`,
 
   ENVIRONMENTS_READ_LAST : `${API}/environments/read/last`,
+  ENVIRONMENTS_READ_LASTALL : `${API}/environments/read/lastAll`,
   ENVIRONMENT_READ_HISTORY : `${API}/environments/read/history`,
 
   SCHEDULES_CREATE : `${API}/schedules/create`,
@@ -53,6 +54,31 @@ export enum Reports {
   ENVIRONMENTS_HISTORY_LOADED = 'Environments History Loaded..',
   SCHEDULES_REMOVED = 'Schedules Removed..',
   SCHEDULES_CREATED = 'Schedules Created..',
+}
+
+export enum LogMessage {
+  SUCCESS_GET_MACHINES = 'Machines Loading Success',
+  FAILED_GET_MACHINES = 'Machines Loading Failed',
+  SUCCESS_GET_SECTIONS = 'Sections Loading Success',
+  FAILED_GET_SECTIONS = 'Sections Loading Failed',
+  SUCCESS_GET_ENVIRONMENTS = 'Environemts Loading Success',
+  FAILED_GET_ENVIRONMENTS = 'Environemts Loading Failed',
+  SUCCESS_GET_SWITCHES = 'Switches Loading Success',
+  FAILED_GET_SWITCHES = 'Switches Loading Failed',
+  SUCCESS_GET_AUTOMATIONS = 'Automations Loading Success',
+  FAILED_GET_AUTOMATIONS = 'Automations Loading Failed',
+  SUCCESS_GET_ENVIRONMENTS_HISTORY = 'Environment History Loading Success',
+  FAILED_GET_ENVIRONMENTS_HISTORY = 'Environment History Loading Failed',
+  SUCCESS_GET_SWITCHES_HISTORY = 'Switches History Loading Success',
+  FAILED_GET_SWITCHES_HISTORY = 'Switches History Loading Failed',
+  SUCCESS_CHANGE_SWITCH = 'Switch Change Success',
+  FAILED_CHANGE_SWITCH = 'Switch Change Failed',
+  SUCCESS_GET_CURRENT_ENVIRONMENT = 'Current Environments Loading Success',
+  FAILED_GET_CURRENT_ENVIRONMENT= 'Current Environments Loading Failed',
+  SUCCESS_SIGNIN = 'Signin Success',
+  FAILED_SIGNIN = 'Signin Failed',
+  SUCCESS_GET_CURRENTS = 'Currents Loading Success',
+  FAILED_GET_CURRENTS = 'Currents Loading Failed',
 }
 
 export enum Texts {

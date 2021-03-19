@@ -12,7 +12,7 @@ function ControlScheduleDate(state =initialState, action) {
     case SAVE_DATE:
       return action.date;
     default:
-      return initialState
+      return state
   }
 }
 

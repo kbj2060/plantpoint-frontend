@@ -18,7 +18,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
     const environmentSections = getReduxData(StorageKeys.SECTION);
-    const primarySection = environmentSections[0]
+    const primarySection = environmentSections[1]
 
     let state: EnvironmentChart = {
         labels: [],
@@ -53,7 +53,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     }
 
     state.datasets = makeDataset<number>(environmentSections.length);
-    state.labels = history[primarySection].map( (h ) => changeToKoreanDate(h.created) );
+    state.labels = history[primarySection].map( ( h ) => changeToKoreanDate(h.created) );
 
     return <Line options={options} data={state} width={width} height={height}/>
 }

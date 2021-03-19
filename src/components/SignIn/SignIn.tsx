@@ -5,10 +5,11 @@ import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {loginFailure, loginSuccess} from "@redux/modules/Authentication";
 import axios from "axios";
-import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Reports, Texts} from "../../reference/constants";
+import {AppName, AuthResults, HttpUrls, Errors, PagePaths, Texts, LogMessage} from "../../reference/constants";
 import CustomDialog from "@compUtils/CustomDialog";
 import SignInInput from "./SiginInput";
 import '@styles/components/signin.scss'
+import {customLogger} from "../../logger/Logger";
 
 function getSuccessAuth<T extends string>(username: T, token: T): Auth {
   return {
@@ -77,15 +78,17 @@ export default function SignInComponent() {
         dispatchLoginSuccess(username, access_token);
         setAuth(updatedAuth);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_SIGNIN, 'SignIn' as string)
         dispatchLoginFailure();
-      });
+      })
   }
 
   function handleSubmit<T extends BaseSyntheticEvent>(event: T): void {
     event.preventDefault();
     loginRequest(signin.username, signin.password)
-      .then(() => Reports.SIGNIN_FINISH);
+      .then(() => customLogger.success(LogMessage.SUCCESS_SIGNIN, 'SignIn' as string));
   }
 
   useEffect(() => {

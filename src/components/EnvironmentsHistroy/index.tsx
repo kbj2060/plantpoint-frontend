@@ -3,7 +3,7 @@ import CustomLine from './CustomLine';
 import TimerIcon from '../../assets/icons/TimerIcon';
 import Typography from '@material-ui/core/Typography';
 import '@styles/components/environment_history.scss';
-import {Reports} from "../../reference/constants";
+import {LogMessage} from "../../reference/constants";
 import _ from "lodash";
 import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import {EnvironmentsHistory,
@@ -12,6 +12,7 @@ import {EnvironmentsHistory,
         ResponseEnvironmentHistoryRead } from "@interfaces/Environment";
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {getHistoryEnvironment} from "../../handler/httpHandler";
+import {customLogger} from "../../logger/Logger";
 
 interface EnvironmentsHistoryProps {
   environment : string;
@@ -50,10 +51,6 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
         setLastUpdate( changeToKoreanDate(lastUpdated) );
         setHistory( grouped );
       })
-      .catch((err) => {
-        console.log("HISTORY FETCH ERROR!");
-        console.log(err);
-      })
   }, [environment])
 
 
@@ -65,16 +62,30 @@ export default function EnvironmentsHistoryComponent({ environment }: Environmen
   useEffect(() => {
     const {Time} = require('@values/time');
 
-    fetchHistory().then(() => { console.log(Reports.ENVIRONMENTS_HISTORY_LOADED) });
+    fetchHistory()
+      .then(() => {
+        customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+      })
     const interval = setInterval(() => {
-      fetchHistory().then(() => { console.log(Reports.ENVIRONMENTS_HISTORY_LOADED) });
+      fetchHistory()
+        .then(() => {
+          customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+        })
+        .catch((err) => {
+          console.log(err)
+          customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+        })
     }, parseInt(Time.historyUpdateTime));
 
     return () => {
       clearInterval(interval)
       cleanup();
     };
-  }, [fetchHistory]);
+  }, [ fetchHistory, environment ]);
 
   return (
     <div className='foreground'>
