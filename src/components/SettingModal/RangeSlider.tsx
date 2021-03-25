@@ -16,18 +16,18 @@ interface RangeSliderProps {
   position: string;
 }
 
-export const RangeSlider = React.forwardRef((
-  { position: machine }: RangeSliderProps,
-  ref?: React.Ref<TaskNextButtonRef>
-  ) => {
+export const RangeSlider = React.forwardRef(({ position: machine }: RangeSliderProps, ref?: React.Ref<TaskNextButtonRef> ) => {
     const {defaultAutomations} = require('@values/defaults')
+
     const dispatch = useDispatch();
     const automationEnable: boolean = useSubscribeAutomationEnable(machine);
-    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine]
+    const singleAutomation: ReducerAutomationDto = getReduxData(StorageKeys.AUTO)[machine];
+
     const [automation, setAutomation] = React.useState<number[]>([
       +singleAutomation.start[0],
       +singleAutomation.end[0],
     ]);
+
 
     function handleChange<T extends BaseSyntheticEvent, U extends number> (
       event: T, value: U | U[]
@@ -35,33 +35,32 @@ export const RangeSlider = React.forwardRef((
       setAutomation(value as number[]);
     }
 
-    useImperativeHandle(ref, () => ({
 
+    useImperativeHandle(ref, () => ({
       handleNextStep () {
         const updated: ReducerAutomationDto = update(singleAutomation, {
           start: { $set: [ automation[0] ] },
           end: { $set: [ automation[1] ] },
         })
-        dispatch(controlAutomation(updated));
+        dispatch( controlAutomation(updated) );
       }
     }))
 
-    function getOnExplanation<T extends string>(machine: T) {
-      if ( machine === "cooler" ) {
-        return new CoolerExplanationChip( machine, automation).onText();
-      } else {
-        return new RangeExplanationChip( machine, automation ).onText();
-      }
+
+    function getOnExplanation <T extends string> (machine: T) {
+      return new RangeExplanationChip( machine, automation ).isCoolerException()  
+              ? new CoolerExplanationChip( machine, automation ).onText() 
+              : new RangeExplanationChip( machine, automation ).onText();
     }
 
-  function getOffExplanation<T extends string>(machine: T) {
-      if ( machine === "cooler" ) {
-        return new CoolerExplanationChip( machine, automation).offText();
-      } else {
-        return new RangeExplanationChip( machine, automation ).offText();
-      }
+
+    function getOffExplanation <T extends string> (machine: T) {
+      return new RangeExplanationChip( machine, automation ).isCoolerException()  
+              ? new CoolerExplanationChip( machine, automation ).offText() 
+              : new RangeExplanationChip( machine, automation ).offText();
     }
 
+    
   if (automationEnable) {
     return (
       <div>

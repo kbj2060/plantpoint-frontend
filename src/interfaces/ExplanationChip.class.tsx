@@ -22,7 +22,7 @@ export class RangeExplanationChip extends ExplanationChipClass {
     this.start = automation[0];
     this.end = automation[1];
   }
-
+  isCoolerException (): boolean { return this.machine === 'cooler' }
   valuetext <T extends number, U extends string> (value: T, status: U) {
     return `${value}${Units[this.machine]} ${Translations[this.machine]} ${status}`;
   }
