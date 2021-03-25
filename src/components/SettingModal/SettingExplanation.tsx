@@ -1,9 +1,4 @@
 import React, {useEffect} from 'react';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
-import AcUnitIcon from '@material-ui/icons/AcUnit';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import ToysIcon from '@material-ui/icons/Toys';
-import OpacityIcon from '@material-ui/icons/Opacity';
 import Chip from '@material-ui/core/Chip';
 import {checkEmpty} from '@funcUtils/checkEmpty';
 import {getReduxData} from "@funcUtils/getReduxData";
@@ -11,14 +6,11 @@ import {groupBy} from "@funcUtils/groupBy";
 import {StorageKeys} from "../../reference/constants";
 import {ReducerAutomationState, saveAutomation} from "@redux/modules/ControlAutomation";
 import {useDispatch} from "react-redux";
-
 import {currentPage} from "@funcUtils/currentPage";
-import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 import {Loader} from "@compUtils/Loader";
 import {getAutomation} from "../../handler/httpHandler";
-import { EmptyMachine, Machines } from '../../reference/machines';
-import { BaseMachine, CycleMachine, RangeMachine, TemperatureRangeMachine } from '../../interfaces/Machine.class';
+import { Machines } from '../../reference/machines';
 
 interface SettingExplanationProps {
   position: string,
@@ -45,12 +37,12 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     return (<Chip key={'off'} className='chip' variant="outlined" size="small" label={"자동화 꺼짐"} /> )
   }
 
-  function getCycleChips<T extends string> (machine: T) {
+  function getCycleChips<T extends string> (machine: T): JSX.Element[] {
     const {start, end, term} = automations[machine];
     return new CycleExplanationChip( start, end, term ).explanation();
   }
 
-  function getRangeChips <T extends string> (machine: T) {
+  function getRangeChips <T extends string> (machine: T): JSX.Element {
     return new RangeExplanationChip( machine, [ automations[machine].start[0], automations[machine].end[0] ] ).isCoolerException() 
             ? new CoolerExplanationChip(
               machine,[ automations[machine].start[0], automations[machine].end[0] ]
@@ -115,55 +107,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     ? <Loader />
     : <table className='table'>
       <tbody>
-      <Explanation />
-      {/* <tr className='cell'>
-        <td className='icon'>
-          <WbSunnyIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-            {!getAutoEnable('led') ? getOffChips() : getRangeChips('led')}
-        </td>
-      </tr>
-      <tr className='cell'>
-        <td className='icon'>
-          <WhatshotIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-            {!getAutoEnable('heater') ? getOffChips() : getRangeChips('heater')}
-        </td>
-      </tr>
-      <tr className='cell'>
-        <td className='icon'>
-          <AcUnitIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-          {!getAutoEnable('cooler') ? getOffChips() : getRangeChips('cooler')}
-        </td>
-      </tr>
-      <tr className='cell'>
-        <td className='icon'>
-          <ToysIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-            {!getAutoEnable('fan') ? getOffChips() : getCycleChips('fan')}
-        </td>
-      </tr>
-      <tr className='cell'>
-        <td className='icon'>
-          <OpacityIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-            {!getAutoEnable('waterpump') ? getOffChips() : getCycleChips('waterpump')}
-        </td>
-      </tr>
-      <tr className='cell'>
-        <td className='icon'>
-          <RoofFanIcon className='default-icon' />
-        </td>
-        <td className='center-icon'>
-          {!getAutoEnable('roofFan') ? getOffChips() : getCycleChips('roofFan')}
-        </td>
-      </tr> */}
+        <Explanation />
       </tbody>
     </table>
   )

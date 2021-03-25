@@ -1,17 +1,24 @@
-import {CycleMachine, TemperatureRangeMachine, TimeRangeMachine} from "@interfaces/Machine.class";
+import {BaseMachine, CycleMachine, TemperatureRangeMachine, TimeRangeMachine} from "@interfaces/Machine.class";
 import {RangeStepper, TimePickerStepper} from "@interfaces/Stepper.class";
 import {ReactNode, Ref} from "react";
 import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon.class";
+import { getReduxData } from '@funcUtils/getReduxData';
+import { StorageKeys } from './constants';
 
-export class EmptyMachine {
+export class EmptyMachine extends BaseMachine {
   automation_type: string; name: string;
   constructor() {
+    super();
     this.name = '';
     this.automation_type = '';
   }
 
   getStepper = (): ReactNode => { return }
   getIcon = (): ReactNode => { return }
+  isAirconditionerConflicted = (status: boolean): boolean => {
+    return (this.name === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
+    || (this.name === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])
+  }
 }
 
 export class LedMachine extends TimeRangeMachine{
@@ -118,6 +125,6 @@ export class WaterPumpMachine extends CycleMachine {
 
 export class Machines {
   getMachines = () => {
-    return [WaterPumpMachine, LedMachine, CoolerMachine, HeaterMachine, RoofFanMachine, FanMachine]
+    return [ WaterPumpMachine, LedMachine, CoolerMachine, HeaterMachine, RoofFanMachine, FanMachine ]
   }
 }
