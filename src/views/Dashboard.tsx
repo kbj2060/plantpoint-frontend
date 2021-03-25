@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AppBar from '@components/AppBar/Appbar';
 import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
@@ -25,21 +25,19 @@ import {Environment} from "@interfaces/Environment.class";
 import {
   getAutomation,
   getAvailableMachines,
-  getAvailableSections, getLastAllEnvironments,
+  getAvailableSections, 
+  getLastAllEnvironments,
   getSwitches
 } from "../handler/httpHandler";
 import { saveEnvironment} from "@redux/modules/ControlEnvironment";
 import {customLogger} from "../logger/Logger";
 import {LogMessage} from "../reference/constants";
 
-
 interface DashboardProps {
   page: string;
 }
 
 export default function Dashboard({page}: DashboardProps) {
-  const dispatch = useDispatch();
-
   const [machineLoaded, setMachineLoaded] = useState(false);
   const [sectionLoaded, setSectionLoaded] = useState(false);
   const [switchLoaded, setSwitchLoaded] = useState(false);
@@ -49,21 +47,54 @@ export default function Dashboard({page}: DashboardProps) {
   const [eSections, setESections] = useState<string[]>([]);
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
+  const dispatch = useDispatch();
+
+
+  const  StatusDisplayWrapper = useCallback((): JSX.Element  =>{
+    const elements: JSX.Element[] = eSections.map((section: string) => {
+      return(
+        <Grid key={section} item xs={12} sm={12} md={4} className='status-display-item' >
+          <StatusDisplay environmentSection={section} />
+        </Grid>)
+      })
+    
+    return (
+      <React.Fragment>
+        {elements}
+      </React.Fragment>
+    )
+  }, []);
+
+  const EnvironmentHistoryWrapper = useCallback((): JSX.Element => {
+    const elements: JSX.Element[] = environments.map((environment: typeof Environment) => {
+      const name = new environment().name;
+      return (
+        <Grid key={name} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
+          <EnvironmentsHistoryComponent environment={name} />
+        </Grid>)
+      })
+
+    return (
+      <React.Fragment>
+        {elements}
+      </React.Fragment>
+    )
+  }, []);
 
   useEffect(() => {
     const { Time } = require('@values/time');
 
     getAvailableMachines(machineSection)
       .then(({data}) => {
-        dispatch( saveMachines(data as ResponseMachineRead[]) )
-        setMachineLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_MACHINES, "Dashboard" as string)
+        dispatch( saveMachines(data as ResponseMachineRead[]) );
+        setMachineLoaded(true);
+        customLogger.success(LogMessage.SUCCESS_GET_MACHINES, "Dashboard" as string);
       })
       .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_MACHINES, "Dashboard" as string)
+        console.log(err);
+        customLogger.error(LogMessage.FAILED_GET_MACHINES, "Dashboard" as string);
       })
-
+    
     getAvailableSections(machineSection)
       .then(({data}) => {
         dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
@@ -152,19 +183,8 @@ export default function Dashboard({page}: DashboardProps) {
               <Grid item xs={12} sm={12} md={4} className='item'>
                 <MachineHistory/>
               </Grid>
-              {eSections.map((section: string) => {
-                return(
-                  <Grid key={section} item xs={12} sm={12} md={4} className='status-display-item' >
-                    <StatusDisplay environmentSection={section} />
-                  </Grid>)
-                })}
-              {environments.map((environment: typeof Environment) => {
-                const name = new environment().name;
-                return (
-                  <Grid key={name} item xs={12} sm={12} md={12} lg={4} xl={4}  className='item' >
-                    <EnvironmentsHistoryComponent environment={name} />
-                  </Grid>)
-                })}
+              <StatusDisplayWrapper />
+              <EnvironmentHistoryWrapper />
             </Grid>
           </div>
         : <Loader />

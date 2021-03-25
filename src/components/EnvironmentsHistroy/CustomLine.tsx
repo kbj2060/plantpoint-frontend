@@ -14,9 +14,10 @@ interface CustomLineProps {
   history: EnvironmentsHistory;
 }
 
-export default function CustomLine({ environment, history, width, height }: CustomLineProps) {
+function CustomLine({ environment, history, width, height }: CustomLineProps) {
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
+    
     const environmentSections = getReduxData(StorageKeys.SECTION);
     const primarySection = environmentSections[0]
 
@@ -57,4 +58,6 @@ export default function CustomLine({ environment, history, width, height }: Cust
 
     return <Line options={options} data={state} width={width} height={height}/>
 }
+
+export default React.memo(CustomLine);
 

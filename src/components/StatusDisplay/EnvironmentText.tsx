@@ -8,7 +8,8 @@ interface EnvironmentTextProps {
 
 const EnvironmentText = ({ section, name }: EnvironmentTextProps) => {
   const { Units } = require('@values/units');
-  const value = useSubscribeEnvironmentStatus(section, name)
+  const value = useSubscribeEnvironmentStatus(section, name);
+  
   return (
     <div>
       <span className='environment'>{value}{Units[name]}</span>
