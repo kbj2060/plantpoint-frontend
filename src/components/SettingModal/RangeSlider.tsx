@@ -29,9 +29,7 @@ export const RangeSlider = React.forwardRef(({ position: machine }: RangeSliderP
     ]);
 
 
-    function handleChange<T extends BaseSyntheticEvent, U extends number> (
-      event: T, value: U | U[]
-    ) {
+    function handleChange<T extends BaseSyntheticEvent, U extends number> ( event: T, value: U | U[] ) {
       setAutomation(value as number[]);
     }
 
@@ -60,27 +58,22 @@ export const RangeSlider = React.forwardRef(({ position: machine }: RangeSliderP
               : new RangeExplanationChip( machine, automation ).offText();
     }
 
-    
-  if (automationEnable) {
-    return (
-      <div>
-        <Grid className='slider-root'>
-          <CustomIosSlider
-            className='slider'
-            min={defaultAutomations[machine].start[0]}
-            max={defaultAutomations[machine].end[0]}
-            value={automation}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid className='explanation'>
-          <Chip className='on-chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
-          <Chip className='off-chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
-        </Grid>
-      </div>
-    );
-  } else {
-    return null;
-  }
-  }
-);
+
+  return automationEnable
+                    ? ( <div>
+                          <Grid className='slider-root'>
+                            <CustomIosSlider
+                              className='slider'
+                              min={defaultAutomations[machine].start[0]}
+                              max={defaultAutomations[machine].end[0]}
+                              value={automation}
+                              onChange={handleChange}
+                            />
+                          </Grid>
+                          <Grid className='explanation'>
+                            <Chip className='on-chip' variant="outlined" size="small" label={getOnExplanation(machine)}/>
+                            <Chip className='off-chip' variant="outlined" size="small" label={getOffExplanation(machine)}/>
+                          </Grid>
+                        </div> )
+                    : null
+  });

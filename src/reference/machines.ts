@@ -4,10 +4,10 @@ import {ReactNode, Ref} from "react";
 import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon.class";
 
 export class EmptyMachine {
-  machineType: string; name: string;
+  automation_type: string; name: string;
   constructor() {
     this.name = '';
-    this.machineType = '';
+    this.automation_type = '';
   }
 
   getStepper = (): ReactNode => { return }
@@ -15,103 +15,109 @@ export class EmptyMachine {
 }
 
 export class LedMachine extends TimeRangeMachine{
-  machineType: string;
+  automation_type: string;
   constructor() {
     super();
     this.name = 'led';
-    this.machineType = 'TimeRangeMachine';
+    this.automation_type = 'TimeRangeMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new RangeStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new LEDIcon().iconHandler(active);
   }
 }
 
 export class HeaterMachine extends TemperatureRangeMachine {
-  machineType: string;
+  automation_type: string;
   constructor() {
     super();
     this.name = 'heater';
-    this.machineType = 'TemperatureRangeMachine';
+    this.automation_type = 'TemperatureRangeMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new RangeStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new HeaterIcon().iconHandler(active);
   }
 }
 
 export class CoolerMachine extends TemperatureRangeMachine {
-  machineType: string;
+  automation_type: string;
   constructor() {
     super();
     this.name = 'cooler';
-    this.machineType = 'TemperatureRangeMachine';
+    this.automation_type = 'TemperatureRangeMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new RangeStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new CoolerIcon().iconHandler(active);
   }
 }
 
 export class FanMachine extends CycleMachine {
-  machineType: string;
+  automation_type: string;
   constructor() {
     super()
     this.name = 'fan';
-    this.machineType = 'CycleMachine';
+    this.automation_type = 'CycleMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new TimePickerStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new FanIcon().iconHandler(active);
   }
 }
 
 export class RoofFanMachine extends CycleMachine {
-  machineType: string;
+  automation_type: string;
   constructor() {
     super()
     this.name = 'roofFan';
-    this.machineType = 'CycleMachine';
+    this.automation_type = 'CycleMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new TimePickerStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new RoofFanIcon().iconHandler(active);
   }
 }
 
 export class WaterPumpMachine extends CycleMachine {
-  machineType: string;
+  automation_type: string;
   constructor() {
     super()
     this.name = 'waterpump';
-    this.machineType = 'CycleMachine';
+    this.automation_type = 'CycleMachine';
   }
 
   getStepper = (position: string, ref: Ref<any>): ReactNode => {
     return new TimePickerStepper(position, ref).render()
   }
 
-  getIcon = (active: boolean): ReactNode => {
+  getIcon = (active: boolean = false): ReactNode => {
     return new WaterpumpIcon().iconHandler(active);
+  }
+}
+
+export class Machines {
+  getMachines = () => {
+    return [WaterPumpMachine, LedMachine, CoolerMachine, HeaterMachine, RoofFanMachine, FanMachine]
   }
 }

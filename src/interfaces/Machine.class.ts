@@ -27,6 +27,10 @@ export abstract class BaseMachine {
   public checkMachineOn = () => {
     return this.status === 1
   }
+
+  public isCycleMachineType = () => {
+    return this.automation_type === 'CycleMachine';
+  }
 }
 
 

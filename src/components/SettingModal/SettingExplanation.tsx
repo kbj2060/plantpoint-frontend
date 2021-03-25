@@ -17,6 +17,8 @@ import RoofFanIcon from "../../assets/icons/RoofFanIcon";
 import {CoolerExplanationChip, CycleExplanationChip, RangeExplanationChip} from "@interfaces/ExplanationChip.class";
 import {Loader} from "@compUtils/Loader";
 import {getAutomation} from "../../handler/httpHandler";
+import { EmptyMachine, Machines } from '../../reference/machines';
+import { BaseMachine, CycleMachine, RangeMachine, TemperatureRangeMachine } from '../../interfaces/Machine.class';
 
 interface SettingExplanationProps {
   position: string,
@@ -49,15 +51,39 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
   }
 
   function getRangeChips <T extends string> (machine: T) {
-    if ( machine === 'cooler' ) {
-      return new CoolerExplanationChip(
-        machine,[ automations[machine].start[0], automations[machine].end[0] ]
-      ).explanation();
-    } else {
-      return new RangeExplanationChip(
-        machine,[ automations[machine].start[0], automations[machine].end[0] ]
-      ).explanation();
-    }
+    return new RangeExplanationChip( machine, [ automations[machine].start[0], automations[machine].end[0] ] ).isCoolerException() 
+            ? new CoolerExplanationChip(
+              machine,[ automations[machine].start[0], automations[machine].end[0] ]
+            ).explanation()
+            : new RangeExplanationChip(
+              machine,[ automations[machine].start[0], automations[machine].end[0] ]
+            ).explanation()
+  }
+
+  function Explanation (): JSX.Element {
+    const elements: JSX.Element[] = ( new Machines().getMachines() ).map((machineClass: any ) => {
+      const machine = new machineClass();
+      return (
+        <tr key={machine.name} className='cell'>
+          <td className='icon'>
+            {machine.getIcon()}
+          </td>
+          <td className='center-icon'>
+              {!getAutoEnable(machine.name) 
+                  ? getOffChips() 
+                  : machine.isCycleMachineType() 
+                    ? getCycleChips(machine.name)
+                    : getRangeChips(machine.name)
+                  }
+          </td>
+        </tr>
+      )
+    })
+    return (
+      <React.Fragment>
+        {elements}
+      </React.Fragment>
+    )
   }
 
   useEffect(() => {
@@ -89,7 +115,8 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
     ? <Loader />
     : <table className='table'>
       <tbody>
-      <tr className='cell'>
+      <Explanation />
+      {/* <tr className='cell'>
         <td className='icon'>
           <WbSunnyIcon className='default-icon' />
         </td>
@@ -136,7 +163,7 @@ export default function SettingExplanation({position}: SettingExplanationProps) 
         <td className='center-icon'>
           {!getAutoEnable('roofFan') ? getOffChips() : getCycleChips('roofFan')}
         </td>
-      </tr>
+      </tr> */}
       </tbody>
     </table>
   )
