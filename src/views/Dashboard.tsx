@@ -51,6 +51,8 @@ export default function Dashboard({page}: DashboardProps) {
   const machineSection: string = currentPage();
 
   useEffect(() => {
+    const { Time } = require('@values/time');
+
     getAvailableMachines(machineSection)
       .then(({data}) => {
         dispatch( saveMachines(data as ResponseMachineRead[]) )
@@ -113,7 +115,20 @@ export default function Dashboard({page}: DashboardProps) {
         customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS, "Dashboard" as string)
       })
 
+    const interval = setInterval(() => {
+      getLastAllEnvironments(machineSection)
+      .then(({data}) => {
+        dispatch( saveEnvironment( data ));
+        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string);
+      })
+      .catch((err) => {
+        console.log(err);
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string);
+      })
+    }, parseInt(Time.statusUpdateTime));
+
     return () => {
+      clearInterval(interval);
       setMachineLoaded(false);
       setSwitchLoaded(false);
       setAutomationLoaded(false);

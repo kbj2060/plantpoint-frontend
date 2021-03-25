@@ -9,7 +9,6 @@ interface EnvironmentTextProps {
 const EnvironmentText = ({ section, name }: EnvironmentTextProps) => {
   const { Units } = require('@values/units');
   const value = useSubscribeEnvironmentStatus(section, name)
-
   return (
     <div>
       <span className='environment'>{value}{Units[name]}</span>
@@ -17,4 +16,4 @@ const EnvironmentText = ({ section, name }: EnvironmentTextProps) => {
   )
 }
 
-export default EnvironmentText;
+export default React.memo(EnvironmentText);

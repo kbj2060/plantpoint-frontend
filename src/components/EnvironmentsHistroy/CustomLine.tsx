@@ -18,7 +18,7 @@ export default function CustomLine({ environment, history, width, height }: Cust
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
     const environmentSections = getReduxData(StorageKeys.SECTION);
-    const primarySection = environmentSections[1]
+    const primarySection = environmentSections[0]
 
     let state: EnvironmentChart = {
         labels: [],
