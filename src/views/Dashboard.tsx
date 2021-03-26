@@ -4,36 +4,16 @@ import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
 import {Grid} from "@material-ui/core";
 import SwitchController from "../components/SwitchController";
-import {useDispatch} from "react-redux";
-import {saveAutomation} from "@redux/modules/ControlAutomation";
-import { ResponseAutomationRead} from "@interfaces/Automation";
-import {ResponseSwitchesReadLast} from "@interfaces/Switch";
-import {ReducerSaveSwitchesDto, saveSwitch} from "@redux/modules/ControlSwitch";
-import {saveMachines} from "@redux/modules/ControlMachine";
-import {groupBy} from "../utils/groupBy";
-import '../styles/layouts/dashboard.scss';
 import CCTV from "@components/CCTV";
 import MachineHistory from "@components/MachinesHistory";
 import StatusDisplay from "@components/StatusDisplay";
 import {currentPage} from "@funcUtils/currentPage";
 import EnvironmentsHistoryComponent from "@components/EnvironmentsHistroy";
-import {ResponseEnvSectionRead, ResponseMachineRead} from "@interfaces/Machine";
-import {saveSections} from "@redux/modules/ControlSection";
 import {Loader} from "@compUtils/Loader";
 import {Environments} from "../reference/environments";
 import {Environment} from "@interfaces/Environment.class";
-import {
-  getAllMachinesCurrent,
-  getAutomation,
-  getAvailableMachines,
-  getAvailableSections, 
-  getLastAllEnvironments,
-  getSwitches
-} from "../handler/httpHandler";
-import { saveEnvironment} from "@redux/modules/ControlEnvironment";
-import {customLogger} from "../logger/Logger";
-import {LogMessage} from "../reference/constants";
-import { saveCurrent } from '../redux/modules/ControlCurrent';
+import { MachinesCollector, SectionsCollector, EnvironmentsCollector, SwitchesCollector, AutomationsCollector, CurrentsCollector } from '../collector/Collector.class';
+import '../styles/layouts/dashboard.scss';
 
 interface DashboardProps {
   page: string;
@@ -49,8 +29,6 @@ export default function Dashboard({page}: DashboardProps) {
   const [eSections, setESections] = useState<string[]>([]);
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
-  const dispatch = useDispatch();
-
 
   const  StatusDisplayWrapper = useCallback((): JSX.Element  =>{
     const elements: JSX.Element[] = eSections.map((section: string) => {
@@ -86,90 +64,23 @@ export default function Dashboard({page}: DashboardProps) {
   useEffect(() => {
     const { Time } = require('@values/time');
 
-    getAvailableMachines(machineSection)
-      .then(({data}) => {
-        dispatch( saveMachines(data as ResponseMachineRead[]) );
-        setMachineLoaded(true);
-        customLogger.success(LogMessage.SUCCESS_GET_MACHINES, "Dashboard" as string);
+    new MachinesCollector(machineSection).execute().then( (isSucceed) => { setMachineLoaded(isSucceed); } )
+    new SectionsCollector(machineSection).execute()
+      .then(({data, isSucceed}) => {
+        setESections(data);
+        setSectionLoaded(isSucceed);
       })
-      .catch((err) => {
-        console.log(err);
-        customLogger.error(LogMessage.FAILED_GET_MACHINES, "Dashboard" as string);
-      })
-    
-    getAvailableSections(machineSection)
-      .then(({data}) => {
-        dispatch( saveSections( data as ResponseEnvSectionRead[] ) );
-        const sections: string[] = data.map((m: ResponseEnvSectionRead) => {
-          return m.e_section;
-        })
-        setESections(sections)
-        setSectionLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_SECTIONS, "Dashboard" as string)
-      })
-      .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_SECTIONS, "Dashboard" as string)
-      })
+    new EnvironmentsCollector(machineSection).execute().then( (isSucceed) => setEnvironmentLoaded(isSucceed) );
+    new SwitchesCollector(machineSection).execute().then( (isSucceed) => setSwitchLoaded(isSucceed) );
+    new AutomationsCollector(machineSection).execute().then( (isSucceed) => setAutomationLoaded(isSucceed) )
 
-    getLastAllEnvironments(machineSection)
-      .then(({data}) => {
-        dispatch( saveEnvironment( data ))
-        setEnvironmentLoaded(true);
-        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string)
-      })
-      .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string)
-      })
-
-    getSwitches(machineSection)
-      .then(({data}) => {
-        const grouped: ReducerSaveSwitchesDto = groupBy(data as ResponseSwitchesReadLast[], 'machine');
-        dispatch( saveSwitch(grouped) )
-        setSwitchLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_SWITCHES, "Dashboard" as string)
-      })
-      .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_SWITCHES, "Dashboard" as string)
-      })
-
-    getAutomation(machineSection)
-      .then(({data}) => {
-        const {lastAutomations}: ResponseAutomationRead = data;
-        const groupedAutomations = groupBy(lastAutomations, 'machine');
-        dispatch( saveAutomation( groupedAutomations ) );
-        setAutomationLoaded(true)
-        customLogger.success(LogMessage.SUCCESS_GET_AUTOMATIONS, "Dashboard" as string)
-      })
-      .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS, "Dashboard" as string)
-      })
 
     const eInterval = setInterval(() => {
-      getLastAllEnvironments(machineSection)
-        .then(({data}) => {
-          dispatch( saveEnvironment( data ));
-          customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string);
-        })
-        .catch((err) => {
-          console.log(err);
-          customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string);
-        });
+      new EnvironmentsCollector(machineSection).execute();
     }, parseInt(Time.statusUpdateTime));
 
     const cInterval = setInterval(() => {        
-      getAllMachinesCurrent(machineSection)
-        .then(({data}) => {
-          dispatch( saveCurrent( data ));
-          customLogger.success(LogMessage.SUCCESS_GET_CURRENTS, "Dashboard" as string);
-        })
-        .catch((err) => {
-          console.log(err);
-          customLogger.error(LogMessage.FAILED_GET_CURRENTS, "Dashboard" as string);
-        });
+      new CurrentsCollector(machineSection).execute();
     }, parseInt(Time.currentUpdateTime));
 
     return () => {
@@ -181,7 +92,7 @@ export default function Dashboard({page}: DashboardProps) {
       setSectionLoaded(false);
       setEnvironmentLoaded(false);
     }
-  }, [ dispatch, machineSection ]);
+  }, [ machineSection ]);
 
   return (
     checkLogin()

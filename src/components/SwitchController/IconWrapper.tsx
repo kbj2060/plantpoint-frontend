@@ -9,8 +9,8 @@ export default function IconWrapper({machine}: IconWrapperProps) {
   const isAnimated: boolean = useSubscribeSwitchStatus(machine) as boolean;
 
   function getIcon (active: boolean): JSX.Element {
-    const machineObject = getMachine(machine);
-    return new machineObject().getIcon(active) as JSX.Element
+    const machineClass = getMachine(machine);
+    return new machineClass().getIcon(active) as JSX.Element
   }
 
   return isAnimated === undefined
