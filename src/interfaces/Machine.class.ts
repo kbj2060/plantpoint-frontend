@@ -20,10 +20,6 @@ export abstract class BaseMachine {
     this.status = status;
   }
 
-  public checkMachineOn = () => {
-    return this.status === 1
-  }
-
   public isCycleMachineType = (): boolean => {
     return this.automation_type === 'CycleMachine';
   }
@@ -34,7 +30,6 @@ export abstract class BaseMachine {
     || (this.name === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])
   }
 }
-
 
 export class RangeMachine extends BaseMachine {
   set_automation = (automation_type: string, enable: boolean, start: string[], end: string[]) => {
@@ -58,12 +53,3 @@ export class CycleMachine extends BaseMachine {
     this.term = term;
   }
 }
-
-// export class Machines {
-//   machines: BaseMachine[];
-//   m_section: string;
-//   constructor(m_section: string, machines: BaseMachine[]) {
-//     this.m_section = m_section;
-//     this.machines = machines;
-//   }
-// }

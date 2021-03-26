@@ -41,3 +41,7 @@ export async function getHistorySwitches <T extends string> (machineSection: T) 
 export async function getMachineCurrents <T extends string> (section: T, machine: T) {
   return await axios.get(`${HttpUrls.CURRENT_READ}/${section}/${machine}`)
 }
+
+export async function getAllMachinesCurrent <T extends string> (section: T) {
+  return await axios.get(`${HttpUrls.CURRENT_READ}/${section}`)
+}

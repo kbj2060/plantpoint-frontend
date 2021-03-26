@@ -23,6 +23,7 @@ import {Loader} from "@compUtils/Loader";
 import {Environments} from "../reference/environments";
 import {Environment} from "@interfaces/Environment.class";
 import {
+  getAllMachinesCurrent,
   getAutomation,
   getAvailableMachines,
   getAvailableSections, 
@@ -32,6 +33,7 @@ import {
 import { saveEnvironment} from "@redux/modules/ControlEnvironment";
 import {customLogger} from "../logger/Logger";
 import {LogMessage} from "../reference/constants";
+import { saveCurrent } from '../redux/modules/ControlCurrent';
 
 interface DashboardProps {
   page: string;
@@ -146,20 +148,33 @@ export default function Dashboard({page}: DashboardProps) {
         customLogger.error(LogMessage.FAILED_GET_AUTOMATIONS, "Dashboard" as string)
       })
 
-    const interval = setInterval(() => {
+    const eInterval = setInterval(() => {
       getLastAllEnvironments(machineSection)
-      .then(({data}) => {
-        dispatch( saveEnvironment( data ));
-        customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string);
-      })
-      .catch((err) => {
-        console.log(err);
-        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string);
-      })
+        .then(({data}) => {
+          dispatch( saveEnvironment( data ));
+          customLogger.success(LogMessage.SUCCESS_GET_ENVIRONMENTS, "Dashboard" as string);
+        })
+        .catch((err) => {
+          console.log(err);
+          customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS, "Dashboard" as string);
+        });
     }, parseInt(Time.statusUpdateTime));
 
+    const cInterval = setInterval(() => {        
+      getAllMachinesCurrent(machineSection)
+        .then(({data}) => {
+          dispatch( saveCurrent( data ));
+          customLogger.success(LogMessage.SUCCESS_GET_CURRENTS, "Dashboard" as string);
+        })
+        .catch((err) => {
+          console.log(err);
+          customLogger.error(LogMessage.FAILED_GET_CURRENTS, "Dashboard" as string);
+        });
+    }, parseInt(Time.currentUpdateTime));
+
     return () => {
-      clearInterval(interval);
+      clearInterval(eInterval);
+      clearInterval(cInterval)
       setMachineLoaded(false);
       setSwitchLoaded(false);
       setAutomationLoaded(false);

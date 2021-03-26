@@ -5,6 +5,7 @@ import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} fr
 import { getReduxData } from '@funcUtils/getReduxData';
 import { StorageKeys } from './constants';
 
+
 export class EmptyMachine extends BaseMachine {
   automation_type: string; name: string;
   constructor() {
