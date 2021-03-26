@@ -13,7 +13,6 @@ import CurrentChecker from "@components/SwitchController/CurrentChecker";
 import '@styles/components/switch_controller.scss';
 import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
-import { Machines } from '../../reference/machines';
 
 interface IconsProps extends MachineProps {}
 

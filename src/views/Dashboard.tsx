@@ -25,8 +25,8 @@ export default function Dashboard({page}: DashboardProps) {
   const [switchLoaded, setSwitchLoaded] = useState(false);
   const [automationLoaded, setAutomationLoaded] = useState(false);
   const [environmentLoaded, setEnvironmentLoaded] = useState(false);
-
   const [eSections, setESections] = useState<string[]>([]);
+
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
 
@@ -64,16 +64,11 @@ export default function Dashboard({page}: DashboardProps) {
   useEffect(() => {
     const { Time } = require('@values/time');
 
-    new MachinesCollector(machineSection).execute().then( (isSucceed) => { setMachineLoaded(isSucceed); } )
-    new SectionsCollector(machineSection).execute()
-      .then(({data, isSucceed}) => {
-        setESections(data);
-        setSectionLoaded(isSucceed);
-      })
+    new MachinesCollector(machineSection).execute().then( (isSucceed) => setMachineLoaded(isSucceed) )
+    new SectionsCollector(machineSection).execute().then(({data, isSucceed}) => { setESections(data); setSectionLoaded(isSucceed); })
     new EnvironmentsCollector(machineSection).execute().then( (isSucceed) => setEnvironmentLoaded(isSucceed) );
     new SwitchesCollector(machineSection).execute().then( (isSucceed) => setSwitchLoaded(isSucceed) );
     new AutomationsCollector(machineSection).execute().then( (isSucceed) => setAutomationLoaded(isSucceed) )
-
 
     const eInterval = setInterval(() => {
       new EnvironmentsCollector(machineSection).execute();

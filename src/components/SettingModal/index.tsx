@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Modal from "@material-ui/core/Modal";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -15,19 +15,19 @@ const customBackdrop = withStyles(() => ({
 }))(Backdrop);
 
 export default function SettingModal() {
-  	const [open, setOpen] = React.useState(false);
+		const [open, setOpen] = React.useState(false);
 
     const handleClose = (): void => {
       setOpen(false)
-    }
+    };
 
     const AutoIconButton = (): JSX.Element => {
-    	const handleOpen = () => {
-      	setOpen((prev) => !prev);
-    	}
+			const handleOpen = () => {
+				setOpen((prev) => !prev);
+			}
 
-    	return (
-    		<Button onClick={handleOpen} type="button">
+			return (
+				<Button onClick={handleOpen} type="button">
 					<AllInclusiveIcon className='auto-icon'/>
         </Button>
 			)

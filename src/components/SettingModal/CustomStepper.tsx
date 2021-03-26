@@ -38,11 +38,12 @@ export interface CustomStepperProp {
 
 export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Element {
   const {Translations} = require('@values/translations')
-  const machines: string[] = getReduxData(StorageKeys.MACHINE);
   const [activeStep, setActiveStep] = React.useState<number>(0);
+  const nextButtonRef = useRef<TaskNextButtonRef>(null);
+
+  const machines: string[] = getReduxData(StorageKeys.MACHINE);
   const steps: string[] = ['head',...machines, 'tail'];
   const labels: string[] = getLabels(steps, Translations);
-  const nextButtonRef = useRef<TaskNextButtonRef>(null);
 
 
   function StepperRenderer (): JSX.Element {
@@ -93,15 +94,14 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
     const element: JSX.Element | null = autoSwitchDisable(activeStep, steps.length)
       ? null
       : <FormControlLabel
-        value=""
-        control={
-          <AutoSwitchWrapper
-            key={steps[activeStep]}
-            machine={steps[activeStep] as string} /> }
-        label=""
-        labelPlacement="top"
-        classes={{ label:'button-label' }}
-      />
+          value=""
+          control={
+            <AutoSwitchWrapper
+              key={steps[activeStep]}
+              machine={steps[activeStep] as string} /> }
+          label=""
+          labelPlacement="top"
+          classes={{ label:'button-label' }} />
 
     return (
       <div className='auto-switch-wrapper' >
@@ -114,10 +114,11 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
   function NextSaveButton (): JSX.Element {
     function handleNext () {
       setActiveStep((prevActiveStep) => ++prevActiveStep );
-      if ( nextButtonRef.current !== null ) {
-        nextButtonRef.current.handleNextStep();
+      if ( nextButtonRef.current !== null ) { 
+        nextButtonRef.current.handleNextStep(); 
       }
     }
+
 
     const handleApply = async () => {
       const controlledBy: string = currentUser() as string;
@@ -129,7 +130,7 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
         })
     };
 
-    return activeStep === steps.length - 1
+      return activeStep === steps.length - 1
                                       ? (<Button className='next-button' onClick={handleApply}>
                                         저장
                                         </Button>)
@@ -140,8 +141,7 @@ export default function CustomStepper({modalClose}: CustomStepperProp): JSX.Elem
 
 
   function BackButton (): JSX.Element {
-    const handleBack = () => { setActiveStep((prevActiveStep) => --prevActiveStep ); };
-
+    const handleBack = () => { setActiveStep( (prevActiveStep) => --prevActiveStep ); };
     return (
       <Button
         disabled={activeStep === 0}

@@ -22,9 +22,6 @@ export class BaseCollector {
 }
 
 export class MachinesCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<boolean> {
     let isSucceed = false;
     await getAvailableMachines(this.mSection)
@@ -42,9 +39,6 @@ export class MachinesCollector extends BaseCollector {
 }
 
 export class SectionsCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<Record<string, any>> {
     let isSucceed = false;
     let result: ResponseEnvSectionRead[] = [] as ResponseEnvSectionRead[];
@@ -64,9 +58,6 @@ export class SectionsCollector extends BaseCollector {
 }
 
 export class EnvironmentsCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<boolean> {
     let isSucceed = false;
     await getLastAllEnvironments(this.mSection)
@@ -84,9 +75,6 @@ export class EnvironmentsCollector extends BaseCollector {
 }
 
 export class SwitchesCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<boolean> {
     let isSucceed = false;
     await getSwitches(this.mSection)
@@ -105,9 +93,6 @@ export class SwitchesCollector extends BaseCollector {
 }
 
 export class AutomationsCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<boolean> {
     let isSucceed = false;
     await getAutomation(this.mSection)
@@ -127,9 +112,6 @@ export class AutomationsCollector extends BaseCollector {
 }
 
 export class CurrentsCollector extends BaseCollector {
-  constructor(mSection: string) {
-    super(mSection);
-  }
   async execute (): Promise<boolean> {
     let isSucceed = false;
     await getAllMachinesCurrent(this.mSection)
