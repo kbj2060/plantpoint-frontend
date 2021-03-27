@@ -14,7 +14,7 @@ import {currentUser} from "@funcUtils/currentUser";
 import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
 import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
-import { MachineHistoryCollector, UpdatedRow } from '../../collector/Collector.class';
+import { MachineHistoryCollector, UpdatedRow } from '../../collector/HistoryCollector.class';
 import { ReducerSwitchState } from '@redux/modules/ControlSwitch';
 
 const theme = createMuiTheme({
@@ -68,7 +68,7 @@ export default function MachineHistory() {
 
 	useEffect(() => {
 		if ( !prevRefresh ) { return; }
-		const updatedRow: UpdatedRow | null = new MachineHistoryCollector(machineSection).extractUpdatedRows(prevRefresh, refresh);
+		const updatedRow: UpdatedRow | null = new MachineHistoryCollector(machineSection).extractUpdatedRow(prevRefresh, refresh);
 		if ( !updatedRow ) { return; }
 		updateRows( {
 			machine : updatedRow!.machine,

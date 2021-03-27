@@ -130,38 +130,3 @@ export class CurrentsCollector extends BaseCollector {
     return isSucceed;
   }
 }
-
-export interface UpdatedRow {
-  machine: string;
-  status: number;
-}
-export class MachineHistoryCollector extends BaseCollector {
-  handleDateLocale (sw: SingleSwitchHistory) {
-    sw.created = changeToKoreanDate(sw.created);
-    return sw;
-  }
-
-  extractUpdatedRows <T extends object> (prevRefresh: T, refresh: T): UpdatedRow | null {
-    const entries: Array<any> = Object.entries( updatedDiff(prevRefresh , refresh) );
-		if ( entries.length !== 1 ) { return null; }
-		const [machine, status] = entries.flat();
-    return { machine: machine, status: status }
-  }
-
-  async execute (): Promise<Record<string, any>> {
-    let isSucceed = false;
-    let result: SingleSwitchHistory[] = [] as SingleSwitchHistory[];
-    await getHistorySwitches(this.mSection)
-      .then(({data}) => {
-        const { switchHistory }: ResponseSwitchHistoryRead = data;
-        result = switchHistory.map(this.handleDateLocale)
-        isSucceed = true;
-        customLogger.success(LogMessage.SUCCESS_GET_SWITCHES_HISTORY, 'MachineHistory' as string)
-      })
-      .catch((err) => {
-        console.log(err)
-        customLogger.error(LogMessage.FAILED_GET_SWITCHES_HISTORY,'MachineHistory' as string);
-      })
-    return { data: result, isSucceed: isSucceed };
-  }
-}
