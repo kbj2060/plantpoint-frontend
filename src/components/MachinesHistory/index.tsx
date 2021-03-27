@@ -7,19 +7,15 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import {LogMessage} from "../../reference/constants";
-import {ResponseSwitchHistoryRead, SingleSwitchHistory} from '@interfaces/MachineHistory';
-import { updatedDiff } from 'deep-object-diff';
+import {SingleSwitchHistory} from '@interfaces/MachineHistory';
 import CustomTableFooter from "@components/MachinesHistory/CustomTableFooter";
 import {usePrevious} from "@hooks/usePrevious";
-import {Loader} from "@compUtils/Loader";
 import {currentUser} from "@funcUtils/currentUser";
 import {koreanDate} from "@funcUtils/koreanDate";
 import {currentPage} from "@funcUtils/currentPage";
-import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import useSubscribeSwitches from "@hooks/useSubscribeSwitches";
-import {getHistorySwitches} from "../../handler/httpHandler";
-import {customLogger} from "../../logger/Logger";
+import { MachineHistoryCollector, UpdatedRow } from '../../collector/Collector.class';
+import { ReducerSwitchState } from '@redux/modules/ControlSwitch';
 
 const theme = createMuiTheme({
   overrides: {
@@ -35,10 +31,13 @@ export default function MachineHistory() {
 	const { Translations } = require('@values/translations');
 	const [ page, setPage ] = React.useState<number>(0);
   const [ rows, setRows ] = React.useState<SingleSwitchHistory[]>([]);
-	const [ isLoaded, setIsLoaded ] = React.useState(false );
+	
+	const machineSection = currentPage();
 	const rowsPerPage = 5;
+	const defaultHeight = 53;
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-	const refresh = useSubscribeSwitches();
+
+	const refresh: ReducerSwitchState = useSubscribeSwitches();
 	const prevRefresh = usePrevious(refresh);
 
   const handleChangePage = useCallback((event: any, newPage: React.SetStateAction<number>) => {
@@ -46,17 +45,16 @@ export default function MachineHistory() {
   }, [])
 
   function handleStatus <T extends SingleSwitchHistory> (row: T) {
-  		return row.status ? 'ON':'OFF';
+		return row.status ? 'ON':'OFF';
 	}
 
 	const TableEmptyHandler = () => {
-  	const defaultHeight = 53;
-  	return (
-  		<>
-  		{emptyRows > 0 && (
-						<TableRow style={{ height: defaultHeight * emptyRows }}>
-						  <TableCell colSpan={6} />
-						</TableRow> ) }
+		return (
+			<>
+			{emptyRows > 0 && (
+											<TableRow style={{ height: defaultHeight * emptyRows }}>
+												<TableCell colSpan={6} />
+											</TableRow> ) }
 			</>
 		)
 	}
@@ -66,53 +64,26 @@ export default function MachineHistory() {
 			prevArray.splice(-1, 1)
 			return [switchHistory, ...prevArray]
 		});
-		setIsLoaded( true );
 	}
 
 	useEffect(() => {
 		if ( !prevRefresh ) { return; }
-		const entries: Array<any> = Object.entries(
-			updatedDiff(prevRefresh as object, refresh as object) as Record<string, boolean>
-		);
-		if ( entries.length !== 1 ) { return; }
-		const [machine, status] = entries.flat();
+		const updatedRow: UpdatedRow | null = new MachineHistoryCollector(machineSection).extractUpdatedRows(prevRefresh, refresh);
+		if ( !updatedRow ) { return; }
 		updateRows( {
-			machine : machine,
-			status: status,
+			machine : updatedRow!.machine,
+			status: updatedRow!.status,
 			controlledBy: currentUser() as string,
 			created: koreanDate(),
 		} as SingleSwitchHistory );
 	}, [refresh, prevRefresh])
 
 	useEffect(() => {
-		const handleDateLocale = (sw: SingleSwitchHistory) => {
-			sw.created = changeToKoreanDate(sw.created);
-			return sw;
-		}
-
-		const getSwitchHistory = async  () => {
-			const machineSection = currentPage();
-			getHistorySwitches(machineSection)
-				.then(({data}) => {
-					const { switchHistory }: ResponseSwitchHistoryRead = data;
-					setRows(() => (switchHistory.map(handleDateLocale)));
-					setIsLoaded(true);
-				})
-		}
-
-		getSwitchHistory()
-			.then(() => {
-				customLogger.success(LogMessage.SUCCESS_GET_SWITCHES_HISTORY, 'MachineHistory' as string)
-			})
-			.catch((err) => {
-				console.log(err)
-				customLogger.error(LogMessage.FAILED_GET_SWITCHES_HISTORY,'MachineHistory' as string);
-			})
+		new MachineHistoryCollector(machineSection).execute()
+			.then( ({ data, isSucceed }) => setRows(data) )
 	}, []);
 
-	if (!isLoaded) {
-		return <Loader />;
-	} else {
+
 		return (
 			<MuiThemeProvider theme={theme}>
 				<TableContainer component={Paper} className='container'>
@@ -128,7 +99,7 @@ export default function MachineHistory() {
 											{Translations[row.machine]}
 										</TableCell>
 										<TableCell className={row.status !== 0 ? 'status-on' : 'status-off'}
-															 align="center">{handleStatus(row)}</TableCell>
+															align="center">{handleStatus(row)}</TableCell>
 										<TableCell className='text' align="center">{row.controlledBy}</TableCell>
 										<TableCell className='text' align="center">{row.created}</TableCell>
 									</TableRow>
@@ -147,5 +118,4 @@ export default function MachineHistory() {
 				</TableContainer>
 			</MuiThemeProvider>
 		);
-	}
 }

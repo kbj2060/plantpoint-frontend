@@ -30,6 +30,7 @@ export default function Dashboard({page}: DashboardProps) {
   const environments = new Environments().getEnvironments();
   const machineSection: string = currentPage();
 
+  
   const  StatusDisplayWrapper = useCallback((): JSX.Element  =>{
     const elements: JSX.Element[] = eSections.map((section: string) => {
       return(
@@ -42,9 +43,10 @@ export default function Dashboard({page}: DashboardProps) {
       <React.Fragment>
         {elements}
       </React.Fragment>
-    )
-  }, []);
+    ) // eslint-disable-next-line
+  }, []); 
 
+  
   const EnvironmentHistoryWrapper = useCallback((): JSX.Element => {
     const elements: JSX.Element[] = environments.map((environment: typeof Environment) => {
       const name = new environment().name;
@@ -58,17 +60,22 @@ export default function Dashboard({page}: DashboardProps) {
       <React.Fragment>
         {elements}
       </React.Fragment>
-    )
-  }, []);
+    ) // eslint-disable-next-line
+  }, []); 
 
   useEffect(() => {
     const { Time } = require('@values/time');
 
-    new MachinesCollector(machineSection).execute().then( (isSucceed) => setMachineLoaded(isSucceed) )
-    new SectionsCollector(machineSection).execute().then(({data, isSucceed}) => { setESections(data); setSectionLoaded(isSucceed); })
-    new EnvironmentsCollector(machineSection).execute().then( (isSucceed) => setEnvironmentLoaded(isSucceed) );
-    new SwitchesCollector(machineSection).execute().then( (isSucceed) => setSwitchLoaded(isSucceed) );
-    new AutomationsCollector(machineSection).execute().then( (isSucceed) => setAutomationLoaded(isSucceed) )
+    new MachinesCollector(machineSection).execute()
+      .then( (isSucceed) => setMachineLoaded(isSucceed) )
+    new SectionsCollector(machineSection).execute()
+      .then(({data, isSucceed}) => { setESections(data); setSectionLoaded(isSucceed); })
+    new EnvironmentsCollector(machineSection).execute()
+      .then( (isSucceed) => setEnvironmentLoaded(isSucceed) );
+    new SwitchesCollector(machineSection).execute()
+      .then( (isSucceed) => setSwitchLoaded(isSucceed) );
+    new AutomationsCollector(machineSection).execute()
+      .then( (isSucceed) => setAutomationLoaded(isSucceed) )
 
     const eInterval = setInterval(() => {
       new EnvironmentsCollector(machineSection).execute();
