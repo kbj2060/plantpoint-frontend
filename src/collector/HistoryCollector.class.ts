@@ -3,27 +3,66 @@ import { ResponseSwitchHistoryRead, SingleSwitchHistory } from '@interfaces/Mach
 import { updatedDiff } from 'deep-object-diff';
 import { customLogger } from '../logger/Logger';
 import { LogMessage, StorageKeys } from '../reference/constants';
-import { getHistorySwitches } from '../handler/httpHandler';
+import { getHistoryEnvironment, getHistorySwitches } from '../handler/httpHandler';
 import { getReduxData } from '@funcUtils/getReduxData';
-import { EnvironmentsHistory } from '@interfaces/Environment';
+import { EnvironmentHistoryUnit, EnvironmentsHistory, ResponseEnvironmentHistoryRead } from '@interfaces/Environment';
+import { checkEmpty } from '@funcUtils/checkEmpty';
+import _ from 'lodash';
 
 export class EnvironmentHistoryCollector {
-  environmentSections: Array<string>; history: EnvironmentsHistory; environment: string; primarySection: string;
-  constructor( history: EnvironmentsHistory, environment: string ) {
+  environmentSections: Array<string>; lastUpdated: string; history: EnvironmentsHistory; mSection: string;
+  constructor(mSection: string ) {
+    this.mSection = mSection;
     this.environmentSections = getReduxData(StorageKeys.SECTION);
-    this.history = history;
-    this.environment = environment;
-    this.primarySection = this.environmentSections[0];
+    this.lastUpdated = "";
+    this.history = {};
   }
 
-  makeDataset () {
+  groupBy <T extends EnvironmentHistoryUnit, U extends keyof T> (
+    xs: T[], key: U
+  ) {
+    return xs.reduce((rv: any, x) => {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  }
+
+  async execute <T extends string>( environment: T ): Promise<boolean> {
+    let isSucceed = false
+    await getHistoryEnvironment(this.mSection, environment)
+      .then(({data})=> {
+        const { histories }: ResponseEnvironmentHistoryRead = data;
+        if ( checkEmpty(histories) ) { return; }
+        this.history = this.groupBy<EnvironmentHistoryUnit, string> (
+          histories, 'environmentSection'
+        );
+        this.lastUpdated = changeToKoreanDate(_.sortBy( histories, 'created' )[ histories.length - 1 ].created);
+        customLogger.success(`${environment} : `+LogMessage.SUCCESS_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+        isSucceed = true;
+      })
+      .catch((err) => {
+        console.log(err)
+        customLogger.error(LogMessage.FAILED_GET_ENVIRONMENTS_HISTORY, 'EnvironmentsHistory' as string)
+      })
+    return isSucceed;
+  }
+
+  getLastUpdatedTime () {
+    return this.lastUpdated;
+  }
+
+  getHistory () {
+    return this.history;
+  }
+
+  makeDataset (history: EnvironmentsHistory, environment: string) {
     const {Translations} = require('@values/translations');
     const {Colors} = require('@values/colors');
     let datasets = []
 
     for(let n = 0; n < this.environmentSections.length; n++){
       const section = this.environmentSections[n];
-      const data = this.history[section] === undefined ? [] : this.history[section].map((h) => h[this.environment])
+      const data = history[section] === undefined ? [] : history[section].map((h) => h[environment])
 
       datasets.push({
         label: Translations[section],
@@ -40,8 +79,9 @@ export class EnvironmentHistoryCollector {
     return datasets
   }
 
-  makeLabels () {
-    return this.history[this.primarySection].map( ( h ) => changeToKoreanDate(h.created) );
+  makeLabels ( history: EnvironmentsHistory ) {
+    const primarySection = this.environmentSections[0];
+    return history[primarySection].map( ( h ) => changeToKoreanDate(h.created) );
   }
 }
 

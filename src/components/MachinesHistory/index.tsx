@@ -32,7 +32,6 @@ export default function MachineHistory() {
 	const [ page, setPage ] = React.useState<number>(0);
   const [ rows, setRows ] = React.useState<SingleSwitchHistory[]>([]);
 	
-	const machineSection = currentPage();
 	const rowsPerPage = 5;
 	const defaultHeight = 53;
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -68,7 +67,8 @@ export default function MachineHistory() {
 
 	useEffect(() => {
 		if ( !prevRefresh ) { return; }
-		const updatedRow: UpdatedRow | null = new MachineHistoryCollector(machineSection).extractUpdatedRow(prevRefresh, refresh);
+		const mSection = currentPage();
+		const updatedRow: UpdatedRow | null = new MachineHistoryCollector(mSection).extractUpdatedRow(prevRefresh, refresh);
 		if ( !updatedRow ) { return; }
 		updateRows( {
 			machine : updatedRow!.machine,
@@ -79,8 +79,8 @@ export default function MachineHistory() {
 	}, [refresh, prevRefresh])
 
 	useEffect(() => {
-		new MachineHistoryCollector(machineSection).execute()
-			.then( ({ data, isSucceed }) => setRows(data) )
+		const mSection = currentPage(); 
+		new MachineHistoryCollector(mSection).execute().then( ({ data, isSucceed }) => setRows(data) )
 	}, []);
 
 

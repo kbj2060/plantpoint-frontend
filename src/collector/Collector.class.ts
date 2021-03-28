@@ -1,8 +1,6 @@
-import { changeToKoreanDate } from '@funcUtils/changeToKoreanDate';
 import { groupBy } from '@funcUtils/groupBy';
 import { ResponseAutomationRead } from '@interfaces/Automation';
 import { ResponseEnvSectionRead, ResponseMachineRead } from '@interfaces/Machine';
-import { ResponseSwitchHistoryRead, SingleSwitchHistory } from '@interfaces/MachineHistory';
 import { ResponseSwitchesReadLast } from '@interfaces/Switch';
 import { saveAutomation } from '@redux/modules/ControlAutomation';
 import { saveCurrent } from '@redux/modules/ControlCurrent';
@@ -11,8 +9,7 @@ import { saveMachines } from '@redux/modules/ControlMachine';
 import { saveSections } from '@redux/modules/ControlSection';
 import { ReducerSaveSwitchesDto, saveSwitch } from '@redux/modules/ControlSwitch';
 import { store } from '@redux/store';
-import { updatedDiff } from 'deep-object-diff';
-import { getAllMachinesCurrent, getAutomation, getAvailableMachines, getAvailableSections, getHistorySwitches, getLastAllEnvironments, getSwitches } from '../handler/httpHandler';
+import { getAllMachinesCurrent, getAutomation, getAvailableMachines, getAvailableSections, getLastAllEnvironments, getSwitches } from '../handler/httpHandler';
 import { customLogger } from '../logger/Logger';
 import { LogMessage } from '../reference/constants';
 
