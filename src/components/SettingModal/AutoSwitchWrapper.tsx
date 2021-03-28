@@ -22,10 +22,7 @@ export default function AutoSwitchWrapper({machine}: AutoSwitchWrapperProps) {
   return(
     <Grid container>
       <Grid item className='auto-switch'>
-        <CustomAntSwitch checked={status}
-                         onChange={handleChange}
-                         value={machine}
-                         name={machine}/>
+        <CustomAntSwitch checked={status} onChange={handleChange} value={machine} name={machine} />
       </Grid>
     </Grid>
   )

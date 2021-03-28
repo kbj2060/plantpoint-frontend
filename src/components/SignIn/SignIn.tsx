@@ -1,5 +1,5 @@
 import React, {BaseSyntheticEvent, useCallback, useEffect} from "react";
-import {Auth, LoginState, SigninDto, SignInResult} from "@interfaces/Login";
+import {Auth, SigninDto, SignInResult} from "@interfaces/Login";
 import {defaultAuth} from "@values/defaults";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -24,7 +24,7 @@ function getSuccessAuth<T extends string>(username: T, token: T): Auth {
   }
 }
 
-interface SignIn {
+export interface SignIn {
   username: string;
   password: string;
 }
@@ -43,11 +43,11 @@ export default function SignInComponent() {
 
   const handleDialogClose = useCallback(() => {
     setOpen(false);
-  }, []);
+  }, []); // eslint-disable-line
 
-  const handleLoginChange = <T extends keyof LoginState> (type: T) => <U extends BaseSyntheticEvent> (e: U): void => {
+  const handleLoginChange = useCallback(<T extends keyof SignIn> (type: T) => <U extends BaseSyntheticEvent> (e: U): void => {
     signin[type] = e.target.value
-  }
+  }, []); // eslint-disable-line
 
   function dispatchLoginSuccess <T extends string> (username: T, accessToken: T): void {
     dispatch(loginSuccess(username, accessToken))

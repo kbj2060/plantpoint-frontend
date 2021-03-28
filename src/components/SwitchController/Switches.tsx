@@ -16,8 +16,11 @@ import socket from "../../socket";
 import { StatusConverter } from '@interfaces/StatusConverter.class';
 import useSubscribeSwitchStatus from "@hooks/useSubscribeSwitchStatus";
 import {customLogger} from "../../logger/Logger";
+import { TemperatureRangeMachine } from '@interfaces/Machine.class';
+import { getMachine } from '../../handler/classHandler';
 
 interface SwitchesProps extends MachineProps {}
+
 function Switches({machine}: SwitchesProps) {
   const machineSection = currentPage();
   const state = useSubscribeSwitchStatus(machine) as boolean;
@@ -34,6 +37,7 @@ function Switches({machine}: SwitchesProps) {
 
   function handleChange <T extends BaseSyntheticEvent> ( e: T ) {
     e.persist();
+    const machineClass = new (getMachine(machine))();
     const status: boolean = new StatusConverter(e.target.checked).toSwitchStatus();
     const dto: ReducerControlSwitchesDto = {
       machineSection: machineSection,
@@ -41,8 +45,7 @@ function Switches({machine}: SwitchesProps) {
       status: status,
     }
 
-    if ((machine === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
-      || (machine === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])) {
+    if ( machineClass instanceof TemperatureRangeMachine && machineClass.isAirconditionerConflicted(status)){
       return;
     }
 

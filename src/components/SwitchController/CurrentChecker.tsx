@@ -1,12 +1,8 @@
 import React, {useEffect} from 'react';
 import {checkEmpty} from "@funcUtils/checkEmpty";
 import {MachineProps} from "@interfaces/main";
-import {LogMessage} from "../../reference/constants";
-import { ResponseCurrentRead } from "@interfaces/Current";
-import {currentPage} from "@funcUtils/currentPage";
 import {Loader} from "@compUtils/Loader";
-import {getMachineCurrents} from "../../handler/httpHandler";
-import {customLogger} from "../../logger/Logger";
+import useSubscribeCurrents from '@hooks/useSubscribeCurrents';
 
 interface CurrentFlowingProps {
 	fillColor: string;
@@ -22,55 +18,27 @@ const CurrentFlowing = ({ fillColor }: CurrentFlowingProps) => {
 }
 
 interface CurrentCheckerProps extends MachineProps { }
-export default function CurrentChecker({machine}: CurrentCheckerProps) {
+function CurrentChecker({machine}: CurrentCheckerProps) {
 	const [flowing, setFlowing] = React.useState<boolean>(false);
 	const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
-
+	const current = useSubscribeCurrents(machine);
+	
 	useEffect(() => {
-		const {Criteria, UpdateTimeOut} = require('@values/defaults')
-		const fetchCurrent = async () => {
-			const machineSection = currentPage();
-			getMachineCurrents(machineSection, machine)
-				.then(({ data }) => {
-					const {current}: ResponseCurrentRead = data;
-					if(checkEmpty(current) || current < Criteria.current){
-						setFlowing(false);
-					}
-					else {
-						setFlowing(true);
-					}
-					setIsLoaded(true);
-			})
-		}
-
-		fetchCurrent()
-			.then(() => {
-				customLogger.success(`${machine} : `+LogMessage.SUCCESS_GET_CURRENTS, 'CurrentChecker' as string)
-			})
-			.catch((err) => {
-				console.log(err)
-				customLogger.error(LogMessage.FAILED_GET_CURRENTS, 'CurrentChecker' as string)
-			})
-		const interval = setInterval(() => {
-			fetchCurrent()
-				.then(() => {
-					customLogger.success(`${machine} : `+LogMessage.SUCCESS_GET_CURRENTS, 'CurrentChecker' as string)
-				})
-				.catch((err) => {
-					console.log(err)
-					customLogger.error(LogMessage.FAILED_GET_CURRENTS, 'CurrentChecker' as string)
-				})
-		}, parseInt(UpdateTimeOut.current));
+		const {Criteria} = require('@values/defaults')
+		checkEmpty(current) || current < Criteria.current ? setFlowing(false) : setFlowing(true);
+		setIsLoaded(true);
 
 		return () => {
-			clearInterval(interval);
+			// clearInterval(interval);
 			setIsLoaded(false);
 			setFlowing(false);
 		}
-	}, [machine]);
+	}, [machine, current]);
 
 	if (!isLoaded) { return <Loader />}
 	if (!flowing) { return <></> }
 
 	return <CurrentFlowing fillColor={'#F6BD60'}/>
 }
+
+export default React.memo(CurrentChecker)

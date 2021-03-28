@@ -1,11 +1,10 @@
 import {Line} from 'react-chartjs-2';
 import React from "react";
 import {checkEmpty} from "@funcUtils/checkEmpty";
-import {changeToKoreanDate} from "@funcUtils/changeToKoreanDate";
 import {EnvironmentChart, EnvironmentsHistory} from "@interfaces/Environment";
 import {options} from "@components/EnvironmentsHistroy/EnvironmentHistoryOptions";
-import {getReduxData} from "@funcUtils/getReduxData";
-import {StorageKeys} from "../../reference/constants";
+import { EnvironmentHistoryCollector } from '../../collector/HistoryCollector.class';
+import { currentPage } from '@funcUtils/currentPage';
 
 interface CustomLineProps {
   environment: string;
@@ -14,47 +13,22 @@ interface CustomLineProps {
   history: EnvironmentsHistory;
 }
 
-export default function CustomLine({ environment, history, width, height }: CustomLineProps) {
-    const {Translations} = require('@values/translations');
-    const {Colors} = require('@values/colors');
-    const environmentSections = getReduxData(StorageKeys.SECTION);
-    const primarySection = environmentSections[1]
+function CustomLine({ environment, history, width, height }: CustomLineProps) {
+  const mSection: string = currentPage();
+  let state: EnvironmentChart = {
+    labels: [],
+    datasets: []
+  }
 
-    let state: EnvironmentChart = {
-        labels: [],
-        datasets: []
-    }
-
-    if ( checkEmpty(history) ){
-      return <Line options={options} data={state} width={width} height={height}/>
-    }
-
-    function makeDataset <T extends number> (n_sections: T) {
-      let datasets = []
-      for(let n = 0; n < n_sections; n++){
-        const section = environmentSections[n];
-        const data = history[section] === undefined
-                      ? []
-                      : history[section].map((h) => h[environment])
-
-        datasets.push({
-          label: Translations[section],
-          fill: false,
-          lineTension: 0.5,
-          backgroundColor: '#efcf76',
-          borderColor: `${Colors[section]}`,
-          borderWidth: 2,
-          pointRadius: 0,
-          data: data,
-          spanGaps: true,
-        })
-      }
-      return datasets
-    }
-
-    state.datasets = makeDataset<number>(environmentSections.length);
-    state.labels = history[primarySection].map( ( h ) => changeToKoreanDate(h.created) );
-
+  if ( checkEmpty(history) ){
     return <Line options={options} data={state} width={width} height={height}/>
+  }
+
+  state.datasets = new EnvironmentHistoryCollector(mSection).makeDataset(history, environment);
+  state.labels = new EnvironmentHistoryCollector(mSection).makeLabels(history);
+
+  return <Line options={options} data={state} width={width} height={height}/>
 }
+
+export default React.memo(CustomLine);
 

@@ -15,6 +15,7 @@ import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
 
 interface IconsProps extends MachineProps {}
+
 const Icons = ({machine}: IconsProps) => {
   return (
     <Box className='icons' flexGrow={1} p={1} >
@@ -24,6 +25,7 @@ const Icons = ({machine}: IconsProps) => {
 }
 
 interface CheckersProps extends MachineProps {}
+
 const Checkers = ({machine}: CheckersProps) => {
   return (
     <Box className='checkers' flexGrow={1} p={1} >
@@ -34,6 +36,7 @@ const Checkers = ({machine}: CheckersProps) => {
 }
 
 interface PowerSwitchProps extends MachineProps {}
+
 const PowerSwitch = ({machine}: PowerSwitchProps) => {
   return (
     <Box className='power-button' p={1} flexGrow={1}>
@@ -48,7 +51,7 @@ export default function SwitchController() {
   const SwitchesWrapper = () => {
     return (
       <>
-      {machines.map(machine =>
+      {machines.map((machine: string) =>
         <Box key={machine.toString()} display='flex'>
           <Icons machine={machine as string} />
           <Checkers machine={machine as string}/>
@@ -61,7 +64,7 @@ export default function SwitchController() {
   const SettingModalWrapper = () => {
     return (
       <Box className='modal-button-box'>
-       <SettingModal />
+        <SettingModal />
       </Box>
     )
   }

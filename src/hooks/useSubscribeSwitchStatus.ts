@@ -6,7 +6,5 @@ import {StorageKeys} from "../reference/constants";
 export default function useSubscribeSwitchStatus(
   machine: string
 ): boolean {
-    return useSelector((state: RootState) =>
-      state[StorageKeys.SWITCHES][machine], shallowEqual
-    )
+    return useSelector((state: RootState) => state[StorageKeys.SWITCHES][machine], shallowEqual )
 }

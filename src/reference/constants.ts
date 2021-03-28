@@ -10,6 +10,7 @@ export enum StorageKeys {
   MACHINE='machine',
   ENVIRONMENTS='environments',
   SECTION='section',
+  CURRENT='current'
 }
 
 export enum WebSocketEvent {
