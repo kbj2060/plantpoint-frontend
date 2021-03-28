@@ -80,7 +80,7 @@ export class EnvironmentHistoryCollector {
   }
 
   makeLabels ( history: EnvironmentsHistory ) {
-    const primarySection = this.environmentSections[0];
+    const primarySection = this.environmentSections[1];
     return history[primarySection].map( ( h ) => changeToKoreanDate(h.created) );
   }
 }

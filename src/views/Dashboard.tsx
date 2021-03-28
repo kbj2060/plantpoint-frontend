@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import AppBar from '@components/AppBar/Appbar';
 import {checkLogin} from "@funcUtils/checkLogin";
 import {Redirect} from "react-router-dom";
@@ -31,7 +31,7 @@ export default function Dashboard({page}: DashboardProps) {
   const machineSection: string = currentPage();
 
   
-  const  StatusDisplayWrapper = useCallback((): JSX.Element  =>{
+  const  StatusDisplayWrapper = (): JSX.Element  =>{
     const elements: JSX.Element[] = eSections.map((section: string) => {
       return(
         <Grid key={section} item xs={12} sm={12} md={4} className='status-display-item' >
@@ -44,10 +44,10 @@ export default function Dashboard({page}: DashboardProps) {
         {elements}
       </React.Fragment>
     ) // eslint-disable-next-line
-  }, []); 
+  };
 
   
-  const EnvironmentHistoryWrapper = useCallback((): JSX.Element => {
+  const EnvironmentHistoryWrapper = (): JSX.Element => {
     const elements: JSX.Element[] = environments.map((environment: typeof Environment) => {
       const name = new environment().name;
       return (
@@ -60,8 +60,8 @@ export default function Dashboard({page}: DashboardProps) {
       <React.Fragment>
         {elements}
       </React.Fragment>
-    ) // eslint-disable-next-line
-  }, []); 
+      ) // eslint-disable-next-line
+    }
 
   useEffect(() => {
     const { Time } = require('@values/time');
