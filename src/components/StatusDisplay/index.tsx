@@ -9,7 +9,7 @@ interface StatusDisplayProps {
 
 export default function StatusDisplay({environmentSection}: StatusDisplayProps) {
   const {Translations} = require('@values/translations');
-  console.log('ddd')
+
   const FigureTitle = () => {
     return (
       <Typography className='figure-title' >
