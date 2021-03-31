@@ -102,6 +102,7 @@ export default function SignInComponent() {
         handleClickDialogOpen();
         break;
     }
+    
     return () => { resetAuth() }
   }, [auth, history])
 

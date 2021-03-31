@@ -18,8 +18,7 @@ import '@styles/components/scheduler.scss';
 export default function Scheduler() {
   const [selectedDay, setSelectedDay] = useState<SchedulerDate|null>(null);
   const [isAdd, setIsAdd] = useState<boolean>(false);
-  const month = useSelector((state: RootState) =>
-    state['date'].month ,shallowEqual)
+  const month = useSelector((state: RootState) => state['date'].month ,shallowEqual)
 
   const handleAddSchedule = () => {
     setIsAdd(true);
@@ -41,6 +40,14 @@ export default function Scheduler() {
       <Button onClick={handleRefresh}>{month}월 일정</Button>
     </ButtonGroup>
   )
+
+  const ScheduleHelper = (): JSX.Element => {
+    return (
+      isAdd
+        ? <ScheduleAdd selectedDay={selectedDay} handleAddFinish={handleAddFinish} />
+        : <ScheduleTable selectedDay={selectedDay}/>
+    )
+  }
 
   const cleanup = () => {
     setSelectedDay(null);
@@ -74,11 +81,7 @@ export default function Scheduler() {
                         shouldHighlightWeekends />
             </Grid>
             <Grid item xs={12} sm={12} md={4} className='item'>
-              {
-                isAdd
-                ? <ScheduleAdd selectedDay={selectedDay} handleAddFinish={handleAddFinish} />
-                : <ScheduleTable selectedDay={selectedDay}/>
-              }
+              <ScheduleHelper />
             </Grid>
           </Grid>
         </div>

@@ -2,8 +2,6 @@ import {BaseMachine, CycleMachine, TemperatureRangeMachine, TimeRangeMachine} fr
 import {RangeStepper, TimePickerStepper} from "@interfaces/Stepper.class";
 import {ReactNode, Ref} from "react";
 import {CoolerIcon, FanIcon, HeaterIcon, LEDIcon, RoofFanIcon, WaterpumpIcon} from "@interfaces/Icon.class";
-import { getReduxData } from '@funcUtils/getReduxData';
-import { StorageKeys } from './constants';
 
 
 export class EmptyMachine extends BaseMachine {
@@ -16,10 +14,6 @@ export class EmptyMachine extends BaseMachine {
 
   getStepper = (): ReactNode => { return }
   getIcon = (): ReactNode => { return }
-  isAirconditionerConflicted = (status: boolean): boolean => {
-    return (this.name === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
-    || (this.name === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])
-  }
 }
 
 export class LedMachine extends TimeRangeMachine{

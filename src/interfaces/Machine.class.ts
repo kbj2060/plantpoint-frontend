@@ -23,12 +23,6 @@ export abstract class BaseMachine {
   public isCycleMachineType = (): boolean => {
     return this.automation_type === 'CycleMachine';
   }
-
-  public isAirconditionerConflicted = (status: boolean): boolean => {
-    console.log(this.name, status, getReduxData(StorageKeys.SWITCHES)['heater'], getReduxData(StorageKeys.SWITCHES)['cooler'])
-    return (this.name === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
-    || (this.name === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])
-  }
 }
 
 export class RangeMachine extends BaseMachine {
@@ -40,7 +34,12 @@ export class RangeMachine extends BaseMachine {
   }
 }
 
-export class TemperatureRangeMachine extends RangeMachine { }
+export class TemperatureRangeMachine extends RangeMachine { 
+  public isAirconditionerConflicted = (status: boolean): boolean => {
+    return (this.name === "cooler" && status && getReduxData(StorageKeys.SWITCHES)['heater'])
+    || (this.name === "heater" && status && getReduxData(StorageKeys.SWITCHES)['cooler'])
+  }
+}
 
 export class TimeRangeMachine extends RangeMachine { }
 
